@@ -22,10 +22,8 @@ type Options struct {
 	HeaderPatternMaps    []string
 	IssuePrefix          []string
 	RefActions           []string
-	MergeNoteTitle       string
 	MergePattern         string
 	MergePatternMaps     []string
-	RevertNoteTitle      string
 	RevertPattern        string
 	RevertPatternMaps    []string
 	NoteKeywords         []string
@@ -133,12 +131,14 @@ func (gen *Generator) readVersions(query string) ([]*Version, error) {
 			return nil, err
 		}
 
-		commitGroups, noteGroups := gen.commitExtractor.Extract(commits)
+		commitGroups, mergeCommits, revertCommits, noteGroups := gen.commitExtractor.Extract(commits)
 
 		versions = append(versions, &Version{
-			Tag:          tag,
-			CommitGroups: commitGroups,
-			NoteGroups:   noteGroups,
+			Tag:           tag,
+			CommitGroups:  commitGroups,
+			MergeCommits:  mergeCommits,
+			RevertCommits: revertCommits,
+			NoteGroups:    noteGroups,
 		})
 	}
 
