@@ -15,20 +15,38 @@ func newCommitExtractor(opts *Options) *commitExtractor {
 	}
 }
 
-func (e *commitExtractor) Extract(commits []*Commit) ([]*CommitGroup, []*NoteGroup) {
-	filteredCommits := commitFilter(commits, e.opts.CommitFilters)
+func (e *commitExtractor) Extract(commits []*Commit) ([]*CommitGroup, []*Commit, []*Commit, []*NoteGroup) {
 	commitGroups := []*CommitGroup{}
 	noteGroups := []*NoteGroup{}
+	mergeCommits := []*Commit{}
+	revertCommits := []*Commit{}
+
+	filteredCommits := commitFilter(commits, e.opts.CommitFilters)
+
+	for _, commit := range commits {
+		if commit.Merge != nil {
+			mergeCommits = append(mergeCommits, commit)
+			continue
+		}
+
+		if commit.Revert != nil {
+			revertCommits = append(revertCommits, commit)
+			continue
+		}
+	}
 
 	for _, commit := range filteredCommits {
-		e.processCommitGroups(&commitGroups, commit)
+		if commit.Merge == nil && commit.Revert == nil {
+			e.processCommitGroups(&commitGroups, commit)
+		}
+
 		e.processNoteGroups(&noteGroups, commit)
 	}
 
 	e.sortCommitGroups(commitGroups)
 	e.sortNoteGroups(noteGroups)
 
-	return commitGroups, noteGroups
+	return commitGroups, mergeCommits, revertCommits, noteGroups
 }
 
 func (e *commitExtractor) processCommitGroups(groups *[]*CommitGroup, commit *Commit) {
@@ -56,22 +74,9 @@ func (e *commitExtractor) processCommitGroups(groups *[]*CommitGroup, commit *Co
 
 func (e *commitExtractor) processNoteGroups(groups *[]*NoteGroup, commit *Commit) {
 	if len(commit.Notes) != 0 {
-		// notes
 		for _, note := range commit.Notes {
 			e.appendNoteToNoteGroups(groups, note)
 		}
-	} else if commit.Merge != nil && e.opts.MergeNoteTitle != "" {
-		// merges
-		e.appendNoteToNoteGroups(groups, &Note{
-			Title: e.opts.MergeNoteTitle,
-			Body:  commit.Header,
-		})
-	} else if commit.Revert != nil && e.opts.RevertNoteTitle != "" {
-		// reverts
-		e.appendNoteToNoteGroups(groups, &Note{
-			Title: e.opts.RevertNoteTitle,
-			Body:  commit.Header,
-		})
 	}
 }
 

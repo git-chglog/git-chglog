@@ -86,7 +86,9 @@ type Tag struct {
 
 // Version ...
 type Version struct {
-	Tag          *Tag
-	CommitGroups []*CommitGroup
-	NoteGroups   []*NoteGroup
+	Tag           *Tag
+	CommitGroups  []*CommitGroup
+	MergeCommits  []*Commit
+	RevertCommits []*Commit
+	NoteGroups    []*NoteGroup
 }

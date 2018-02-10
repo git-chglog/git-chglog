@@ -9,9 +9,6 @@ import (
 func TestCommitExtractor(t *testing.T) {
 	assert := assert.New(t)
 
-	mTitle := "Merges"
-	rTitle := "Reverts"
-
 	extractor := newCommitExtractor(&Options{
 		CommitSortBy:      "Scope",
 		CommitGroupBy:     "Type",
@@ -19,8 +16,6 @@ func TestCommitExtractor(t *testing.T) {
 		CommitGroupTitleMaps: map[string]string{
 			"bar": "BAR",
 		},
-		MergeNoteTitle:  mTitle,
-		RevertNoteTitle: rTitle,
 	})
 
 	fixtures := []*Commit{
@@ -85,7 +80,7 @@ func TestCommitExtractor(t *testing.T) {
 		},
 	}
 
-	commitGroups, noteGroups := extractor.Extract(fixtures)
+	commitGroups, mergeCommits, revertCommits, noteGroups := extractor.Extract(fixtures)
 
 	assert.Equal([]*CommitGroup{
 		&CommitGroup{
@@ -106,13 +101,15 @@ func TestCommitExtractor(t *testing.T) {
 		},
 	}, commitGroups)
 
+	assert.Equal([]*Commit{
+		fixtures[4],
+	}, mergeCommits)
+
+	assert.Equal([]*Commit{
+		fixtures[5],
+	}, revertCommits)
+
 	assert.Equal([]*NoteGroup{
-		&NoteGroup{
-			Title: mTitle,
-			Notes: []*Note{
-				{mTitle, fixtures[4].Header},
-			},
-		},
 		&NoteGroup{
 			Title: "note1-title",
 			Notes: []*Note{
@@ -136,12 +133,6 @@ func TestCommitExtractor(t *testing.T) {
 			Title: "note4-title",
 			Notes: []*Note{
 				fixtures[3].Notes[0],
-			},
-		},
-		&NoteGroup{
-			Title: rTitle,
-			Notes: []*Note{
-				{rTitle, fixtures[5].Header},
 			},
 		},
 	}, noteGroups)
