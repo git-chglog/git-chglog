@@ -1,5 +1,3 @@
-# CHANGELOG
-
 {{range .Versions}}
 <a name="{{urlquery .Tag.Name}}"></a>
 ## {{.Tag.Name}} ({{datetime "2006-01-02" .Tag.Date}})
@@ -7,6 +5,14 @@
 ### {{.Title}}
 {{range .Commits}}
 * {{if ne .Scope ""}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
+{{end}}{{if .RevertCommits}}
+### Reverts
+{{range .RevertCommits}}
+* {{.Header}}{{end}}
+{{end}}{{if .MergeCommits}}
+### Pull Requests
+{{range .MergeCommits}}
+* {{.Header}}{{end}}
 {{end}}{{range .NoteGroups}}
 ### {{.Title}}
 {{range .Notes}}
