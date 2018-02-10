@@ -1,0 +1,24 @@
+@@__CHGLOG__@@HASH:65cf1add9735dcc4810dda3312b0792236c97c4e	65cf1add@@__CHGLOG_DELIMITER__@@AUTHOR:tsuyoshi wada	mail@example.com	1514808000@@__CHGLOG_DELIMITER__@@COMMITTER:tsuyoshi wada	mail@example.com	1514808000@@__CHGLOG_DELIMITER__@@SUBJECT:feat(*): Add new feature #123@@__CHGLOG_DELIMITER__@@BODY:
+
+@@__CHGLOG__@@HASH:14ef0b6d386c5432af9292eab3c8314fa3001bc7	14ef0b6d@@__CHGLOG_DELIMITER__@@AUTHOR:tsuyoshi wada	mail@example.com	1515153600@@__CHGLOG_DELIMITER__@@COMMITTER:tsuyoshi wada	mail@example.com	1515153600@@__CHGLOG_DELIMITER__@@SUBJECT:Merge pull request #3 from username/branchname@@__CHGLOG_DELIMITER__@@BODY:This is body message.
+
+Fixes #3
+
+Closes #1
+
+BREAKING CHANGE: This is breaking point message.
+@@__CHGLOG__@@HASH:809a8280ffd0dadb0f4e7ba9fc835e63c37d6af6	809a8280@@__CHGLOG_DELIMITER__@@AUTHOR:tsuyoshi wada	mail@example.com	1517486400@@__CHGLOG_DELIMITER__@@COMMITTER:tsuyoshi wada	mail@example.com	1517486400@@__CHGLOG_DELIMITER__@@SUBJECT:fix(controller): Fix cors configure@@__CHGLOG_DELIMITER__@@BODY:Has mention body
+
+@tsuyoshiwada
+@hogefuga
+@FooBarBaz
+@@__CHGLOG__@@HASH:74824d6bd1470b901ec7123d13a76a1b8938d8d0	74824d6b@@__CHGLOG_DELIMITER__@@AUTHOR:tsuyoshi wada	mail@example.com	1517488587@@__CHGLOG_DELIMITER__@@COMMITTER:tsuyoshi wada	mail@example.com	1517488587@@__CHGLOG_DELIMITER__@@SUBJECT:fix(model): Remove hoge attributes@@__CHGLOG_DELIMITER__@@BODY:This mixed body message.
+
+BREAKING CHANGE:
+This is multiline breaking change note.
+It is treated as the body of the Note until a mention or reference appears.
+
+We also allow blank lines :)
+
+Fixes #123
+Closes username/repository#456
