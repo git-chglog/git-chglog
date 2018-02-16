@@ -157,6 +157,7 @@ func (gen *Generator) readVersions(query string) ([]*Version, error) {
 		versions = append(versions, &Version{
 			Tag:           tag,
 			CommitGroups:  commitGroups,
+			Commits:       commits,
 			MergeCommits:  mergeCommits,
 			RevertCommits: revertCommits,
 			NoteGroups:    noteGroups,
