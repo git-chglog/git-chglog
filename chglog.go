@@ -43,11 +43,11 @@ type RenderData struct {
 
 // Config ...
 type Config struct {
-	Bin      string
-	Path     string
-	Template string
-	Info     *Info
-	Options  *Options
+	Bin        string
+	WorkingDir string
+	Template   string
+	Info       *Info
+	Options    *Options
 }
 
 // Generator ...
@@ -98,17 +98,9 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 }
 
 func (gen *Generator) readVersions(query string) ([]*Version, error) {
-	tags, err := gen.tagReader.ReadAll()
+	tags, first, err := gen.getTags(query)
 	if err != nil {
 		return nil, err
-	}
-
-	first := ""
-	if query != "" {
-		tags, first, err = gen.tagSelector.Select(tags, query)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	versions := []*Version{}
@@ -145,13 +137,30 @@ func (gen *Generator) readVersions(query string) ([]*Version, error) {
 	return versions, nil
 }
 
+func (gen *Generator) getTags(query string) ([]*Tag, string, error) {
+	tags, err := gen.tagReader.ReadAll()
+	if err != nil {
+		return nil, "", err
+	}
+
+	first := ""
+	if query != "" {
+		tags, first, err = gen.tagSelector.Select(tags, query)
+		if err != nil {
+			return nil, "", err
+		}
+	}
+
+	return tags, first, nil
+}
+
 func (gen *Generator) workdir() (func() error, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return nil, err
 	}
 
-	err = os.Chdir(gen.config.Path)
+	err = os.Chdir(gen.config.WorkingDir)
 	if err != nil {
 		return nil, err
 	}
