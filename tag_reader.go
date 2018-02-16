@@ -61,5 +61,31 @@ func (r *tagReader) ReadAll() ([]*Tag, error) {
 		})
 	}
 
+	total := len(tags)
+
+	for i, tag := range tags {
+		var (
+			next *RelateTag
+			prev *RelateTag
+		)
+
+		if i > 0 {
+			next = &RelateTag{
+				Name: tags[i-1].Name,
+				Date: tags[i-1].Date,
+			}
+		}
+
+		if i+1 < total {
+			prev = &RelateTag{
+				Name: tags[i+1].Name,
+				Date: tags[i+1].Date,
+			}
+		}
+
+		tag.Next = next
+		tag.Previous = prev
+	}
+
 	return tags, nil
 }

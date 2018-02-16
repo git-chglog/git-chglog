@@ -78,10 +78,18 @@ type CommitGroup struct {
 	Commits  []*Commit
 }
 
-// Tag ...
-type Tag struct {
+// RelateTag ...
+type RelateTag struct {
 	Name string
 	Date time.Time
+}
+
+// Tag ...
+type Tag struct {
+	Name     string
+	Date     time.Time
+	Next     *RelateTag
+	Previous *RelateTag
 }
 
 // Version ...
