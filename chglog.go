@@ -50,6 +50,33 @@ type Config struct {
 	Options    *Options
 }
 
+func normalizeConfig(config *Config) {
+	opts := config.Options
+
+	if opts.HeaderPattern == "" {
+		opts.HeaderPattern = "^(.*)$"
+		opts.HeaderPatternMaps = []string{
+			"Subject",
+		}
+	}
+
+	if opts.MergePattern == "" {
+		opts.MergePattern = "^Merge branch '(\\w+)'$"
+		opts.MergePatternMaps = []string{
+			"Source",
+		}
+	}
+
+	if opts.RevertPattern == "" {
+		opts.RevertPattern = "^Revert \"([\\s\\S]*)\"$"
+		opts.RevertPatternMaps = []string{
+			"Header",
+		}
+	}
+
+	config.Options = opts
+}
+
 // Generator ...
 type Generator struct {
 	client          gitcmd.Client
@@ -69,6 +96,8 @@ func NewGenerator(config *Config) *Generator {
 	if config.Options.Processor != nil {
 		config.Options.Processor.Bootstrap(config)
 	}
+
+	normalizeConfig(config)
 
 	return &Generator{
 		client:          client,
