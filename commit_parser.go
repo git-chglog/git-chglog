@@ -38,6 +38,14 @@ var (
 	}, delimiter)
 )
 
+func joinAndQuoteMeta(list []string, sep string) string {
+	arr := make([]string, len(list))
+	for i, s := range list {
+		arr[i] = regexp.QuoteMeta(s)
+	}
+	return strings.Join(arr, sep)
+}
+
 type commitParser struct {
 	client    gitcmd.Client
 	config    *Config
@@ -53,9 +61,9 @@ type commitParser struct {
 func newCommitParser(client gitcmd.Client, config *Config) *commitParser {
 	opts := config.Options
 
-	joinedRefActions := strings.Join(opts.RefActions, "|")
-	joinedIssuePrefix := strings.Join(opts.IssuePrefix, "|")
-	joinedNoteKeywords := strings.Join(opts.NoteKeywords, "|")
+	joinedRefActions := joinAndQuoteMeta(opts.RefActions, "|")
+	joinedIssuePrefix := joinAndQuoteMeta(opts.IssuePrefix, "|")
+	joinedNoteKeywords := joinAndQuoteMeta(opts.NoteKeywords, "|")
 
 	return &commitParser{
 		client:    client,
@@ -65,7 +73,7 @@ func newCommitParser(client gitcmd.Client, config *Config) *commitParser {
 		reRevert:  regexp.MustCompile(opts.RevertPattern),
 		reRef:     regexp.MustCompile("(?i)(" + joinedRefActions + ")\\s?([\\w/\\.\\-]+)?(?:" + joinedIssuePrefix + ")(\\d+)"),
 		reIssue:   regexp.MustCompile("(?:" + joinedIssuePrefix + ")(\\d+)"),
-		reNotes:   regexp.MustCompile("^(?i)[\\s|*]*(" + joinedNoteKeywords + ")[:\\s]+(.*)"),
+		reNotes:   regexp.MustCompile("^(?i)\\s*(" + joinedNoteKeywords + ")[:\\s]+(.*)"),
 		reMention: regexp.MustCompile("@([\\w-]+)"),
 	}
 }
@@ -76,8 +84,6 @@ func (p *commitParser) Parse(rev string) ([]*Commit, error) {
 		rev,
 		"--no-decorate",
 		"--pretty="+logFormat,
-		"-n",
-		"10",
 	)
 
 	if err != nil {
@@ -203,25 +209,32 @@ func (p *commitParser) processHeader(commit *Commit, input string) {
 }
 
 func (p *commitParser) processBody(commit *Commit, input string) {
+	input = convNewline(input, "\n")
+
 	// body
 	commit.Body = input
 
 	// notes & refs & mentions
 	commit.Notes = []*Note{}
 	inNote := false
+	fenceDetector := newMdFenceDetector()
 	lines := strings.Split(input, "\n")
 
 	for _, line := range lines {
-		refs := p.parseRefs(line)
-		if len(refs) > 0 {
-			inNote = false
-			commit.Refs = append(commit.Refs, refs...)
-		}
+		fenceDetector.Update(line)
 
-		mentions := p.parseMentions(line)
-		if len(mentions) > 0 {
-			inNote = false
-			commit.Mentions = append(commit.Mentions, mentions...)
+		if !fenceDetector.InCodeblock() {
+			refs := p.parseRefs(line)
+			if len(refs) > 0 {
+				inNote = false
+				commit.Refs = append(commit.Refs, refs...)
+			}
+
+			mentions := p.parseMentions(line)
+			if len(mentions) > 0 {
+				inNote = false
+				commit.Mentions = append(commit.Mentions, mentions...)
+			}
 		}
 
 		res := p.reNotes.FindAllStringSubmatch(line, -1)
@@ -240,6 +253,10 @@ func (p *commitParser) processBody(commit *Commit, input string) {
 		}
 	}
 
+	p.trimSpaceInNotes(commit)
+}
+
+func (*commitParser) trimSpaceInNotes(commit *Commit) {
 	for _, note := range commit.Notes {
 		note.Body = strings.TrimSpace(note.Body)
 	}
@@ -325,4 +342,43 @@ func (p *commitParser) uniqMentions(mentions []string) []string {
 	}
 
 	return arr
+}
+
+var (
+	fenceTypes = []string{
+		"```",
+		"~~~",
+		"    ",
+		"\t",
+	}
+)
+
+type mdFenceDetector struct {
+	fence int
+}
+
+func newMdFenceDetector() *mdFenceDetector {
+	return &mdFenceDetector{
+		fence: -1,
+	}
+}
+
+func (d *mdFenceDetector) InCodeblock() bool {
+	return d.fence > -1
+}
+
+func (d *mdFenceDetector) Update(input string) {
+	for i, s := range fenceTypes {
+		if d.fence < 0 {
+			if strings.Index(input, s) == 0 {
+				d.fence = i
+				break
+			}
+		} else {
+			if strings.Index(input, s) == 0 && i == d.fence {
+				d.fence = -1
+				break
+			}
+		}
+	}
 }

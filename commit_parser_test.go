@@ -2,6 +2,7 @@ package chglog
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"testing"
@@ -20,7 +21,7 @@ func TestCommitParserParse(t *testing.T) {
 				return "", errors.New("")
 			}
 
-			bytes, _ := ioutil.ReadFile(filepath.Join("fixtures", "gitlog.txt"))
+			bytes, _ := ioutil.ReadFile(filepath.Join("testdata", "gitlog.txt"))
 
 			return string(bytes), nil
 		},
@@ -62,10 +63,9 @@ func TestCommitParserParse(t *testing.T) {
 				"Ref",
 				"Source",
 			},
-			RevertPattern: "^Revert\\s\"([\\s\\S]*)\"\\s*This reverts commit (\\w*)\\.",
+			RevertPattern: "^Revert \"([\\s\\S]*)\"$",
 			RevertPatternMaps: []string{
-				"Subject",
-				"Hash",
+				"Header",
 			},
 			NoteKeywords: []string{
 				"BREAKING CHANGE",
@@ -230,10 +230,23 @@ BREAKING CHANGE: This is breaking point message.`,
 			Notes: []*Note{
 				&Note{
 					Title: "BREAKING CHANGE",
-					Body: `This is multiline breaking change note.
+					Body: fmt.Sprintf(`This is multiline breaking change note.
 It is treated as the body of the Note until a mention or reference appears.
 
-We also allow blank lines :)`,
+We also allow blank lines :)
+
+Example:
+
+%sjavascript
+import { Controller } from 'hoge-fuga';
+
+@autobind
+class MyController extends Controller {
+  constructor() {
+    super();
+  }
+}
+%s`, "```", "```"),
 				},
 			},
 			Mentions: []string{},
@@ -241,7 +254,7 @@ We also allow blank lines :)`,
 			Type:     "fix",
 			Scope:    "model",
 			Subject:  "Remove hoge attributes",
-			Body: `This mixed body message.
+			Body: fmt.Sprintf(`This mixed body message.
 
 BREAKING CHANGE:
 This is multiline breaking change note.
@@ -249,8 +262,49 @@ It is treated as the body of the Note until a mention or reference appears.
 
 We also allow blank lines :)
 
+Example:
+
+%sjavascript
+import { Controller } from 'hoge-fuga';
+
+@autobind
+class MyController extends Controller {
+  constructor() {
+    super();
+  }
+}
+%s
+
 Fixes #123
-Closes username/repository#456`,
+Closes username/repository#456`, "```", "```"),
+		},
+		&Commit{
+			Hash: &Hash{
+				Long:  "123456789735dcc4810dda3312b0792236c97c4e",
+				Short: "12345678",
+			},
+			Author: &Author{
+				Name:  "tsuyoshi wada",
+				Email: "mail@example.com",
+				Date:  time.Unix(int64(1517488587), 0),
+			},
+			Committer: &Committer{
+				Name:  "tsuyoshi wada",
+				Email: "mail@example.com",
+				Date:  time.Unix(int64(1517488587), 0),
+			},
+			Merge: nil,
+			Revert: &Revert{
+				Header: "fix(core): commit message",
+			},
+			Refs:     []*Ref{},
+			Notes:    []*Note{},
+			Mentions: []string{},
+			Header:   "Revert \"fix(core): commit message\"",
+			Type:     "",
+			Scope:    "",
+			Subject:  "",
+			Body:     "This reverts commit f755db78dcdf461dc42e709b3ab728ceba353d1d.",
 		},
 	}, commits)
 }

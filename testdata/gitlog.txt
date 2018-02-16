@@ -20,5 +20,20 @@ It is treated as the body of the Note until a mention or reference appears.
 
 We also allow blank lines :)
 
+Example:
+
+```javascript
+import { Controller } from 'hoge-fuga';
+
+@autobind
+class MyController extends Controller {
+  constructor() {
+    super();
+  }
+}
+```
+
 Fixes #123
 Closes username/repository#456
+
+@@__CHGLOG__@@HASH:123456789735dcc4810dda3312b0792236c97c4e	12345678@@__CHGLOG_DELIMITER__@@AUTHOR:tsuyoshi wada	mail@example.com	1517488587@@__CHGLOG_DELIMITER__@@COMMITTER:tsuyoshi wada	mail@example.com	1517488587@@__CHGLOG_DELIMITER__@@SUBJECT:Revert "fix(core): commit message"@@__CHGLOG_DELIMITER__@@BODY:This reverts commit f755db78dcdf461dc42e709b3ab728ceba353d1d.

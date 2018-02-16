@@ -30,9 +30,7 @@ type Merge struct {
 
 // Revert ...
 type Revert struct {
-	Raw     string
-	Subject string
-	Hash    string
+	Header string
 }
 
 // Ref ...
@@ -96,6 +94,7 @@ type Tag struct {
 type Version struct {
 	Tag           *Tag
 	CommitGroups  []*CommitGroup
+	Commits       []*Commit
 	MergeCommits  []*Commit
 	RevertCommits []*Commit
 	NoteGroups    []*NoteGroup
