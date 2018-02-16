@@ -73,9 +73,7 @@ func TestCommitExtractor(t *testing.T) {
 			Header: "Revert1",
 			Notes:  []*Note{},
 			Revert: &Revert{
-				Raw:     "revert1",
-				Subject: "REVERT1",
-				Hash:    "1",
+				Header: "REVERT1",
 			},
 		},
 	}

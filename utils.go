@@ -104,3 +104,11 @@ func compareTime(a time.Time, operator string, b time.Time) bool {
 		return false
 	}
 }
+
+func convNewline(str, nlcode string) string {
+	return strings.NewReplacer(
+		"\r\n", nlcode,
+		"\r", nlcode,
+		"\n", nlcode,
+	).Replace(str)
+}

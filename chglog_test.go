@@ -70,7 +70,7 @@ func TestGeneratorWithTypeScopeSubject(t *testing.T) {
 	gen := NewGenerator(&Config{
 		Bin:        "git",
 		WorkingDir: filepath.Join(testRepoRoot, testName),
-		Template:   filepath.Join("fixtures", testName+".md"),
+		Template:   filepath.Join("testdata", testName+".md"),
 		Info: &Info{
 			Title:         "CHANGELOG Example",
 			RepositoryURL: "https://github.com/git-chglog/git-chglog",
