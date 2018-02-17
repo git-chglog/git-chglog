@@ -1,6 +1,7 @@
 package chglog
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -164,6 +165,10 @@ func (gen *Generator) readVersions(query string) ([]*Version, error) {
 		})
 	}
 
+	if len(versions) == 0 {
+		return nil, fmt.Errorf("a commits corresponding to \"%s\" was not found", query)
+	}
+
 	return versions, nil
 }
 
@@ -201,6 +206,10 @@ func (gen *Generator) workdir() (func() error, error) {
 }
 
 func (gen *Generator) render(w io.Writer, versions []*Version) error {
+	if _, err := os.Stat(gen.config.Template); err != nil {
+		return err
+	}
+
 	fmap := template.FuncMap{
 		"datetime": func(layout string, input time.Time) string {
 			return input.Format(layout)

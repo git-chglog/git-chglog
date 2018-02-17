@@ -8,7 +8,7 @@
 {{end}}{{if .RevertCommits}}
 ### Reverts
 {{range .RevertCommits}}
-* {{.Header}}{{end}}
+* {{.Revert.Header}}{{end}}
 {{end}}{{if .MergeCommits}}
 ### Pull Requests
 {{range .MergeCommits}}

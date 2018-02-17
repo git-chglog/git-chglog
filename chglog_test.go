@@ -11,20 +11,22 @@ import (
 	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
 )
 
-const (
+var (
+	cwd          string
 	testRepoRoot = ".tmp"
 )
 
 func TestMain(m *testing.M) {
+	cwd, _ = os.Getwd()
+	cleanup()
 	code := m.Run()
 	cleanup()
 	os.Exit(code)
 }
 
 func setup(dir string, setupRepo func(gitcmd.Client)) {
-	cwd, _ := os.Getwd()
+	testDir := filepath.Join(cwd, testRepoRoot, dir)
 
-	testDir := filepath.Join(testRepoRoot, dir)
 	os.MkdirAll(testDir, os.ModePerm)
 	os.Chdir(testDir)
 
@@ -39,12 +41,64 @@ func setup(dir string, setupRepo func(gitcmd.Client)) {
 }
 
 func cleanup() {
-	os.RemoveAll(testRepoRoot)
+	os.Chdir(cwd)
+	os.RemoveAll(filepath.Join(cwd, testRepoRoot))
+}
+
+func TestGeneratorNotFoundCommits(t *testing.T) {
+	assert := assert.New(t)
+	testName := "not_found"
+
+	setup(testName, func(git gitcmd.Client) {
+	})
+
+	gen := NewGenerator(&Config{
+		Bin:        "git",
+		WorkingDir: filepath.Join(testRepoRoot, testName),
+		Template:   filepath.Join("testdata", testName+".md"),
+		Info: &Info{
+			RepositoryURL: "https://github.com/git-chglog/git-chglog",
+		},
+		Options: &Options{
+			CommitFilters:        map[string][]string{},
+			CommitSortBy:         "Scope",
+			CommitGroupBy:        "Type",
+			CommitGroupSortBy:    "Title",
+			CommitGroupTitleMaps: map[string]string{},
+			HeaderPattern:        "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+			HeaderPatternMaps: []string{
+				"Type",
+				"Scope",
+				"Subject",
+			},
+			IssuePrefix: []string{
+				"#",
+				"gh-",
+			},
+			RefActions:   []string{},
+			MergePattern: "^Merge pull request #(\\d+) from (.*)$",
+			MergePatternMaps: []string{
+				"Ref",
+				"Source",
+			},
+			RevertPattern: "^Revert \"([\\s\\S]*)\"$",
+			RevertPatternMaps: []string{
+				"Header",
+			},
+			NoteKeywords: []string{
+				"BREAKING CHANGE",
+			},
+		},
+	})
+
+	buf := &bytes.Buffer{}
+	err := gen.Generate(buf, "foo")
+	assert.Contains(err.Error(), "\"foo\" was not found")
+	assert.Equal("", buf.String())
 }
 
 func TestGeneratorWithTypeScopeSubject(t *testing.T) {
 	assert := assert.New(t)
-
 	testName := "type_scope_subject"
 
 	setup(testName, func(git gitcmd.Client) {
@@ -105,10 +159,9 @@ func TestGeneratorWithTypeScopeSubject(t *testing.T) {
 				"Ref",
 				"Source",
 			},
-			RevertPattern: "^Revert\\s\"([\\s\\S]*)\"\\s*This reverts commit (\\w*)\\.",
+			RevertPattern: "^Revert \"([\\s\\S]*)\"$",
 			RevertPatternMaps: []string{
-				"Subject",
-				"Hash",
+				"Header",
 			},
 			NoteKeywords: []string{
 				"BREAKING CHANGE",
@@ -117,8 +170,9 @@ func TestGeneratorWithTypeScopeSubject(t *testing.T) {
 	})
 
 	buf := &bytes.Buffer{}
-	gen.Generate(buf, "")
+	err := gen.Generate(buf, "")
 
+	assert.Nil(err)
 	assert.Equal(`<a name="2.0.0-beta.0"></a>
 ## 2.0.0-beta.0 (2018-01-03)
 
@@ -143,6 +197,10 @@ Online breaking change message.
 ### Features
 
 * **parser:** New some super options #333
+
+### Reverts
+
+* feat(core): Add foo bar @mention and issue #987
 
 ### Pull Requests
 
