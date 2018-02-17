@@ -1,7 +1,7 @@
 package chglog
 
 import (
-	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 	"time"
@@ -51,7 +51,7 @@ func compare(a interface{}, operator string, b interface{}) (bool, error) {
 	at := reflect.TypeOf(a).String()
 	bt := reflect.TypeOf(a).String()
 	if at != bt {
-		return false, errors.New("todo: not match type")
+		return false, fmt.Errorf("\"%s\" and \"%s\" can not be compared", at, bt)
 	}
 
 	switch at {

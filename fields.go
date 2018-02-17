@@ -22,31 +22,31 @@ type Committer struct {
 	Date  time.Time
 }
 
-// Merge ...
+// Merge info for commit
 type Merge struct {
 	Ref    string
 	Source string
 }
 
-// Revert ...
+// Revert info for commit
 type Revert struct {
 	Header string
 }
 
-// Ref ...
+// Ref is abstract data related to commit. (e.g. `Issues`, `Pull Request`)
 type Ref struct {
-	Action string
-	Ref    string
-	Source string
+	Action string // (e.g. `Closes`)
+	Ref    string // (e.g. `123`)
+	Source string // (e.g. `owner/repository`)
 }
 
-// Note ...
+// Note of commit
 type Note struct {
-	Title string
-	Body  string
+	Title string // (e.g. `BREAKING CHANGE`)
+	Body  string // `Note` content body
 }
 
-// NoteGroup ...
+// NoteGroup is a collection of `Note` grouped by titles
 type NoteGroup struct {
 	Title string
 	Notes []*Note
@@ -57,32 +57,34 @@ type Commit struct {
 	Hash      *Hash
 	Author    *Author
 	Committer *Committer
-	Merge     *Merge
-	Revert    *Revert
+	Merge     *Merge  // If it is not a merge commit, `nil` is assigned
+	Revert    *Revert // If it is not a revert commit, `nil` is assigned
 	Refs      []*Ref
 	Notes     []*Note
-	Mentions  []string
-	Header    string
-	Type      string
-	Scope     string
-	Subject   string
+	Mentions  []string // Name of the user included in the commit header or body
+	Header    string   // (e.g. `feat(core): Add new feature`)
+	Type      string   // (e.g. `feat`)
+	Scope     string   // (e.g. `core`)
+	Subject   string   // (e.g. `Add new feature`)
 	Body      string
 }
 
-// CommitGroup is group of commit
+// CommitGroup is a collection of commits grouped according to the `CommitGroupBy` option
 type CommitGroup struct {
-	RawTitle string
-	Title    string
+	RawTitle string // Raw title before conversion (e.g. `build`)
+	Title    string // Conversion by `CommitGroupTitleMaps` option, or title converted in title case (e.g. `Build`)
 	Commits  []*Commit
 }
 
-// RelateTag ...
+// RelateTag is sibling tag data of `Tag`.
+// If you give `Tag`, the reference hierarchy will be deepened.
+// This struct is used to minimize the hierarchy of references
 type RelateTag struct {
 	Name string
 	Date time.Time
 }
 
-// Tag ...
+// Tag is data of git-tag
 type Tag struct {
 	Name     string
 	Date     time.Time
@@ -90,7 +92,7 @@ type Tag struct {
 	Previous *RelateTag
 }
 
-// Version ...
+// Version is a tag-separeted datset to be included in CHANGELOG
 type Version struct {
 	Tag           *Tag
 	CommitGroups  []*CommitGroup
