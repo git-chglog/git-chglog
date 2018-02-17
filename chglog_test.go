@@ -55,7 +55,7 @@ func TestGeneratorNotFoundCommits(t *testing.T) {
 	gen := NewGenerator(&Config{
 		Bin:        "git",
 		WorkingDir: filepath.Join(testRepoRoot, testName),
-		Template:   filepath.Join("testdata", testName+".md"),
+		Template:   filepath.Join(cwd, "testdata", testName+".md"),
 		Info: &Info{
 			RepositoryURL: "https://github.com/git-chglog/git-chglog",
 		},
@@ -124,7 +124,7 @@ func TestGeneratorWithTypeScopeSubject(t *testing.T) {
 	gen := NewGenerator(&Config{
 		Bin:        "git",
 		WorkingDir: filepath.Join(testRepoRoot, testName),
-		Template:   filepath.Join("testdata", testName+".md"),
+		Template:   filepath.Join(cwd, "testdata", testName+".md"),
 		Info: &Info{
 			Title:         "CHANGELOG Example",
 			RepositoryURL: "https://github.com/git-chglog/git-chglog",

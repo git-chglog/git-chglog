@@ -1,14 +1,7 @@
 package chglog
 
 import (
-	"errors"
 	"strings"
-)
-
-// TODO
-var (
-	errNotFound = errors.New("todo: not found")
-	errParse    = errors.New("todo: parse error")
 )
 
 type tagSelector struct{}
@@ -36,7 +29,7 @@ func (s *tagSelector) Select(tags []*Tag, query string) ([]*Tag, string, error) 
 		return s.selectRangeTags(tags, tokens[0], tokens[1])
 	}
 
-	return nil, "", errParse
+	return nil, "", errFailedQueryParse
 }
 
 func (s *tagSelector) selectSingleTag(tags []*Tag, token string) ([]*Tag, string, error) {
@@ -76,7 +69,7 @@ func (*tagSelector) selectBeforeTags(tags []*Tag, token string) ([]*Tag, string,
 	}
 
 	if len(res) == 0 {
-		return res, "", errNotFound
+		return res, "", errNotFoundTag
 	}
 
 	return res, from, nil
@@ -101,7 +94,7 @@ func (*tagSelector) selectAfterTags(tags []*Tag, token string) ([]*Tag, string, 
 	}
 
 	if len(res) == 0 {
-		return res, "", errNotFound
+		return res, "", errNotFoundTag
 	}
 
 	return res, from, nil
@@ -133,7 +126,7 @@ func (s *tagSelector) selectRangeTags(tags []*Tag, old string, new string) ([]*T
 	}
 
 	if len(res) == 0 {
-		return res, "", errNotFound
+		return res, "", errNotFoundTag
 	}
 
 	return res, from, nil

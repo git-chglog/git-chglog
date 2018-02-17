@@ -5,26 +5,19 @@ import (
 	"strings"
 )
 
-// Processor ...
+// Processor hooks the internal processing of `Generator`, it is possible to adjust the contents
 type Processor interface {
 	Bootstrap(*Config)
 	ProcessCommit(*Commit) *Commit
 }
 
-// PlainProcessor ...
-type PlainProcessor struct{}
-
-// Bootstrap ...
-func (*PlainProcessor) Bootstrap(config *Config) {}
-
-// ProcessCommit ...
-func (*PlainProcessor) ProcessCommit(commit *Commit) *Commit {
-	return commit
-}
-
-// GitHubProcessor ...
+// GitHubProcessor is optimized for CHANGELOG used in GitHub
+//
+// The following processing is performed
+//  - Mentions automatic link (@tsuyoshiwada -> [@tsuyoshiwada](https://github.com/tsuyoshiwada))
+//  - Automatic link to references (#123 -> [#123](https://github.com/owner/repo/issues/123))
 type GitHubProcessor struct {
-	Host      string
+	Host      string // Host name used for link destination. Note: You must include the protocol (e.g. "https://github.com")
 	config    *Config
 	reMention *regexp.Regexp
 	reIssue   *regexp.Regexp

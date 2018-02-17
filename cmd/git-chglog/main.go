@@ -25,10 +25,13 @@ func main() {
    {{range .Flags}}{{.}}
    {{end}}
 %s
-   {{.Name}} todo1
-   {{.Name}} todo2
-   {{.Name}} todo3
-   {{.Name}} todo4
+   {{.Name}}
+   {{.Name}} 1.0.0..5.0.0-rc.10
+   {{.Name}} 1.0.0..
+   {{.Name}} ..5.0.0-rc.10
+   {{.Name}} 1.0.0
+   {{.Name}} --output CHANGELOG.md
+   {{.Name}} --config dir/path/config.yml
 `,
 		ttl("USAGE:"),
 		ttl("VERSION:"),
