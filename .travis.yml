@@ -17,6 +17,4 @@ branches:
   only:
     - master
 after_success:
-  - echo "TODO release process"
-  # - gox -os "darwin linux windows" -arch "amd64" -output "dist/{{.OS}}_{{.Arch}}_{{.Dir}}" .
-  # - ghr --username tsuyoshiwada --token $GITHUB_TOKEN --replace `grep 'Version =' version.go | sed -E 's/.*"(.+)"$$/\1/'` dist/
+  - ./scripts/release.sh
