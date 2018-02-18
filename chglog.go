@@ -21,7 +21,7 @@ type Options struct {
 	CommitGroupSortBy    string              // Property name to use for sorting `CommitGroup` (e.g. `Title`)
 	CommitGroupTitleMaps map[string]string   // Map for `CommitGroup` title conversion
 	HeaderPattern        string              // A regular expression to use for parsing the commit header
-	HeaderPatternMaps    []string            // A rule for mapping the result of `HeaderPattern` to the property of` Commit`
+	HeaderPatternMaps    []string            // A rule for mapping the result of `HeaderPattern` to the property of `Commit`
 	IssuePrefix          []string            // Prefix used for issues (e.g. `#`, `gh-`)
 	RefActions           []string            // Word list of `Ref.Action`
 	MergePattern         string              // A regular expression to use for parsing the merge commit
