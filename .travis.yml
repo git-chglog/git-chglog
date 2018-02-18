@@ -1,0 +1,19 @@
+language: go
+sudo: false
+notifications:
+  email: false
+go:
+  - 1.9
+before_install:
+  - go get github.com/golang/dep/...
+  - go get github.com/mitchellh/gox
+  - go get github.com/tcnksm/ghr
+script:
+  - make test
+branches:
+  only:
+    - master
+after_success:
+  # todo
+  # - gox -os "darwin linux windows" -arch "amd64" -output "dist/{{.OS}}_{{.Arch}}_{{.Dir}}" .
+  # - ghr --username tsuyoshiwada --token $GITHUB_TOKEN --replace `grep 'Version =' version.go | sed -E 's/.*"(.+)"$$/\1/'` dist/
