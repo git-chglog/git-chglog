@@ -34,7 +34,7 @@ var (
 	}
 
 	tplStandard    = "standard"
-	tplCool        = "rich"
+	tplCool        = "cool"
 	templateStyles = []string{
 		tplStandard,
 		tplCool,

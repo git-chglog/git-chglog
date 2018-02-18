@@ -76,7 +76,7 @@ func (c *CLI) Run() int {
 		return ExitCodeError
 	}
 
-	c.logger.Log(fmt.Sprintf(":sparkles:Generate of %s is completed! (%s)",
+	c.logger.Log(fmt.Sprintf(":sparkles: Generate of %s is completed! (%s)",
 		color.GreenString("\""+c.ctx.OutputPath+"\""),
 		color.New(color.Bold).SprintFunc()(time.Since(start).String()),
 	))
