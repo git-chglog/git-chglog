@@ -13,29 +13,46 @@ func main() {
 
 	cli.AppHelpTemplate = fmt.Sprintf(`
 %s
-   {{.Name}} [options] [tag revision]
+  {{.Name}} [options] <tag query>
+
+    There are the following specification methods for <tag query>.
+
+    1. <old>..<new> - Commit contained in <old> tags from <new>.
+    2. <name>..     - Commit from the <name> to the latest tag.
+    3. ..<name>     - Commit from the oldest tag to <name>.
+    4. <name>       - Commit contained in <name>.
 
 %s
-   {{.Version}}{{if .Author}}
+  {{range .Flags}}{{.}}
+  {{end}}
+%s
 
-%s
-  {{.Author}}{{end}}
+  $ {{.Name}}
 
-%s
-   {{range .Flags}}{{.}}
-   {{end}}
-%s
-   {{.Name}}
-   {{.Name}} 1.0.0..5.0.0-rc.10
-   {{.Name}} 1.0.0..
-   {{.Name}} ..5.0.0-rc.10
-   {{.Name}} 1.0.0
-   {{.Name}} --output CHANGELOG.md
-   {{.Name}} --config dir/path/config.yml
+    If <tag query> is not specified, it corresponds to all tags.
+    This is the simplest example.
+
+  $ {{.Name}} 1.0.0..2.0.0
+
+    The above is a command to generate CHANGELOG including commit of 1.0.0 to 2.0.0.
+
+  $ {{.Name}} 1.0.0
+
+    The above is a command to generate CHANGELOG including commit of only 1.0.0.
+
+  $ {{.Name}} $(git describe --tags $(git rev-list --tags --max-count=1))
+
+    The above is a command to generate CHANGELOG with the commit included in the latest tag.
+
+  $ {{.Name}} --output CHANGELOG.md
+
+    The above is a command to output to CHANGELOG.md instead of standard output.
+
+  $ {{.Name}} --config custom/dir/config.yml
+
+    The adove is a command that uses a configuration file placed other than ".chglog/config.yml".
 `,
 		ttl("USAGE:"),
-		ttl("VERSION:"),
-		ttl("AUTHOR:"),
 		ttl("OPTIONS:"),
 		ttl("EXAMPLE:"),
 	)
@@ -62,7 +79,7 @@ func main() {
 		// output
 		cli.StringFlag{
 			Name:  "output, o",
-			Usage: "output path and filename for the changelogs (default: output to stdout)",
+			Usage: "output path and filename for the changelogs. If not specified, output to stdout",
 		},
 
 		// silent
