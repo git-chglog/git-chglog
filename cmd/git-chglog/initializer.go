@@ -80,7 +80,7 @@ func (init *Initializer) Run() int {
 
 	success := color.CyanString("✔")
 	emoji.Fprintf(os.Stdout, `
-:sparkles:%s
+:sparkles: %s
   %s %s
   %s %s
 
