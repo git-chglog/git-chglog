@@ -8,6 +8,7 @@ deps:
 .PHONY: clean
 clean:
 	rm -rf ./vendor/
+	rm -rf ./dist/
 	rm -rf ./git-chglog
 	rm -rf $(GOPATH)/bin/git-chglog
 
