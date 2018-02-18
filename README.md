@@ -25,11 +25,6 @@
 * [CLI Usage](#cli-usage)
     - [`tag query`](#tag-query)
 * [Configuration](#configuration)
-    - [`bin`](#bin)
-    - [`style`](#style)
-    - [`template`](#template)
-    - [`info`](#info)
-    - [`options`](#options)
 * [Templates](#templates)
 * [Supported Styles](#supported-styles)
 * [FAQ](#faq)
@@ -67,7 +62,7 @@ The basic steps are as follows.
 
 1. Get all the tags.
 1. Get the commit contained between `tagA` and `tagB`.
-1. Execute with all tags corresponding to [tag query](# tag-query) that specified Step 1 to 2.
+1. Execute with all tags corresponding to [tag query](#tag-query) that specified Step 1 to 2.
 
 
 
@@ -318,29 +313,29 @@ Options used to process commits.
 
 Option concerning acquisition and sort of commit.
 
-| Key       | Required | Type        | Default   | Description                                                                                         |
-|:----------|:---------|:------------|:----------|:----------------------------------------------------------------------------------------------------|
-| `filters` | N        | Map in List | none      | Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value. |
-| `sort_by` | N        | String      | `"Scope"` | Property name to use for sorting `Commit`. See [Commit](#todo).                                     |
+| Key       | Required | Type        | Default   | Description                                                                                                         |
+|:----------|:---------|:------------|:----------|:--------------------------------------------------------------------------------------------------------------------|
+| `filters` | N        | Map in List | none      | Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value.                 |
+| `sort_by` | N        | String      | `"Scope"` | Property name to use for sorting `Commit`. See [Commit](https://godoc.org/github.com/git-chglog/git-chglog#Commit). |
 
 #### `options.commit_groups`
 
 Option for groups of commits.
 
-| Key          | Required | Type        | Default   | Description                                                                           |
-|:-------------|:---------|:------------|:----------|:--------------------------------------------------------------------------------------|
-| `group_by`   | N        | String      | `"Type"`  | Property name of `Commit` to be grouped into `CommitGroup`. See [CommitGroup](#todo). |
-| `sort_by`    | N        | String      | `"Title"` | Property name to use for sorting `CommitGroup`. See [CommitGroup](#todo).             |
-| `title_maps` | N        | Map in List | none      | Map for `CommitGroup` title conversion.                                               |
+| Key          | Required | Type        | Default   | Description                                                                                |
+|:-------------|:---------|:------------|:----------|:-------------------------------------------------------------------------------------------|
+| `group_by`   | N        | String      | `"Type"`  | Property name of `Commit` to be grouped into `CommitGroup`. See [CommitGroup][doc-commit]. |
+| `sort_by`    | N        | String      | `"Title"` | Property name to use for sorting `CommitGroup`. See [CommitGroup][doc-commit-group].       |
+| `title_maps` | N        | Map in List | none      | Map for `CommitGroup` title conversion.                                                    |
 
 #### `options.header`
 
 This option is used for parsing the commit header.
 
-| Key            | Required | Type   | Default | Description                                                                                        |
-|:---------------|:---------|:-------|:--------|:---------------------------------------------------------------------------------------------------|
-| `pattern`      | Y        | String | none    | A regular expression to use for parsing the commit header.                                         |
-| `pattern_maps` | Y        | List   | none    | A rule for mapping the result of `HeaderPattern` to the property of `Commit`. See [Commit](#todo). |
+| Key            | Required | Type   | Default | Description                                                                                             |
+|:---------------|:---------|:-------|:--------|:--------------------------------------------------------------------------------------------------------|
+| `pattern`      | Y        | String | none    | A regular expression to use for parsing the commit header.                                              |
+| `pattern_maps` | Y        | List   | none    | A rule for mapping the result of `HeaderPattern` to the property of `Commit`. See [Commit][doc-commit]. |
 
 #### `options.issues`
 
@@ -354,9 +349,9 @@ This option is used to detect issues.
 
 This option is for parsing references.
 
-| Key       | Required | Type | Default | Description                                  |
-|:----------|:---------|:-----|:--------|:---------------------------------------------|
-| `actions` | N        | List | none    | Word list of `Ref.Action`. See [Ref](#todo). |
+| Key       | Required | Type | Default | Description                                    |
+|:----------|:---------|:-----|:--------|:-----------------------------------------------|
+| `actions` | N        | List | none    | Word list of `Ref.Action`. See [Ref][doc-ref]. |
 
 #### `options.merges`
 
@@ -426,7 +421,7 @@ The basic templates are as follows.
 {{end}}
 ```
 
-See godoc [RenderData](#todo) for available variables.
+See godoc [RenderData][doc-render-data] for available variables.
 
 
 
@@ -520,3 +515,11 @@ See [CHANGELOG.md](./CHANGELOG.md)
 ## License
 
 [MIT © tsuyoshiwada](./LICENSE)
+
+
+
+
+[doc-commit]: https://godoc.org/github.com/git-chglog/git-chglog#Commit
+[doc-commit-group]: https://godoc.org/github.com/git-chglog/git-chglog#Commit
+[doc-ref]: https://godoc.org/github.com/git-chglog/git-chglog#Ref
+[doc-render-data]: https://godoc.org/github.com/git-chglog/git-chglog#RenderData
