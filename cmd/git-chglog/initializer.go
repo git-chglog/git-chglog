@@ -24,9 +24,9 @@ var (
 		styleNone,
 	}
 
-	fmtTypeScopeSubject  = "<type>(<scope>): <subject>"
-	fmtTypeSubject       = "<type>: <subject>"
-	fmtSubject           = "<subject>"
+	fmtTypeScopeSubject  = "<type>(<scope>): <subject> -- feat(core) Add new feature"
+	fmtTypeSubject       = "<type>: <subject> -- feat: Add new feature"
+	fmtSubject           = "<subject> -- Add new feature"
 	commitMessageFormats = []string{
 		fmtTypeScopeSubject,
 		fmtTypeSubject,
