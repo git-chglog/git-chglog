@@ -309,17 +309,17 @@ func (init *Initializer) createTemplate(answer *Answer) string {
 	// commits
 	tpl += init.commits(answer.Style, answer.Template, answer.CommitMessageFormat)
 
-	// merges
+	// revert
 	if answer.IncludeReverts {
 		tpl += `{{if .RevertCommits}}
 ### Reverts
 {{range .RevertCommits}}
-* {{.Header}}{{end}}
+* {{.Revert.Header}}{{end}}
 {{end}}`
 	}
 
-	// reverts
-	if answer.IncludeReverts {
+	// merge
+	if answer.IncludeMerges {
 		tpl += fmt.Sprintf(`{{if .MergeCommits}}
 ### %s
 {{range .MergeCommits}}
