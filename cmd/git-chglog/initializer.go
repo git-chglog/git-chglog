@@ -26,10 +26,12 @@ var (
 
 	fmtTypeScopeSubject  = "<type>(<scope>): <subject> -- feat(core) Add new feature"
 	fmtTypeSubject       = "<type>: <subject> -- feat: Add new feature"
-	fmtSubject           = "<subject> -- Add new feature"
+	fmtGitBasic          = "<<type> subject> -- Add new feature"
+	fmtSubject           = "<subject> -- Add new feature (Not detect `type` field)"
 	commitMessageFormats = []string{
 		fmtTypeScopeSubject,
 		fmtTypeSubject,
+		fmtGitBasic,
 		fmtSubject,
 	}
 
@@ -259,6 +261,11 @@ func (init *Initializer) createConfigYamlContent(answer *Answer) string {
 		headerPatternMaps = `
       - Type
       - Subject`
+	case fmtGitBasic:
+		headerPattern = `^((\\w+)\\s.*)$`
+		headerPatternMaps = `
+      - Subject
+      - Type`
 	case fmtSubject:
 		headerPattern = `^(.*)$`
 		headerPatternMaps = `
@@ -380,7 +387,12 @@ func (*Initializer) commits(style, template, format string) string {
 	)
 
 	switch format {
-	case fmtTypeScopeSubject, fmtTypeSubject:
+	case fmtSubject:
+		body = `{{range .Commits}}
+* {{.Header}}{{end}}
+`
+
+	default:
 		if format == fmtTypeScopeSubject {
 			header = "{{if ne .Scope \"\"}}**{{.Scope}}:** {{end}}{{.Subject}}"
 		} else {
@@ -391,11 +403,6 @@ func (*Initializer) commits(style, template, format string) string {
 {{range .Commits}}
 * %s{{end}}
 `, header)
-
-	case fmtSubject:
-		body = `{{range .Commits}}
-* {{.Header}}{{end}}
-`
 	}
 
 	return fmt.Sprintf(`{{range .CommitGroups}}
