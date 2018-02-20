@@ -1,94 +1,50 @@
-# Contributing
+# Contributing `git-chglog`
 
-By participating to this project, you agree to abide our [code of
-conduct](/CODE_OF_CONDUCT.md).
+Thank you for contributing `git-chglog` :tada:
 
-## Setup your machine
 
-`goreleaser` is written in [Go](https://golang.org/).
+## Templates
 
-Prerequisites:
+Please use issue/PR templates which are inserted automatically.
 
-- `make`
-- [Go 1.16+](https://golang.org/doc/install)
-- [snapcraft](https://snapcraft.io/)
-- [Docker](https://www.docker.com/)
-- `gpg` (probably already installed on your system)
 
-Clone `goreleaser` anywhere:
+## Found a Bug?
 
-```sh
-git clone git@github.com:goreleaser/goreleaser.git
+If you find a bug in the source code, you can help us by [submitting an issue](https://github.com/git-chglog/git-chglog/issues) to our [GitHub Repository](https://github.com/git-chglog/git-chglog). Even better, you can submit a Pull Request with a fix.
+
+
+## Commit Message Format
+
+A format influenced by [Angular commit message](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit-message-format).
+
+```
+<type>: <subject>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
 ```
 
-`cd` into the directory and install the dependencies:
 
-```sh
-make setup
-```
+### Type
 
-A good way of making sure everything is all right is running the test suite:
+Must be one of the following:
 
-```sh
-make test
-```
+* **docs:** Documention only changes
+* **ci:** Changes to our CI configuration files and scripts
+* **chore:** Updating Makefile etc, no production code changes
+* **feat:** A new feature
+* **fix:** A bug fix
+* **perf:** A code change that improves performance
+* **refactor:** A code change that neither fixes a bug nor adds a feature
+* **style:** Changes that do not affect the meaning of the code
+* **test:** Adding missing tests or correcting existing tests
 
-## Test your change
 
-You can create a branch for your changes and try to build from the source as you go:
+### Footer
 
-```sh
-make build
-```
+The footer should contain a [closing reference to an issue](https://help.github.com/articles/closing-issues-via-commit-messages/) if any.
 
-When you are satisfied with the changes, we suggest you run:
+The **footer** should contain any information about **Breaking Changes** and is also the place to reference GitHub issues that this commit **Closes**.
 
-```sh
-make ci
-```
-
-## Create a commit
-
-Commit messages should be well formatted, and to make that "standardized", we
-are using Conventional Commits.
-
-You can follow the documentation on
-[their website](https://www.conventionalcommits.org).
-
-## Submit a pull request
-
-Push your branch to your `goreleaser` fork and open a pull request against the
-master branch.
-
-## Financial contributions
-
-We also welcome financial contributions in full transparency on our [open collective](https://opencollective.com/goreleaser).
-Anyone can file an expense. If the expense makes sense for the development of the community, it will be "merged" in the ledger of our open collective by the core contributors and the person who filed the expense will be reimbursed.
-
-## Credits
-
-### Contributors
-
-Thank you to all the people who have already contributed to GoReleaser!
-<a href="graphs/contributors"><img src="https://opencollective.com/goreleaser/contributors.svg?width=890" /></a>
-
-### Backers
-
-Thank you to all our backers! [[Become a backer](https://opencollective.com/goreleaser#backer)]
-
-<a href="https://opencollective.com/goreleaser#backers" target="_blank"><img src="https://opencollective.com/goreleaser/backers.svg?width=890"></a>
-
-### Sponsors
-
-Thank you to all our sponsors! (please ask your company to also support this open source project by [becoming a sponsor](https://opencollective.com/goreleaser#sponsor))
-
-<a href="https://opencollective.com/goreleaser/sponsor/0/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/goreleaser/sponsor/1/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/goreleaser/sponsor/2/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/goreleaser/sponsor/3/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/goreleaser/sponsor/4/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/goreleaser/sponsor/5/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/goreleaser/sponsor/6/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/goreleaser/sponsor/7/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/goreleaser/sponsor/8/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/goreleaser/sponsor/9/website" target="_blank"><img src="https://opencollective.com/goreleaser/sponsor/9/avatar.svg"></a>
+**Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
