@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/fatih/color"
 	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
@@ -25,9 +26,9 @@ var (
 	}
 
 	fmtTypeScopeSubject  = "<type>(<scope>): <subject> -- feat(core) Add new feature"
-	fmtTypeSubject       = "<type>: <subject> -- feat: Add new feature"
-	fmtGitBasic          = "<<type> subject> -- Add new feature"
-	fmtSubject           = "<subject> -- Add new feature (Not detect `type` field)"
+	fmtTypeSubject       = "<type>: <subject>          -- feat: Add new feature"
+	fmtGitBasic          = "<<type> subject>           -- Add new feature"
+	fmtSubject           = "<subject>                  -- Add new feature (Not detect `type` field)"
 	commitMessageFormats = []string{
 		fmtTypeScopeSubject,
 		fmtTypeSubject,
@@ -133,6 +134,12 @@ func (init *Initializer) createQuestions() []*survey.Question {
 				Message: "Choose the format of your favorite commit message",
 				Options: commitMessageFormats,
 				Default: commitMessageFormats[0],
+			},
+			Transform: func(ans interface{}) (newAns interface{}) {
+				if s, ok := ans.(string); ok {
+					newAns = strings.TrimSpace(strings.Split(s, "--")[0])
+				}
+				return
 			},
 		},
 		{
