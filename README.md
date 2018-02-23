@@ -192,7 +192,7 @@ EXAMPLE:
 
   $ git-chglog --config custom/dir/config.yml
 
-    The adove is a command that uses a configuration file placed other than ".chglog/config.yml".
+    The above is a command that uses a configuration file placed other than ".chglog/config.yml".
 ```
 
 
