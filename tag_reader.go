@@ -1,6 +1,7 @@
 package chglog
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -33,7 +34,7 @@ func (r *tagReader) ReadAll() ([]*Tag, error) {
 	tags := []*Tag{}
 
 	if err != nil {
-		return tags, err
+		return tags, fmt.Errorf("failed to get git-tag: %s", err.Error())
 	}
 
 	lines := strings.Split(out, "\n")
