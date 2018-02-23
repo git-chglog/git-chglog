@@ -5,6 +5,7 @@ notifications:
 go:
   - 1.9
 before_install:
+  - go get github.com/mattn/goveralls
   - go get github.com/mitchellh/gox
   - go get github.com/tcnksm/ghr
 before_script:
@@ -13,6 +14,7 @@ before_script:
   - timedatectl
 script:
   - make test
+  - goveralls -service=travis-ci
 branches:
   only:
     - master
