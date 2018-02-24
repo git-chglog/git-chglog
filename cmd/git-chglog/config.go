@@ -70,7 +70,7 @@ type Config struct {
 }
 
 // Normalize ...
-func (config *Config) Normalize(ctx *Context) error {
+func (config *Config) Normalize(ctx *CLIContext) error {
 	err := mergo.Merge(config, &Config{
 		Bin:      "git",
 		Template: "CHANGELOG.tpl.md",
@@ -148,7 +148,7 @@ func (config *Config) normalizeStyleOfGitHub() {
 }
 
 // Convert ...
-func (config *Config) Convert(ctx *Context) *chglog.Config {
+func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 	info := config.Info
 	opts := config.Options
 

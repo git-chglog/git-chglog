@@ -1,8 +1,14 @@
 package main
 
 type mockFileSystem struct {
-	ReturnMkdirP func(string) error
-	ReturnCreate func(string) (File, error)
+	ReturnExists    func(string) bool
+	ReturnMkdirP    func(string) error
+	ReturnCreate    func(string) (File, error)
+	ReturnWriteFile func(string, []byte) error
+}
+
+func (m *mockFileSystem) Exists(path string) bool {
+	return m.ReturnExists(path)
 }
 
 func (m *mockFileSystem) MkdirP(path string) error {
@@ -11,6 +17,10 @@ func (m *mockFileSystem) MkdirP(path string) error {
 
 func (m *mockFileSystem) Create(name string) (File, error) {
 	return m.ReturnCreate(name)
+}
+
+func (m *mockFileSystem) WriteFile(path string, content []byte) error {
+	return m.ReturnWriteFile(path, content)
 }
 
 type mockFile struct {
