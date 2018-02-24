@@ -42,9 +42,15 @@ func (p *GitHubProcessor) ProcessCommit(commit *Commit) *Commit {
 	commit.Header = p.addLinks(commit.Header)
 	commit.Subject = p.addLinks(commit.Subject)
 	commit.Body = p.addLinks(commit.Body)
+
 	for _, note := range commit.Notes {
 		note.Body = p.addLinks(note.Body)
 	}
+
+	if commit.Revert != nil {
+		commit.Revert.Header = p.addLinks(commit.Revert.Header)
+	}
+
 	return commit
 }
 
