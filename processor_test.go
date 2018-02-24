@@ -51,4 +51,19 @@ gh-56 hoge fuga`,
 			},
 		),
 	)
+
+	assert.Equal(
+		&Commit{
+			Revert: &Revert{
+				Header: "revert header [@mention](https://github.com/mention) [#123](https://example.com/issues/123)",
+			},
+		},
+		processor.ProcessCommit(
+			&Commit{
+				Revert: &Revert{
+					Header: "revert header @mention #123",
+				},
+			},
+		),
+	)
 }
