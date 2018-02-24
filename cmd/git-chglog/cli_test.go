@@ -40,7 +40,7 @@ func TestCLIForStdout(t *testing.T) {
 	}
 
 	c := NewCLI(
-		&Context{
+		&CLIContext{
 			WorkingDir: "/",
 			ConfigPath: "/.chglog/config.yml",
 			OutputPath: "",
@@ -108,7 +108,7 @@ func TestCLIForFile(t *testing.T) {
 	}
 
 	c := NewCLI(
-		&Context{
+		&CLIContext{
 			WorkingDir: "/",
 			ConfigPath: "/.chglog/config.yml",
 			OutputPath: "/dir/to/CHANGELOG.tpl",

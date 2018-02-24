@@ -4,8 +4,8 @@ import (
 	"io"
 )
 
-// Context ...
-type Context struct {
+// CLIContext ...
+type CLIContext struct {
 	WorkingDir string
 	Stdout     io.Writer
 	Stderr     io.Writer
@@ -15,4 +15,11 @@ type Context struct {
 	NoColor    bool
 	NoEmoji    bool
 	Query      string
+}
+
+// InitContext ...
+type InitContext struct {
+	WorkingDir string
+	Stdout     io.Writer
+	Stderr     io.Writer
 }

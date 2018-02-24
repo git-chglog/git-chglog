@@ -12,7 +12,7 @@ import (
 
 // CLI ...
 type CLI struct {
-	ctx              *Context
+	ctx              *CLIContext
 	fs               FileSystem
 	logger           *Logger
 	configLoader     ConfigLoader
@@ -22,8 +22,7 @@ type CLI struct {
 
 // NewCLI ...
 func NewCLI(
-	ctx *Context,
-	fs FileSystem,
+	ctx *CLIContext, fs FileSystem,
 	configLoader ConfigLoader,
 	generator Generator,
 ) *CLI {

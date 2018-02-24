@@ -16,7 +16,7 @@ func TestConfigNormalize(t *testing.T) {
 		},
 	}
 
-	err := config.Normalize(&Context{
+	err := config.Normalize(&CLIContext{
 		ConfigPath: "/test/config.yml",
 	})
 
@@ -30,7 +30,7 @@ func TestConfigNormalize(t *testing.T) {
 		Template: "/CHANGELOG.tpl.md",
 	}
 
-	err = config.Normalize(&Context{
+	err = config.Normalize(&CLIContext{
 		ConfigPath: "/test/config.yml",
 	})
 
