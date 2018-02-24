@@ -30,7 +30,3 @@ coverage:
 .PHONY: install
 install:
 	go install ./cmd/git-chglog
-
-.PHONY: chglog
-chglog:
-	git-chglog -c ./.chglog/config.yml
