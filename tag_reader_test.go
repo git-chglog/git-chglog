@@ -13,19 +13,17 @@ func TestTagReader(t *testing.T) {
 	assert := assert.New(t)
 	client := &mockClient{
 		ReturnExec: func(subcmd string, args ...string) (string, error) {
-			if subcmd != "log" {
+			if subcmd != "for-each-ref" {
 				return "", errors.New("")
 			}
 			return strings.Join([]string{
 				"",
-				"tag: v5.2.0-beta.1, origin/labs/router\t1518023112",
-				"tag: 2.0.0\t1517875200",
-				"tag: v2.0.4-rc.1\t1517788800",
-				"tag: 2.0.4-beta.1\t1517702400",
-				"tag: hoge_fuga\t1517616000",
-				"tag: 1.9.29-alpha.0\t1517529600",
-				"hoge\t0",
-				"foo\t0",
+				"refs/tags/v2.0.4-beta.1@@__CHGLOG__@@Release v2.0.4-beta.1@@__CHGLOG__@@Thu Feb 1 00:00:00 2018 +0000@@__CHGLOG__@@",
+				"refs/tags/4.4.3@@__CHGLOG__@@This is tag subject@@__CHGLOG__@@@@__CHGLOG__@@Fri Feb 2 00:00:00 2018 +0000",
+				"refs/tags/4.4.4@@__CHGLOG__@@Release 4.4.4@@__CHGLOG__@@Fri Feb 2 10:00:40 2018 +0000@@__CHGLOG__@@",
+				"refs/tags/5.0.0-rc.0@@__CHGLOG__@@Release 5.0.0-rc.0@@__CHGLOG__@@Sat Feb 3 12:30:10 2018 +0000@@__CHGLOG__@@",
+				"refs/tags/hoge_fuga@@__CHGLOG__@@Invalid semver tag name@@__CHGLOG__@@Mon Mar 12 12:30:10 2018 +0000@@__CHGLOG__@@",
+				"hoge@@__CHGLOG__@@",
 			}, "\n"), nil
 		},
 	}
@@ -36,68 +34,69 @@ func TestTagReader(t *testing.T) {
 	assert.Equal(
 		[]*Tag{
 			&Tag{
-				Name: "v5.2.0-beta.1",
-				Date: time.Unix(1518023112, 0),
-				Next: nil,
+				Name:    "hoge_fuga",
+				Subject: "Invalid semver tag name",
+				Date:    time.Date(2018, 3, 12, 12, 30, 10, 0, time.UTC),
+				Next:    nil,
 				Previous: &RelateTag{
-					Name: "2.0.0",
-					Date: time.Unix(1517875200, 0),
+					Name:    "5.0.0-rc.0",
+					Subject: "Release 5.0.0-rc.0",
+					Date:    time.Date(2018, 2, 3, 12, 30, 10, 0, time.UTC),
 				},
 			},
 			&Tag{
-				Name: "2.0.0",
-				Date: time.Unix(1517875200, 0),
+				Name:    "5.0.0-rc.0",
+				Subject: "Release 5.0.0-rc.0",
+				Date:    time.Date(2018, 2, 3, 12, 30, 10, 0, time.UTC),
 				Next: &RelateTag{
-					Name: "v5.2.0-beta.1",
-					Date: time.Unix(1518023112, 0),
+					Name:    "hoge_fuga",
+					Subject: "Invalid semver tag name",
+					Date:    time.Date(2018, 3, 12, 12, 30, 10, 0, time.UTC),
 				},
 				Previous: &RelateTag{
-					Name: "v2.0.4-rc.1",
-					Date: time.Unix(1517788800, 0),
+					Name:    "4.4.4",
+					Subject: "Release 4.4.4",
+					Date:    time.Date(2018, 2, 2, 10, 0, 40, 0, time.UTC),
 				},
 			},
 			&Tag{
-				Name: "v2.0.4-rc.1",
-				Date: time.Unix(1517788800, 0),
+				Name:    "4.4.4",
+				Subject: "Release 4.4.4",
+				Date:    time.Date(2018, 2, 2, 10, 0, 40, 0, time.UTC),
 				Next: &RelateTag{
-					Name: "2.0.0",
-					Date: time.Unix(1517875200, 0),
+					Name:    "5.0.0-rc.0",
+					Subject: "Release 5.0.0-rc.0",
+					Date:    time.Date(2018, 2, 3, 12, 30, 10, 0, time.UTC),
 				},
 				Previous: &RelateTag{
-					Name: "2.0.4-beta.1",
-					Date: time.Unix(1517702400, 0),
+					Name:    "4.4.3",
+					Subject: "This is tag subject",
+					Date:    time.Date(2018, 2, 2, 0, 0, 0, 0, time.UTC),
 				},
 			},
 			&Tag{
-				Name: "2.0.4-beta.1",
-				Date: time.Unix(1517702400, 0),
+				Name:    "4.4.3",
+				Subject: "This is tag subject",
+				Date:    time.Date(2018, 2, 2, 0, 0, 0, 0, time.UTC),
 				Next: &RelateTag{
-					Name: "v2.0.4-rc.1",
-					Date: time.Unix(1517788800, 0),
+					Name:    "4.4.4",
+					Subject: "Release 4.4.4",
+					Date:    time.Date(2018, 2, 2, 10, 0, 40, 0, time.UTC),
 				},
 				Previous: &RelateTag{
-					Name: "hoge_fuga",
-					Date: time.Unix(1517616000, 0),
+					Name:    "v2.0.4-beta.1",
+					Subject: "Release v2.0.4-beta.1",
+					Date:    time.Date(2018, 2, 1, 0, 0, 0, 0, time.UTC),
 				},
 			},
 			&Tag{
-				Name: "hoge_fuga",
-				Date: time.Unix(1517616000, 0),
+				Name:    "v2.0.4-beta.1",
+				Subject: "Release v2.0.4-beta.1",
+				Date:    time.Date(2018, 2, 1, 0, 0, 0, 0, time.UTC),
 				Next: &RelateTag{
-					Name: "2.0.4-beta.1",
-					Date: time.Unix(1517702400, 0),
-				},
-				Previous: &RelateTag{
-					Name: "1.9.29-alpha.0",
-					Date: time.Unix(1517529600, 0),
-				},
-			},
-			&Tag{
-				Name: "1.9.29-alpha.0",
-				Date: time.Unix(1517529600, 0),
-				Next: &RelateTag{
-					Name: "hoge_fuga",
-					Date: time.Unix(1517616000, 0),
+					Name:    "4.4.3",
+					Subject: "This is tag subject",
+					Date:    time.Date(2018, 2, 2, 0, 0, 0, 0, time.UTC),
 				},
 				Previous: nil,
 			},
