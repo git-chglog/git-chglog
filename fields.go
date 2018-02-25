@@ -80,13 +80,15 @@ type CommitGroup struct {
 // If you give `Tag`, the reference hierarchy will be deepened.
 // This struct is used to minimize the hierarchy of references
 type RelateTag struct {
-	Name string
-	Date time.Time
+	Name    string
+	Subject string
+	Date    time.Time
 }
 
 // Tag is data of git-tag
 type Tag struct {
 	Name     string
+	Subject  string
 	Date     time.Time
 	Next     *RelateTag
 	Previous *RelateTag

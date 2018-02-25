@@ -11,6 +11,7 @@ clean:
 	rm -rf ./dist/
 	rm -rf ./git-chglog
 	rm -rf $(GOPATH)/bin/git-chglog
+	rm -rf cover.out
 
 .PHONY: bulid
 build:
@@ -20,10 +21,12 @@ build:
 test:
 	go test -v `go list ./... | grep -v /vendor/`
 
+.PHONY: coverage
+coverage:
+	goverage -coverprofile=cover.out `go list ./... | grep -v /vendor/`
+	go tool cover -func=cover.out
+	@rm -rf cover.out
+
 .PHONY: install
 install:
 	go install ./cmd/git-chglog
-
-.PHONY: chglog
-chglog:
-	git-chglog -c ./.chglog/config.yml

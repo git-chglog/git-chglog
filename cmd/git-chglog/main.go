@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/fatih/color"
+	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
 	"github.com/urfave/cli"
 )
 
@@ -111,29 +112,44 @@ func main() {
 		wd, err := os.Getwd()
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "failed to get working directory", err)
-			os.Exit(1)
+			os.Exit(ExitCodeError)
 		}
 
 		// initializer
 		if c.Bool("init") {
-			os.Exit(NewInitializer().Run())
+			initializer := NewInitializer(
+				&InitContext{
+					WorkingDir: wd,
+					Stdout:     os.Stdout,
+					Stderr:     os.Stderr,
+				},
+				fs,
+				NewQuestioner(
+					gitcmd.New(&gitcmd.Config{
+						Bin: "git",
+					}),
+					fs,
+				),
+				NewConfigBuilder(),
+				NewTemplateBuilder(),
+			)
+
+			os.Exit(initializer.Run())
 		}
 
 		// chglog
-		ctx := &Context{
-			WorkingDir: wd,
-			Stdout:     os.Stdout,
-			Stderr:     os.Stderr,
-			ConfigPath: c.String("config"),
-			OutputPath: c.String("output"),
-			Silent:     c.Bool("silent"),
-			NoColor:    c.Bool("no-color"),
-			NoEmoji:    c.Bool("no-emoji"),
-			Query:      c.Args().First(),
-		}
-
 		chglogCLI := NewCLI(
-			ctx,
+			&CLIContext{
+				WorkingDir: wd,
+				Stdout:     os.Stdout,
+				Stderr:     os.Stderr,
+				ConfigPath: c.String("config"),
+				OutputPath: c.String("output"),
+				Silent:     c.Bool("silent"),
+				NoColor:    c.Bool("no-color"),
+				NoEmoji:    c.Bool("no-emoji"),
+				Query:      c.Args().First(),
+			},
 			fs,
 			NewConfigLoader(),
 			NewGenerator(),
