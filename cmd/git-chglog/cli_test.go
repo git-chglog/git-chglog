@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"io"
+	"path/filepath"
+	"regexp"
 	"testing"
 
 	chglog "github.com/git-chglog/git-chglog"
@@ -66,13 +68,13 @@ func TestCLIForFile(t *testing.T) {
 
 	mockFS := &mockFileSystem{
 		ReturnMkdirP: func(path string) error {
-			if path != "/dir/to" {
+			if filepath.ToSlash(path) != "/dir/to" {
 				return errors.New("")
 			}
 			return nil
 		},
 		ReturnCreate: func(name string) (File, error) {
-			if name != "/dir/to/CHANGELOG.tpl" {
+			if filepath.ToSlash(name) != "/dir/to/CHANGELOG.tpl" {
 				return nil, errors.New("")
 			}
 			return &mockFile{
@@ -88,7 +90,7 @@ func TestCLIForFile(t *testing.T) {
 
 	configLoader := &mockConfigLoaderImpl{
 		ReturnLoad: func(path string) (*Config, error) {
-			if path != "/.chglog/config.yml" {
+			if filepath.ToSlash(path) != "/.chglog/config.yml" {
 				return nil, errors.New("")
 			}
 			return &Config{
@@ -99,7 +101,7 @@ func TestCLIForFile(t *testing.T) {
 
 	generator := &mockGeneratorImpl{
 		ReturnGenerate: func(w io.Writer, query string, config *chglog.Config) error {
-			if config.Bin != "/custom/bin/git" {
+			if filepath.ToSlash(config.Bin) != "/custom/bin/git" {
 				return errors.New("")
 			}
 			w.Write([]byte("success!!"))
@@ -122,5 +124,6 @@ func TestCLIForFile(t *testing.T) {
 
 	assert.Equal(ExitCodeOK, c.Run())
 	assert.Equal("", stderr.String())
-	assert.Contains(stdout.String(), "Generate of \"/dir/to/CHANGELOG.tpl\"")
+	out := regexp.MustCompile("\x1b\\[[^a-z]*[a-z]").ReplaceAllString(stdout.String(), "")
+	assert.Contains(out, "Generate of \"/dir/to/CHANGELOG.tpl\"")
 }
