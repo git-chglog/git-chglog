@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/fatih/color"
+	"github.com/mattn/go-colorable"
 	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
 	"github.com/urfave/cli"
 )
@@ -120,8 +121,8 @@ func main() {
 			initializer := NewInitializer(
 				&InitContext{
 					WorkingDir: wd,
-					Stdout:     os.Stdout,
-					Stderr:     os.Stderr,
+					Stdout:     colorable.NewColorableStdout(),
+					Stderr:     colorable.NewColorableStderr(),
 				},
 				fs,
 				NewQuestioner(
@@ -141,8 +142,8 @@ func main() {
 		chglogCLI := NewCLI(
 			&CLIContext{
 				WorkingDir: wd,
-				Stdout:     os.Stdout,
-				Stderr:     os.Stderr,
+				Stdout:     colorable.NewColorableStdout(),
+				Stderr:     colorable.NewColorableStderr(),
 				ConfigPath: c.String("config"),
 				OutputPath: c.String("output"),
 				Silent:     c.Bool("silent"),
