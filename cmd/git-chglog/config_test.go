@@ -1,6 +1,7 @@
 package main
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,7 +24,7 @@ func TestConfigNormalize(t *testing.T) {
 	assert.Nil(err)
 	assert.Equal("git", config.Bin)
 	assert.Equal("https://example.com/foo/bar", config.Info.RepositoryURL)
-	assert.Equal("/test/CHANGELOG.tpl.md", config.Template)
+	assert.Equal("/test/CHANGELOG.tpl.md", filepath.ToSlash(config.Template))
 
 	// abs template
 	config = &Config{
@@ -35,5 +36,5 @@ func TestConfigNormalize(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal("/CHANGELOG.tpl.md", config.Template)
+	assert.Equal("/CHANGELOG.tpl.md", filepath.ToSlash(config.Template))
 }
