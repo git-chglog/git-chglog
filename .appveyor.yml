@@ -1,0 +1,21 @@
+version: "{build}"
+
+clone_depth: 1
+clone_folder: c:\gopath\src\github.com\git-chglog\git-chglog
+
+environment:
+  GOPATH: c:\gopath
+
+install:
+  - echo %PATH%
+  - echo %GOPATH%
+  - go version
+  - go env
+  - set PATH=%PATH%;%GOPATH%\bin
+
+test_script:
+  - go build github.com/git-chglog/git-chglog/cmd/git-chglog
+  - for /f "" %%G in ('go list github.com/git-chglog/git-chglog/...') do ( go test -v %%G & IF ERRORLEVEL == 1 EXIT 1)
+
+build: off
+deploy: off
