@@ -5,7 +5,6 @@ import (
 	"path/filepath"
 
 	"github.com/fatih/color"
-	"github.com/mattn/go-colorable"
 	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
 )
 
@@ -31,7 +30,7 @@ func NewInitializer(
 	return &Initializer{
 		ctx:             ctx,
 		fs:              fs,
-		logger:          NewLogger(colorable.NewColorableStdout(), colorable.NewColorableStderr(), false, false),
+		logger:          NewLogger(ctx.Stdout, ctx.Stderr, false, false),
 		questioner:      questioner,
 		configBuilder:   configBuilder,
 		templateBuilder: templateBuilder,
