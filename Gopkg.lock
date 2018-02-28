@@ -74,8 +74,8 @@
     "core",
     "terminal"
   ]
-  revision = "0aa8b6a162b391fe2d95648b7677d1d6ac2090a6"
-  version = "v1.4.1"
+  revision = "9f89d9dd66613216993dc300f9f3dbae9c3c9bda"
+  version = "v1.4.2"
 
 [[projects]]
   name = "gopkg.in/kyokomi/emoji.v1"
@@ -92,6 +92,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0be1d1c2f1a9b1c1f1d63ad065141425b62687efb378f6657b088ddf993c3882"
+  inputs-digest = "da532fb70b3049dffe6ae9f73b3f0a742452639096a325ac5d2400be6ad0559e"
   solver-name = "gps-cdcl"
   solver-version = 1
