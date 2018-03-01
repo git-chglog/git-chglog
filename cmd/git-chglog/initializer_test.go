@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"errors"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,13 +17,13 @@ func TestInitializer(t *testing.T) {
 
 	mockFs := &mockFileSystem{
 		ReturnMkdirP: func(path string) error {
-			if path == "/test/config" {
+			if path == filepath.FromSlash("/test/config") {
 				return nil
 			}
 			return errors.New("")
 		},
 		ReturnWriteFile: func(path string, content []byte) error {
-			if path == "/test/config/config.yml" || path == "/test/config/CHANGELOG.tpl.md" {
+			if path == filepath.FromSlash("/test/config/config.yml") || path == filepath.FromSlash("/test/config/CHANGELOG.tpl.md") {
 				return nil
 			}
 			return errors.New("")

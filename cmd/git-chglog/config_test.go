@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -18,7 +19,7 @@ func TestConfigNormalize(t *testing.T) {
 	}
 
 	err := config.Normalize(&CLIContext{
-		ConfigPath: "/test/config.yml",
+		ConfigPath: filepath.FromSlash("/test/config.yml"),
 	})
 
 	assert.Nil(err)
@@ -27,14 +28,16 @@ func TestConfigNormalize(t *testing.T) {
 	assert.Equal("/test/CHANGELOG.tpl.md", filepath.ToSlash(config.Template))
 
 	// abs template
+	cwd, _ := os.Getwd()
+
 	config = &Config{
-		Template: "/CHANGELOG.tpl.md",
+		Template: filepath.Join(cwd, "CHANGELOG.tpl.md"),
 	}
 
 	err = config.Normalize(&CLIContext{
-		ConfigPath: "/test/config.yml",
+		ConfigPath: filepath.Join(cwd, "test", "config.yml"),
 	})
 
 	assert.Nil(err)
-	assert.Equal("/CHANGELOG.tpl.md", filepath.ToSlash(config.Template))
+	assert.Equal(filepath.Join(cwd, "CHANGELOG.tpl.md"), config.Template)
 }
