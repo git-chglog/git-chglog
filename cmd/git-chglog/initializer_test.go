@@ -64,7 +64,9 @@ func TestInitializer(t *testing.T) {
 		mockFs,
 		questioner,
 		configBuilder,
-		tplBuilder,
+		func(t string) TemplateBuilder {
+			return tplBuilder
+		},
 	)
 
 	assert.Equal(ExitCodeOK, init.Run())

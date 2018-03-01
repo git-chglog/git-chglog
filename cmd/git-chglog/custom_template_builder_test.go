@@ -6,9 +6,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTemplateBuilderDefault(t *testing.T) {
+func TestCustomTemplateBuilderDefault(t *testing.T) {
 	assert := assert.New(t)
-	builder := NewTemplateBuilder()
+	builder := NewCustomTemplateBuilder()
 
 	out, err := builder.Build(&Answer{
 		Style:               styleGitHub,
@@ -25,7 +25,7 @@ func TestTemplateBuilderDefault(t *testing.T) {
 {{range .CommitGroups}}
 ### {{.Title}}
 {{range .Commits}}
-* {{if ne .Scope ""}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
+* {{if .Scope}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
 {{end}}{{if .RevertCommits}}
 ### Reverts
 {{range .RevertCommits}}
@@ -43,9 +43,9 @@ func TestTemplateBuilderDefault(t *testing.T) {
 {{end}}`, out)
 }
 
-func TestTemplateBuilderNone(t *testing.T) {
+func TestCustomTemplateBuilderNone(t *testing.T) {
 	assert := assert.New(t)
-	builder := NewTemplateBuilder()
+	builder := NewCustomTemplateBuilder()
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
@@ -61,7 +61,7 @@ func TestTemplateBuilderNone(t *testing.T) {
 {{range .CommitGroups}}
 ### {{.Title}}
 {{range .Commits}}
-* {{if ne .Scope ""}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
+* {{if .Scope}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
 {{end}}{{if .RevertCommits}}
 ### Reverts
 {{range .RevertCommits}}
@@ -79,9 +79,9 @@ func TestTemplateBuilderNone(t *testing.T) {
 {{end}}`, out)
 }
 
-func TestTemplateBuilderCool(t *testing.T) {
+func TestCustomTemplateBuilderCool(t *testing.T) {
 	assert := assert.New(t)
-	builder := NewTemplateBuilder()
+	builder := NewCustomTemplateBuilder()
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
@@ -99,7 +99,7 @@ func TestTemplateBuilderCool(t *testing.T) {
 {{range .CommitGroups}}
 ### {{.Title}}
 {{range .Commits}}
-* {{if ne .Scope ""}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
+* {{if .Scope}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
 {{end}}{{if .RevertCommits}}
 ### Reverts
 {{range .RevertCommits}}
@@ -117,9 +117,9 @@ func TestTemplateBuilderCool(t *testing.T) {
 {{end}}`, out)
 }
 
-func TestTemplateBuilderSubjectOnly(t *testing.T) {
+func TestCustomTemplateBuilderSubjectOnly(t *testing.T) {
 	assert := assert.New(t)
-	builder := NewTemplateBuilder()
+	builder := NewCustomTemplateBuilder()
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
@@ -152,9 +152,9 @@ func TestTemplateBuilderSubjectOnly(t *testing.T) {
 {{end}}`, out)
 }
 
-func TestTemplateBuilderSubject(t *testing.T) {
+func TestCustomTemplateBuilderSubject(t *testing.T) {
 	assert := assert.New(t)
-	builder := NewTemplateBuilder()
+	builder := NewCustomTemplateBuilder()
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
@@ -188,9 +188,9 @@ func TestTemplateBuilderSubject(t *testing.T) {
 {{end}}`, out)
 }
 
-func TestTemplateBuilderIgnoreReverts(t *testing.T) {
+func TestCustomTemplateBuilderIgnoreReverts(t *testing.T) {
 	assert := assert.New(t)
-	builder := NewTemplateBuilder()
+	builder := NewCustomTemplateBuilder()
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
@@ -220,9 +220,9 @@ func TestTemplateBuilderIgnoreReverts(t *testing.T) {
 {{end}}`, out)
 }
 
-func TestTemplateBuilderIgnoreMerges(t *testing.T) {
+func TestCustomTemplateBuilderIgnoreMerges(t *testing.T) {
 	assert := assert.New(t)
-	builder := NewTemplateBuilder()
+	builder := NewCustomTemplateBuilder()
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,

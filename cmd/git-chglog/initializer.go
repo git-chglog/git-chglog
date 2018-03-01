@@ -10,13 +10,13 @@ import (
 
 // Initializer ...
 type Initializer struct {
-	ctx             *InitContext
-	client          gitcmd.Client
-	fs              FileSystem
-	logger          *Logger
-	questioner      Questioner
-	configBuilder   ConfigBuilder
-	templateBuilder TemplateBuilder
+	ctx                    *InitContext
+	client                 gitcmd.Client
+	fs                     FileSystem
+	logger                 *Logger
+	questioner             Questioner
+	configBuilder          ConfigBuilder
+	templateBuilderFactory TemplateBuilderFactory
 }
 
 // NewInitializer ...
@@ -25,15 +25,14 @@ func NewInitializer(
 	fs FileSystem,
 	questioner Questioner,
 	configBuilder ConfigBuilder,
-	templateBuilder TemplateBuilder,
-) *Initializer {
+	tplBuilderFactory TemplateBuilderFactory) *Initializer {
 	return &Initializer{
-		ctx:             ctx,
-		fs:              fs,
-		logger:          NewLogger(ctx.Stdout, ctx.Stderr, false, false),
-		questioner:      questioner,
-		configBuilder:   configBuilder,
-		templateBuilder: templateBuilder,
+		ctx:                    ctx,
+		fs:                     fs,
+		logger:                 NewLogger(ctx.Stdout, ctx.Stderr, false, false),
+		questioner:             questioner,
+		configBuilder:          configBuilder,
+		templateBuilderFactory: tplBuilderFactory,
 	}
 }
 
@@ -86,7 +85,8 @@ func (init *Initializer) generateConfig(ans *Answer) error {
 }
 
 func (init *Initializer) generateTemplate(ans *Answer) error {
-	s, err := init.templateBuilder.Build(ans)
+	templateBuilder := init.templateBuilderFactory(ans.Template)
+	s, err := templateBuilder.Build(ans)
 	if err != nil {
 		return err
 	}
