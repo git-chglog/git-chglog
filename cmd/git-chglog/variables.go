@@ -86,9 +86,11 @@ var (
 
 // Templates
 var (
-	tplStandard = "standard"
-	tplCool     = "cool"
-	templates   = []string{
+	tplKeepAChangelog = "keep-a-changelog"
+	tplStandard       = "standard"
+	tplCool           = "cool"
+	templates         = []string{
+		tplKeepAChangelog,
 		tplStandard,
 		tplCool,
 	}

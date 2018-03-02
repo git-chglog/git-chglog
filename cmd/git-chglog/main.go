@@ -132,7 +132,7 @@ func main() {
 					fs,
 				),
 				NewConfigBuilder(),
-				NewTemplateBuilder(),
+				templateBuilderFactory,
 			)
 
 			os.Exit(initializer.Run())

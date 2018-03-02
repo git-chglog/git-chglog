@@ -6,17 +6,20 @@ go:
   - 1.9
 before_install:
   - go get github.com/mattn/goveralls
-  - go get github.com/mitchellh/gox
-  - go get github.com/tcnksm/ghr
 before_script:
   - export TZ=Asia/Tokyo
   - sudo timedatectl set-timezone Asia/Tokyo
   - timedatectl
 script:
   - make test
-  - goveralls -service=travis-ci
-branches:
-  only:
-    - master
 after_success:
-  - ./scripts/release.sh
+  - goveralls -service=travis-ci
+before_deploy:
+  - go get github.com/mitchellh/gox
+  - go get github.com/tcnksm/ghr
+deploy:
+  provider: script
+  script: ./scripts/release.sh
+  on:
+    tags: true
+    branch: master
