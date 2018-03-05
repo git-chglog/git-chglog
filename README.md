@@ -405,7 +405,7 @@ The basic templates are as follows.
 {{range .CommitGroups}}
 ### {{.Title}}
 {{range .Commits}}
-* {{if ne .Scope ""}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
+* {{if .Scope}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
 {{end}}{{if .RevertCommits}}
 ### Reverts
 {{range .RevertCommits}}
