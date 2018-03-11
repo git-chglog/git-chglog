@@ -283,9 +283,9 @@ Git execution command.
 
 CHANGELOG style. Automatic linking of issues and notices, initial value setting such as merges etc. are done automatically.
 
-| Required | Type   | Default  | Description                   |
-|:---------|:-------|:---------|:------------------------------|
-| N        | String | `"none"` | Should be `"github"` `"none"` |
+| Required | Type   | Default  | Description                              |
+|:---------|:-------|:---------|:-----------------------------------------|
+| N        | String | `"none"` | Should be `"github"` `"gitlab"` `"none"` |
 
 
 ### `template`
@@ -432,7 +432,7 @@ See godoc [RenderData][doc-render-data] for available variables.
 | Name                                       | Status                | Features                                               |
 |:-------------------------------------------|:----------------------|:-------------------------------------------------------|
 | [GitHub](https://github.com/)              | :white_check_mark:    | Mentions automatic link. Automatic link to references. |
-| [GitLab](https://about.gitlab.com/)        | :white_medium_square: | -                                                      |
+| [GitLab](https://about.gitlab.com/)        | :white_check_mark:    | Mentions automatic link. Automatic link to references. |
 | [Bitbucket](https://bitbucket.org/product) | :white_medium_square: | -                                                      |
 
 > :memo: Even with styles that are not yet supported, it is possible to make ordinary CHANGELOG.
