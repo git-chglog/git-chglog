@@ -17,6 +17,7 @@ func NewProcessorFactory() *ProcessorFactory {
 	return &ProcessorFactory{
 		hostRegistry: map[string]string{
 			"github": "github.com",
+			"gitlab": "gitlab.com",
 		},
 	}
 }
@@ -39,6 +40,10 @@ func (factory *ProcessorFactory) Create(config *Config) (chglog.Processor, error
 	switch host {
 	case "github.com":
 		return &chglog.GitHubProcessor{
+			Host: fmt.Sprintf("%s://%s", obj.Scheme, obj.Host),
+		}, nil
+	case "gitlab.com":
+		return &chglog.GitLabProcessor{
 			Host: fmt.Sprintf("%s://%s", obj.Scheme, obj.Host),
 		}, nil
 	default:
