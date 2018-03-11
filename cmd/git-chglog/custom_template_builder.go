@@ -48,7 +48,7 @@ func (*customTemplateBuilderImpl) versionHeader(style, template string) string {
 
 	// parts
 	switch style {
-	case styleGitHub:
+	case styleGitHub, styleGitLab:
 		tpl = "<a name=\"{{.Tag.Name}}\"></a>\n"
 		tagName = "{{if .Tag.Previous}}[{{.Tag.Name}}]({{$.Info.RepositoryURL}}/compare/{{.Tag.Previous.Name}}...{{.Tag.Name}}){{else}}{{.Tag.Name}}{{end}}"
 	}
@@ -115,6 +115,8 @@ func (t *customTemplateBuilderImpl) merges(style string) string {
 	switch style {
 	case styleGitHub:
 		title = "Pull Requests"
+	case styleGitLab:
+		title = "Merge Requests"
 	default:
 		title = "Merges"
 	}

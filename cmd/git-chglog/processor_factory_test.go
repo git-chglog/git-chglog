@@ -56,3 +56,39 @@ func TestProcessorFactoryForGitHub(t *testing.T) {
 		processor,
 	)
 }
+
+func TestProcessorFactoryForGitLab(t *testing.T) {
+	assert := assert.New(t)
+	factory := NewProcessorFactory()
+
+	// gitlab.com
+	processor, err := factory.Create(&Config{
+		Info: Info{
+			RepositoryURL: "https://gitlab.com/owner/repo",
+		},
+	})
+
+	assert.Nil(err)
+	assert.Equal(
+		&chglog.GitLabProcessor{
+			Host: "https://gitlab.com",
+		},
+		processor,
+	)
+
+	// self-hosted
+	processor, err = factory.Create(&Config{
+		Style: "gitlab",
+		Info: Info{
+			RepositoryURL: "https://original-gitserver.com/owner/repo",
+		},
+	})
+
+	assert.Nil(err)
+	assert.Equal(
+		&chglog.GitLabProcessor{
+			Host: "https://original-gitserver.com",
+		},
+		processor,
+	)
+}

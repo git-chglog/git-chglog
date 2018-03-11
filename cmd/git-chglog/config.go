@@ -147,6 +147,43 @@ func (config *Config) normalizeStyleOfGitHub() {
 	config.Options = opts
 }
 
+// For GitLab
+func (config *Config) normalizeStyleOfGitLab() {
+	opts := config.Options
+
+	if len(opts.Issues.Prefix) == 0 {
+		opts.Issues.Prefix = []string{
+			"#",
+		}
+	}
+
+	if len(opts.Refs.Actions) == 0 {
+		opts.Refs.Actions = []string{
+			"close",
+			"closes",
+			"closed",
+			"closing",
+			"fix",
+			"fixes",
+			"fixed",
+			"fixing",
+			"resolve",
+			"resolves",
+			"resolved",
+			"resolving",
+		}
+	}
+
+	if opts.Merges.Pattern == "" && len(opts.Merges.PatternMaps) == 0 {
+		opts.Merges.Pattern = "^Merge branch '.*' into '(.*)'$"
+		opts.Merges.PatternMaps = []string{
+			"Source",
+		}
+	}
+
+	config.Options = opts
+}
+
 // Convert ...
 func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 	info := config.Info
