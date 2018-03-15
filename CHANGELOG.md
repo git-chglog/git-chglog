@@ -4,8 +4,13 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## [Unreleased]
 
-<a name="0.0.3"></a>
-## [0.0.3] - 2018-03-12
+<a name="0.3.1"></a>
+## [0.3.1] - 2018-03-15
+### Bug Fixes
+- Fix preview string of commit subject ([@kt3k](https://github.com/kt3k))
+
+<a name="0.3.0"></a>
+## [0.3.0] - 2018-03-12
 ### Features
 - Add support for GitLab :tada:
 
@@ -60,8 +65,9 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - Add MergeCommits and RevertCommits
 - First implement
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.0.3...HEAD
-[0.0.3]: https://github.com/git-chglog/git-chglog/compare/0.2.0...0.0.3
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.3.1...HEAD
+[0.3.1]: https://github.com/git-chglog/git-chglog/compare/0.3.0...0.3.1
+[0.3.0]: https://github.com/git-chglog/git-chglog/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/git-chglog/git-chglog/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/git-chglog/git-chglog/compare/0.0.2...0.1.0
 [0.0.2]: https://github.com/git-chglog/git-chglog/compare/0.0.1...0.0.2
