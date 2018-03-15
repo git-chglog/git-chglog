@@ -55,7 +55,7 @@ func (f *CommitMessageFormat) PatternMapString() string {
 // Formats
 var (
 	fmtTypeScopeSubject = &CommitMessageFormat{
-		Preview:     "feat(core) Add new feature",
+		Preview:     "feat(core): Add new feature",
 		Display:     "<type>(<scope>): <subject>",
 		Pattern:     `^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$`,
 		PatternMaps: []string{"Type", "Scope", "Subject"},
