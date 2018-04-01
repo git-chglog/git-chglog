@@ -4,6 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## [Unreleased]
 
+<a name="0.3.2"></a>
+## [0.3.2] - 2018-04-02
+### Bug Fixes
+- Fix color output bug in windows help command
+
 <a name="0.3.1"></a>
 ## [0.3.1] - 2018-03-15
 ### Bug Fixes
@@ -65,7 +70,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - Add MergeCommits and RevertCommits
 - First implement
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.3.1...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.3.2...HEAD
+[0.3.2]: https://github.com/git-chglog/git-chglog/compare/0.3.1...0.3.2
 [0.3.1]: https://github.com/git-chglog/git-chglog/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/git-chglog/git-chglog/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/git-chglog/git-chglog/compare/0.1.0...0.2.0
