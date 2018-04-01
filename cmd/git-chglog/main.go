@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/fatih/color"
@@ -58,6 +59,10 @@ func main() {
 		ttl("OPTIONS:"),
 		ttl("EXAMPLE:"),
 	)
+
+	cli.HelpPrinter = func(w io.Writer, templ string, data interface{}) {
+		cli.HelpPrinterCustom(colorable.NewColorableStdout(), templ, data, nil)
+	}
 
 	app := cli.NewApp()
 	app.Name = "git-chglog"
