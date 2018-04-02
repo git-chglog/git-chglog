@@ -457,9 +457,9 @@ See godoc [RenderData][doc-render-data] for available variables.
 
 ## TODO
 
+* [x] Windows Support
 * [ ] More styles (GitLab, Bitbucket, and others ...)
 * [ ] Snippetization of configuration files (improvement of reusability)
-* [ ] Windows Support
 * [ ] More test test test ... (and example)
 
 
