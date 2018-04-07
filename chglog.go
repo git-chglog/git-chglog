@@ -2,6 +2,7 @@
 package chglog
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -135,6 +136,7 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 
 func (gen *Generator) readVersions(query string) ([]*Version, error) {
 	tags, first, err := gen.getTags(query)
+
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +174,7 @@ func (gen *Generator) readVersions(query string) ([]*Version, error) {
 	}
 
 	if len(versions) == 0 {
-		return nil, fmt.Errorf("a commits corresponding to \"%s\" was not found", query)
+		return nil, fmt.Errorf("commits corresponding to \"%s\" was not found", query)
 	}
 
 	return versions, nil
@@ -182,6 +184,10 @@ func (gen *Generator) getTags(query string) ([]*Tag, string, error) {
 	tags, err := gen.tagReader.ReadAll()
 	if err != nil {
 		return nil, "", err
+	}
+
+	if len(tags) == 0 {
+		return nil, "", errors.New("git-tag does not exist")
 	}
 
 	first := ""
