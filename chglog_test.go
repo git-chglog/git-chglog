@@ -49,11 +49,12 @@ func cleanup() {
 	os.RemoveAll(filepath.Join(cwd, testRepoRoot))
 }
 
-func TestGeneratorNotFoundCommits(t *testing.T) {
+func TestGeneratorNotFoundTags(t *testing.T) {
 	assert := assert.New(t)
 	testName := "not_found"
 
 	setup(testName, func(git gitcmd.Client) {
+		git.Exec("commit", "--allow-empty", "--date", "Mon Jan 1 00:00:00 2018 +0000", "-m", "feat(*): New feature")
 	})
 
 	gen := NewGenerator(&Config{
@@ -63,36 +64,33 @@ func TestGeneratorNotFoundCommits(t *testing.T) {
 		Info: &Info{
 			RepositoryURL: "https://github.com/git-chglog/git-chglog",
 		},
-		Options: &Options{
-			CommitFilters:        map[string][]string{},
-			CommitSortBy:         "Scope",
-			CommitGroupBy:        "Type",
-			CommitGroupSortBy:    "Title",
-			CommitGroupTitleMaps: map[string]string{},
-			HeaderPattern:        "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
-			HeaderPatternMaps: []string{
-				"Type",
-				"Scope",
-				"Subject",
-			},
-			IssuePrefix: []string{
-				"#",
-				"gh-",
-			},
-			RefActions:   []string{},
-			MergePattern: "^Merge pull request #(\\d+) from (.*)$",
-			MergePatternMaps: []string{
-				"Ref",
-				"Source",
-			},
-			RevertPattern: "^Revert \"([\\s\\S]*)\"$",
-			RevertPatternMaps: []string{
-				"Header",
-			},
-			NoteKeywords: []string{
-				"BREAKING CHANGE",
-			},
+		Options: &Options{},
+	})
+
+	buf := &bytes.Buffer{}
+	err := gen.Generate(buf, "")
+	assert.Error(err)
+	assert.Contains(err.Error(), "git-tag does not exist")
+	assert.Equal("", buf.String())
+}
+
+func TestGeneratorNotFoundCommits(t *testing.T) {
+	assert := assert.New(t)
+	testName := "not_found"
+
+	setup(testName, func(git gitcmd.Client) {
+		git.Exec("commit", "--allow-empty", "--date", "Mon Jan 1 00:00:00 2018 +0000", "-m", "feat(*): New feature")
+		git.Exec("tag", "1.0.0")
+	})
+
+	gen := NewGenerator(&Config{
+		Bin:        "git",
+		WorkingDir: filepath.Join(testRepoRoot, testName),
+		Template:   filepath.Join(cwd, "testdata", testName+".md"),
+		Info: &Info{
+			RepositoryURL: "https://github.com/git-chglog/git-chglog",
 		},
+		Options: &Options{},
 	})
 
 	buf := &bytes.Buffer{}
@@ -107,6 +105,7 @@ func TestGeneratorNotFoundCommitsOne(t *testing.T) {
 
 	setup(testName, func(git gitcmd.Client) {
 		git.Exec("commit", "--allow-empty", "--date", "Mon Jan 1 00:00:00 2018 +0000", "-m", "chore(*): First commit")
+		git.Exec("tag", "1.0.0")
 	})
 
 	gen := NewGenerator(&Config{
@@ -150,8 +149,8 @@ func TestGeneratorNotFoundCommitsOne(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "foo")
-	assert.Contains(err.Error(), "\"foo\" was not found")
 	assert.Error(err)
+	assert.Contains(err.Error(), "\"foo\" was not found")
 	assert.Equal("", buf.String())
 }
 
