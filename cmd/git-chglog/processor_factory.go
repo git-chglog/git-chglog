@@ -16,8 +16,9 @@ type ProcessorFactory struct {
 func NewProcessorFactory() *ProcessorFactory {
 	return &ProcessorFactory{
 		hostRegistry: map[string]string{
-			"github": "github.com",
-			"gitlab": "gitlab.com",
+			"github":    "github.com",
+			"gitlab":    "gitlab.com",
+			"bitbucket": "bitbucket.org",
 		},
 	}
 }
@@ -44,6 +45,10 @@ func (factory *ProcessorFactory) Create(config *Config) (chglog.Processor, error
 		}, nil
 	case "gitlab.com":
 		return &chglog.GitLabProcessor{
+			Host: fmt.Sprintf("%s://%s", obj.Scheme, obj.Host),
+		}, nil
+	case "bitbucket.org":
+		return &chglog.BitbucketProcessor{
 			Host: fmt.Sprintf("%s://%s", obj.Scheme, obj.Host),
 		}, nil
 	default:
