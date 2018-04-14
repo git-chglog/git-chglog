@@ -283,9 +283,9 @@ Git execution command.
 
 CHANGELOG style. Automatic linking of issues and notices, initial value setting such as merges etc. are done automatically.
 
-| Required | Type   | Default  | Description                              |
-|:---------|:-------|:---------|:-----------------------------------------|
-| N        | String | `"none"` | Should be `"github"` `"gitlab"` `"none"` |
+| Required | Type   | Default  | Description                                           |
+|:---------|:-------|:---------|:------------------------------------------------------|
+| N        | String | `"none"` | Should be `"github"` `"gitlab"` `"bitbucket"``"none"` |
 
 
 ### `template`
@@ -429,11 +429,11 @@ See godoc [RenderData][doc-render-data] for available variables.
 
 ## Supported Styles
 
-| Name                                       | Status                | Features                                               |
-|:-------------------------------------------|:----------------------|:-------------------------------------------------------|
-| [GitHub](https://github.com/)              | :white_check_mark:    | Mentions automatic link. Automatic link to references. |
-| [GitLab](https://about.gitlab.com/)        | :white_check_mark:    | Mentions automatic link. Automatic link to references. |
-| [Bitbucket](https://bitbucket.org/product) | :white_medium_square: | -                                                      |
+| Name                                       | Status             | Features                                               |
+|:-------------------------------------------|:-------------------|:-------------------------------------------------------|
+| [GitHub](https://github.com/)              | :white_check_mark: | Mentions automatic link. Automatic link to references. |
+| [GitLab](https://about.gitlab.com/)        | :white_check_mark: | Mentions automatic link. Automatic link to refkrentes. |
+| [Bitbucket](https://bitbucket.org/product) | :white_check_mark: | Mentions automatic link. Automatic link to references. |
 
 > :memo: Even with styles that are not yet supported, it is possible to make ordinary CHANGELOG.
 
@@ -458,7 +458,7 @@ See godoc [RenderData][doc-render-data] for available variables.
 ## TODO
 
 * [x] Windows Support
-* [ ] More styles (GitLab, Bitbucket, and others ...)
+* [x] More styles (GitHub, GitLab, Bitbucket :tada:)
 * [ ] Snippetization of configuration files (improvement of reusability)
 * [ ] More test test test ... (and example)
 
