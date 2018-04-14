@@ -47,7 +47,7 @@ func (t *kacTemplateBuilderImpl) versionHeader(style string) string {
 	)
 
 	switch style {
-	case styleGitHub, styleGitLab:
+	case styleGitHub, styleGitLab, styleBitbucket:
 		tagName = "{{if .Tag.Previous}}[{{.Tag.Name}}]{{else}}{{.Tag.Name}}{{end}}"
 	}
 
@@ -85,7 +85,7 @@ func (t *kacTemplateBuilderImpl) merges(style string) string {
 	var title string
 
 	switch style {
-	case styleGitHub:
+	case styleGitHub, styleBitbucket:
 		title = "Pull Requests"
 	case styleGitLab:
 		title = "Merge Requests"
@@ -114,6 +114,11 @@ func (*kacTemplateBuilderImpl) footer(style string) string {
 		return `{{if .Versions}}
 [Unreleased]: {{.Info.RepositoryURL}}/compare/{{$latest := index .Versions 0}}{{$latest.Tag.Name}}...HEAD{{range .Versions}}{{if .Tag.Previous}}
 [{{.Tag.Name}}]: {{$.Info.RepositoryURL}}/compare/{{.Tag.Previous.Name}}...{{.Tag.Name}}{{end}}{{end}}
+{{end}}`
+	case styleBitbucket:
+		return `{{if .Versions}}
+[Unreleased]: {{.Info.RepositoryURL}}/compare/HEAD..{{$latest := index .Versions 0}}{{$latest.Tag.Name}}{{range .Versions}}{{if .Tag.Previous}}
+[{{.Tag.Name}}]: {{$.Info.RepositoryURL}}/compare/{{.Tag.Name}}..{{.Tag.Previous.Name}}{{end}}{{end}}
 {{end}}`
 	default:
 		return ""

@@ -92,3 +92,39 @@ func TestProcessorFactoryForGitLab(t *testing.T) {
 		processor,
 	)
 }
+
+func TestProcessorFactoryForBitbucket(t *testing.T) {
+	assert := assert.New(t)
+	factory := NewProcessorFactory()
+
+	// bitbucket.org
+	processor, err := factory.Create(&Config{
+		Info: Info{
+			RepositoryURL: "https://bitbucket.org/owner/repo",
+		},
+	})
+
+	assert.Nil(err)
+	assert.Equal(
+		&chglog.BitbucketProcessor{
+			Host: "https://bitbucket.org",
+		},
+		processor,
+	)
+
+	// self-hosted
+	processor, err = factory.Create(&Config{
+		Style: "bitbucket",
+		Info: Info{
+			RepositoryURL: "https://original-gitserver.com/owner/repo",
+		},
+	})
+
+	assert.Nil(err)
+	assert.Equal(
+		&chglog.BitbucketProcessor{
+			Host: "https://original-gitserver.com",
+		},
+		processor,
+	)
+}

@@ -14,12 +14,14 @@ var (
 
 // Styles
 var (
-	styleGitHub = "github"
-	styleGitLab = "gitlab"
-	styleNone   = "none"
-	styles      = []string{
+	styleGitHub    = "github"
+	styleGitLab    = "gitlab"
+	styleBitbucket = "bitbucket"
+	styleNone      = "none"
+	styles         = []string{
 		styleGitHub,
 		styleGitLab,
+		styleBitbucket,
 		styleNone,
 	}
 )
