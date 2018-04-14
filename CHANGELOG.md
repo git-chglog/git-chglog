@@ -4,6 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## [Unreleased]
 
+<a name="0.4.0"></a>
+## [0.4.0] - 2018-04-14
+### Features
+- Add support for Bitbucket :tada:
+
 <a name="0.3.3"></a>
 ## [0.3.3] - 2018-04-07
 ### Features
@@ -75,7 +80,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - Add MergeCommits and RevertCommits
 - First implement
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.3.3...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/git-chglog/git-chglog/compare/0.3.3...0.4.0
 [0.3.3]: https://github.com/git-chglog/git-chglog/compare/0.3.2...0.3.3
 [0.3.2]: https://github.com/git-chglog/git-chglog/compare/0.3.1...0.3.2
 [0.3.1]: https://github.com/git-chglog/git-chglog/compare/0.3.0...0.3.1
