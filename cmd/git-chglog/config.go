@@ -108,6 +108,10 @@ func (config *Config) normalizeStyle() {
 	switch config.Style {
 	case "github":
 		config.normalizeStyleOfGitHub()
+	case "gitlab":
+		config.normalizeStyleOfGitLab()
+	case "bitbucket":
+		config.normalizeStyleOfBitbucket()
 	}
 }
 
@@ -178,6 +182,61 @@ func (config *Config) normalizeStyleOfGitLab() {
 		opts.Merges.Pattern = "^Merge branch '.*' into '(.*)'$"
 		opts.Merges.PatternMaps = []string{
 			"Source",
+		}
+	}
+
+	config.Options = opts
+}
+
+// For Bitbucket
+func (config *Config) normalizeStyleOfBitbucket() {
+	opts := config.Options
+
+	if len(opts.Issues.Prefix) == 0 {
+		opts.Issues.Prefix = []string{
+			"#",
+		}
+	}
+
+	if len(opts.Refs.Actions) == 0 {
+		opts.Refs.Actions = []string{
+			"close",
+			"closes",
+			"closed",
+			"closing",
+			"fix",
+			"fixed",
+			"fixes",
+			"fixing",
+			"resolve",
+			"resolves",
+			"resolved",
+			"resolving",
+			"eopen",
+			"reopens",
+			"reopening",
+			"hold",
+			"holds",
+			"holding",
+			"wontfix",
+			"invalidate",
+			"invalidates",
+			"invalidated",
+			"invalidating",
+			"addresses",
+			"re",
+			"references",
+			"ref",
+			"refs",
+			"see",
+		}
+	}
+
+	if opts.Merges.Pattern == "" && len(opts.Merges.PatternMaps) == 0 {
+		opts.Merges.Pattern = "^Merged in (.*) \\(pull request #(\\d+)\\)$"
+		opts.Merges.PatternMaps = []string{
+			"Source",
+			"Ref",
 		}
 	}
 

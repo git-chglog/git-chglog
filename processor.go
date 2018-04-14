@@ -120,3 +120,58 @@ func (p *GitLabProcessor) addLinks(input string) string {
 
 	return input
 }
+
+// BitbucketProcessor is optimized for CHANGELOG used in Bitbucket
+//
+// The following processing is performed
+//  - Mentions automatic link (@tsuyoshiwada -> [@tsuyoshiwada](https://bitbucket.org/tsuyoshiwada/))
+//  - Automatic link to references (#123 -> [#123](https://bitbucket.org/owner/repo/issues/123/))
+type BitbucketProcessor struct {
+	Host      string // Host name used for link destination. Note: You must include the protocol (e.g. "https://bitbucket.org")
+	config    *Config
+	reMention *regexp.Regexp
+	reIssue   *regexp.Regexp
+}
+
+// Bootstrap ...
+func (p *BitbucketProcessor) Bootstrap(config *Config) {
+	p.config = config
+
+	if p.Host == "" {
+		p.Host = "https://bitbucket.org"
+	} else {
+		p.Host = strings.TrimRight(p.Host, "/")
+	}
+
+	p.reMention = regexp.MustCompile("@(\\w+)")
+	p.reIssue = regexp.MustCompile("(?i)#(\\d+)")
+}
+
+// ProcessCommit ...
+func (p *BitbucketProcessor) ProcessCommit(commit *Commit) *Commit {
+	commit.Header = p.addLinks(commit.Header)
+	commit.Subject = p.addLinks(commit.Subject)
+	commit.Body = p.addLinks(commit.Body)
+
+	for _, note := range commit.Notes {
+		note.Body = p.addLinks(note.Body)
+	}
+
+	if commit.Revert != nil {
+		commit.Revert.Header = p.addLinks(commit.Revert.Header)
+	}
+
+	return commit
+}
+
+func (p *BitbucketProcessor) addLinks(input string) string {
+	repoURL := strings.TrimRight(p.config.Info.RepositoryURL, "/")
+
+	// mentions
+	input = p.reMention.ReplaceAllString(input, "[@$1]("+p.Host+"/$1/)")
+
+	// issues
+	input = p.reIssue.ReplaceAllString(input, "[#$1]("+repoURL+"/issues/$1/)")
+
+	return input
+}
