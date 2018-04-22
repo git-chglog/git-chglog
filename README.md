@@ -285,7 +285,7 @@ CHANGELOG style. Automatic linking of issues and notices, initial value setting 
 
 | Required | Type   | Default  | Description                                           |
 |:---------|:-------|:---------|:------------------------------------------------------|
-| N        | String | `"none"` | Should be `"github"` `"gitlab"` `"bitbucket"``"none"` |
+| N        | String | `"none"` | Should be `"github"` `"gitlab"` `"bitbucket"` `"none"` |
 
 
 ### `template`
