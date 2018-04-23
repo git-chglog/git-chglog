@@ -283,8 +283,8 @@ Git execution command.
 
 CHANGELOG style. Automatic linking of issues and notices, initial value setting such as merges etc. are done automatically.
 
-| Required | Type   | Default  | Description                                           |
-|:---------|:-------|:---------|:------------------------------------------------------|
+| Required | Type   | Default  | Description                                            |
+|:---------|:-------|:---------|:-------------------------------------------------------|
 | N        | String | `"none"` | Should be `"github"` `"gitlab"` `"bitbucket"` `"none"` |
 
 
