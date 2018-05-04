@@ -2,9 +2,17 @@
 All notable changes to this project will be documented in this file.  
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
 
+<a name="unreleased"></a>
 ## [Unreleased]
 
 
+<a name="0.6.0"></a>
+## [0.6.0] - 2018-05-04
+### Features
+- Add tag name header id for keep-a-changelog template
+
+
+<a name="0.5.0"></a>
 ## [0.5.0] - 2018-05-04
 ### Bug Fixes
 - Add unreleased commits section to keep-a-changelog template [#15](https://github.com/git-chglog/git-chglog/issues/15)
@@ -99,7 +107,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.5.0...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.6.0...HEAD
+[0.6.0]: https://github.com/git-chglog/git-chglog/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/git-chglog/git-chglog/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/git-chglog/git-chglog/compare/0.3.3...0.4.0
 [0.3.3]: https://github.com/git-chglog/git-chglog/compare/0.3.2...0.3.3
