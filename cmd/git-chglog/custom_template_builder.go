@@ -12,7 +12,7 @@ func NewCustomTemplateBuilder() TemplateBuilder {
 // Build ...
 func (t *customTemplateBuilderImpl) Build(ans *Answer) (string, error) {
 	// versions
-	tpl := "{{range .Versions}}\n"
+	tpl := "{{ range .Versions }}\n"
 
 	// version header
 	tpl += t.versionHeader(ans.Style, ans.Template)
@@ -34,7 +34,7 @@ func (t *customTemplateBuilderImpl) Build(ans *Answer) (string, error) {
 	tpl += t.notes()
 
 	// versions end
-	tpl += "\n{{end}}"
+	tpl += "{{ end -}}"
 
 	return tpl, nil
 }
@@ -42,30 +42,30 @@ func (t *customTemplateBuilderImpl) Build(ans *Answer) (string, error) {
 func (*customTemplateBuilderImpl) versionHeader(style, template string) string {
 	var (
 		tpl     string
-		tagName = "{{.Tag.Name}}"
-		date    = "{{datetime \"2006-01-02\" .Tag.Date}}"
+		tagName = "{{ .Tag.Name }}"
+		date    = "{{ datetime \"2006-01-02\" .Tag.Date }}"
 	)
 
 	// parts
 	switch style {
 	case styleGitHub, styleGitLab:
-		tpl = "<a name=\"{{.Tag.Name}}\"></a>\n"
-		tagName = "{{if .Tag.Previous}}[{{.Tag.Name}}]({{$.Info.RepositoryURL}}/compare/{{.Tag.Previous.Name}}...{{.Tag.Name}}){{else}}{{.Tag.Name}}{{end}}"
+		tpl = "<a name=\"{{ .Tag.Name }}\"></a>\n"
+		tagName = "{{ if .Tag.Previous }}[{{ .Tag.Name }}]({{ $.Info.RepositoryURL }}/compare/{{ .Tag.Previous.Name }}...{{ .Tag.Name }}){{ else }}{{ .Tag.Name }}{{ end }}"
 	case styleBitbucket:
-		tpl = "<a name=\"{{.Tag.Name}}\"></a>\n"
-		tagName = "{{if .Tag.Previous}}[{{.Tag.Name}}]({{$.Info.RepositoryURL}}/compare/{{.Tag.Name}}..{{.Tag.Previous.Name}}){{else}}{{.Tag.Name}}{{end}}"
+		tpl = "<a name=\"{{ .Tag.Name }}\"></a>\n"
+		tagName = "{{ if .Tag.Previous }}[{{ .Tag.Name }}]({{ $.Info.RepositoryURL }}/compare/{{ .Tag.Name }}..{{ .Tag.Previous.Name }}){{ else }}{{ .Tag.Name }}{{ end }}"
 	}
 
 	// format
 	switch template {
 	case tplStandard:
-		tpl = fmt.Sprintf("%s## %s (%s)\n",
+		tpl = fmt.Sprintf("%s## %s (%s)\n\n",
 			tpl,
 			tagName,
 			date,
 		)
 	case tplCool:
-		tpl = fmt.Sprintf("%s## %s\n\n> %s\n",
+		tpl = fmt.Sprintf("%s## %s\n\n> %s\n\n",
 			tpl,
 			tagName,
 			date,
@@ -83,33 +83,40 @@ func (*customTemplateBuilderImpl) commits(template, format string) string {
 
 	switch format {
 	case fmtSubject.Display:
-		body = `{{range .Commits}}
-* {{.Header}}{{end}}
-`
+		body = `{{ range .Commits -}}
+* {{ .Header }}
+{{ end }}`
 
 	default:
 		if format == fmtTypeScopeSubject.Display {
-			header = "{{if .Scope}}**{{.Scope}}:** {{end}}{{.Subject}}"
+			header = "{{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}"
 		} else {
-			header = "{{.Subject}}"
+			header = "{{ .Subject }}"
 		}
 
-		body = fmt.Sprintf(`### {{.Title}}
-{{range .Commits}}
-* %s{{end}}
-`, header)
+		body = fmt.Sprintf(`### {{ .Title }}
+
+{{ range .Commits -}}
+* %s
+{{ end }}`, header)
 	}
 
-	return fmt.Sprintf(`{{range .CommitGroups}}
-%s{{end}}`, body)
+	return fmt.Sprintf(`{{ range .CommitGroups -}}
+%s
+{{ end -}}
+`, body)
 }
 
 func (*customTemplateBuilderImpl) reverts() string {
-	return `{{if .RevertCommits}}
+	return `
+{{- if .RevertCommits -}}
 ### Reverts
-{{range .RevertCommits}}
-* {{.Revert.Header}}{{end}}
-{{end}}`
+
+{{ range .RevertCommits -}}
+* {{ .Revert.Header }}
+{{ end }}
+{{ end -}}
+`
 }
 
 func (t *customTemplateBuilderImpl) merges(style string) string {
@@ -124,18 +131,27 @@ func (t *customTemplateBuilderImpl) merges(style string) string {
 		title = "Merges"
 	}
 
-	return fmt.Sprintf(`{{if .MergeCommits}}
+	return fmt.Sprintf(`
+{{- if .MergeCommits -}}
 ### %s
-{{range .MergeCommits}}
-* {{.Header}}{{end}}
-{{end}}`, title)
+
+{{ range .MergeCommits -}}
+* {{ .Header }}
+{{ end }}
+{{ end -}}
+`, title)
 }
 
 func (*customTemplateBuilderImpl) notes() string {
-	return `{{range .NoteGroups}}
-### {{.Title}}
-{{range .Notes}}
-{{.Body}}
-{{end}}
-{{end}}`
+	return `
+{{- if .NoteGroups -}}
+{{ range .NoteGroups -}}
+### {{ .Title }}
+
+{{ range .Notes }}
+{{ .Body }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+`
 }
