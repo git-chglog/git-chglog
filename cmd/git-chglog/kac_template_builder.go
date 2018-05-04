@@ -12,7 +12,11 @@ func NewKACTemplateBuilder() TemplateBuilder {
 // Build ...
 func (t *kacTemplateBuilderImpl) Build(ans *Answer) (string, error) {
 	// versions
-	tpl := "## {{if .Versions}}[Unreleased]{{end}}\n{{range .Versions}}\n"
+	tpl := `## {{ if .Versions }}[Unreleased]{{ end }}
+
+{{ range .Versions }}
+`
+
 	tpl += t.versionHeader(ans.Style)
 
 	// commits
@@ -32,7 +36,7 @@ func (t *kacTemplateBuilderImpl) Build(ans *Answer) (string, error) {
 	tpl += t.notes()
 
 	// versions end
-	tpl += "{{end}}"
+	tpl += "{{ end -}}\n"
 
 	// footer (links)
 	tpl += t.footer(ans.Style)
@@ -42,16 +46,16 @@ func (t *kacTemplateBuilderImpl) Build(ans *Answer) (string, error) {
 
 func (t *kacTemplateBuilderImpl) versionHeader(style string) string {
 	var (
-		tagName = "{{.Tag.Name}}"
-		date    = "{{datetime \"2006-01-02\" .Tag.Date}}"
+		tagName = "{{ .Tag.Name }}"
+		date    = "{{ datetime \"2006-01-02\" .Tag.Date }}"
 	)
 
 	switch style {
 	case styleGitHub, styleGitLab, styleBitbucket:
-		tagName = "{{if .Tag.Previous}}[{{.Tag.Name}}]{{else}}{{.Tag.Name}}{{end}}"
+		tagName = "{{ if .Tag.Previous }}[{{ .Tag.Name }}]{{ else }}{{ .Tag.Name }}{{ end }}"
 	}
 
-	return fmt.Sprintf("## %s - %s", tagName, date)
+	return fmt.Sprintf("## %s - %s\n", tagName, date)
 }
 
 func (t *kacTemplateBuilderImpl) commits(format string) string {
@@ -61,24 +65,32 @@ func (t *kacTemplateBuilderImpl) commits(format string) string {
 
 	switch format {
 	case fmtSubject.Display:
-		body = `{{range .Commits}}
-- {{.Header}}{{end}}`
+		body = `{{ range .Commits -}}
+- {{ .Header }}
+{{ end }}`
 
 	default:
-		body = `### {{.Title}}{{range .Commits}}
-- {{if .Scope}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}`
+		body = `### {{ .Title }}
+{{ range .Commits -}}
+- {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
+{{ end }}`
 	}
 
-	return fmt.Sprintf(`{{range .CommitGroups}}
+	return fmt.Sprintf(`{{ range .CommitGroups -}}
 %s
-{{end}}`, body)
+{{ end -}}
+`, body)
 }
 
 func (t *kacTemplateBuilderImpl) reverts() string {
-	return `{{if .RevertCommits}}
-### Reverts{{range .RevertCommits}}
-- {{.Revert.Header}}{{end}}
-{{end}}`
+	return `
+{{- if .RevertCommits -}}
+### Reverts
+{{ range .RevertCommits -}}
+- {{ .Revert.Header }}
+{{ end }}
+{{ end -}}
+`
 }
 
 func (t *kacTemplateBuilderImpl) merges(style string) string {
@@ -93,33 +105,51 @@ func (t *kacTemplateBuilderImpl) merges(style string) string {
 		title = "Merges"
 	}
 
-	return fmt.Sprintf(`{{if .MergeCommits}}
-### %s{{range .MergeCommits}}
-- {{.Header}}{{end}}
-{{end}}`, title)
+	return fmt.Sprintf(`
+{{- if .MergeCommits -}}
+### %s
+{{ range .MergeCommits -}}
+- {{ .Header }}
+{{ end }}
+{{ end -}}
+`, title)
 }
 
 func (*kacTemplateBuilderImpl) notes() string {
-	return `{{range .NoteGroups}}
-### {{.Title}}
-{{range .Notes}}
-{{.Body}}
-{{end}}
-{{end}}`
+	return `
+{{- if .NoteGroups -}}
+{{ range .NoteGroups -}}
+### {{ .Title }}
+{{ range .Notes }}
+{{ .Body }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+`
 }
 
 func (*kacTemplateBuilderImpl) footer(style string) string {
 	switch style {
 	case styleGitHub, styleGitLab:
-		return `{{if .Versions}}
-[Unreleased]: {{.Info.RepositoryURL}}/compare/{{$latest := index .Versions 0}}{{$latest.Tag.Name}}...HEAD{{range .Versions}}{{if .Tag.Previous}}
-[{{.Tag.Name}}]: {{$.Info.RepositoryURL}}/compare/{{.Tag.Previous.Name}}...{{.Tag.Name}}{{end}}{{end}}
-{{end}}`
+		return `
+{{- if .Versions }}
+[Unreleased]: {{ .Info.RepositoryURL }}/compare/{{ $latest := index .Versions 0 }}{{ $latest.Tag.Name }}...HEAD
+{{ range .Versions -}}
+{{ if .Tag.Previous -}}
+[{{ .Tag.Name }}]: {{ $.Info.RepositoryURL }}/compare/{{ .Tag.Previous.Name }}...{{ .Tag.Name }}
+{{ end -}}
+{{ end -}}
+{{ end -}}`
 	case styleBitbucket:
-		return `{{if .Versions}}
-[Unreleased]: {{.Info.RepositoryURL}}/compare/HEAD..{{$latest := index .Versions 0}}{{$latest.Tag.Name}}{{range .Versions}}{{if .Tag.Previous}}
-[{{.Tag.Name}}]: {{$.Info.RepositoryURL}}/compare/{{.Tag.Name}}..{{.Tag.Previous.Name}}{{end}}{{end}}
-{{end}}`
+		return `
+{{- if .Versions }}
+[Unreleased]: {{ .Info.RepositoryURL }}/compare/HEAD..{{ $latest := index .Versions 0 }}{{ $latest.Tag.Name }}
+{{ range .Versions -}}
+{{ if .Tag.Previous -}}
+[{{ .Tag.Name }}]: {{ $.Info.RepositoryURL }}/compare/{{ .Tag.Name }}..{{ .Tag.Previous.Name }}
+{{ end -}}
+{{ end -}}
+{{ end -}}`
 	default:
 		return ""
 	}
