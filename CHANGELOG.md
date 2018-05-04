@@ -4,30 +4,45 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## [Unreleased]
 
+
+## [0.5.0] - 2018-05-04
+### Bug Fixes
+- Add unreleased commits section to keep-a-changelog template [#15](https://github.com/git-chglog/git-chglog/issues/15)
+
+### Features
+- Update template format to human readable
+- Add `Unreleased` field to `RenderData`
+
+
 <a name="0.4.0"></a>
 ## [0.4.0] - 2018-04-14
 ### Features
 - Add support for Bitbucket :tada:
+
 
 <a name="0.3.3"></a>
 ## [0.3.3] - 2018-04-07
 ### Features
 - Change to kindly error message when git-tag does not exist
 
+
 <a name="0.3.2"></a>
 ## [0.3.2] - 2018-04-02
 ### Bug Fixes
 - Fix color output bug in windows help command
+
 
 <a name="0.3.1"></a>
 ## [0.3.1] - 2018-03-15
 ### Bug Fixes
 - Fix preview string of commit subject ([@kt3k](https://github.com/kt3k))
 
+
 <a name="0.3.0"></a>
 ## [0.3.0] - 2018-03-12
 ### Features
 - Add support for GitLab :tada:
+
 
 <a name="0.2.0"></a>
 ## [0.2.0] - 2018-03-02
@@ -38,6 +53,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ### Bug Fixes
 - Support Windows colors :tada: ([@mattn](https://github.com/mattn))
 - Fixed several bugs in Windows
+
 
 <a name="0.1.0"></a>
 ## [0.1.0] - 2018-02-25
@@ -54,6 +70,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - Add Git Basic to commit message format
 - Add preview to the commit message format of `--init` option
 
+
 <a name="0.0.2"></a>
 ## [0.0.2] - 2018-02-18
 ### Bug Fixes
@@ -61,6 +78,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### Features
 - Add preview to the commit message format of `--init` option
+
 
 <a name="0.0.1"></a>
 ## 0.0.1 - 2018-02-18
@@ -80,7 +98,9 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - Add MergeCommits and RevertCommits
 - First implement
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.4.0...HEAD
+
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.5.0...HEAD
+[0.5.0]: https://github.com/git-chglog/git-chglog/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/git-chglog/git-chglog/compare/0.3.3...0.4.0
 [0.3.3]: https://github.com/git-chglog/git-chglog/compare/0.3.2...0.3.3
 [0.3.2]: https://github.com/git-chglog/git-chglog/compare/0.3.1...0.3.2
