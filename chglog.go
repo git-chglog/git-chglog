@@ -40,8 +40,9 @@ type Info struct {
 
 // RenderData is the data passed to the template
 type RenderData struct {
-	Info     *Info
-	Versions []*Version
+	Info       *Info
+	Unreleased *Unreleased
+	Versions   []*Version
 }
 
 // Config for generating CHANGELOG
@@ -126,21 +127,29 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 	}
 	defer back()
 
-	versions, err := gen.readVersions(query)
+	tags, first, err := gen.getTags(query)
 	if err != nil {
 		return err
 	}
 
-	return gen.render(w, versions)
-}
-
-func (gen *Generator) readVersions(query string) ([]*Version, error) {
-	tags, first, err := gen.getTags(query)
-
+	unreleased, err := gen.readUnreleased(tags)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
+	versions, err := gen.readVersions(tags, first)
+	if err != nil {
+		return err
+	}
+
+	if len(versions) == 0 {
+		return fmt.Errorf("commits corresponding to \"%s\" was not found", query)
+	}
+
+	return gen.render(w, unreleased, versions)
+}
+
+func (gen *Generator) readVersions(tags []*Tag, first string) ([]*Version, error) {
 	versions := []*Version{}
 
 	for i, tag := range tags {
@@ -173,11 +182,32 @@ func (gen *Generator) readVersions(query string) ([]*Version, error) {
 		})
 	}
 
-	if len(versions) == 0 {
-		return nil, fmt.Errorf("commits corresponding to \"%s\" was not found", query)
+	return versions, nil
+}
+
+func (gen *Generator) readUnreleased(tags []*Tag) (*Unreleased, error) {
+	rev := "HEAD"
+
+	if len(tags) > 0 {
+		rev = tags[0].Name + "..HEAD"
 	}
 
-	return versions, nil
+	commits, err := gen.commitParser.Parse(rev)
+	if err != nil {
+		return nil, err
+	}
+
+	commitGroups, mergeCommits, revertCommits, noteGroups := gen.commitExtractor.Extract(commits)
+
+	unreleased := &Unreleased{
+		CommitGroups:  commitGroups,
+		Commits:       commits,
+		MergeCommits:  mergeCommits,
+		RevertCommits: revertCommits,
+		NoteGroups:    noteGroups,
+	}
+
+	return unreleased, nil
 }
 
 func (gen *Generator) getTags(query string) ([]*Tag, string, error) {
@@ -217,7 +247,7 @@ func (gen *Generator) workdir() (func() error, error) {
 	}, nil
 }
 
-func (gen *Generator) render(w io.Writer, versions []*Version) error {
+func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Version) error {
 	if _, err := os.Stat(gen.config.Template); err != nil {
 		return err
 	}
@@ -233,7 +263,8 @@ func (gen *Generator) render(w io.Writer, versions []*Version) error {
 	t := template.Must(template.New(fname).Funcs(fmap).ParseFiles(gen.config.Template))
 
 	return t.Execute(w, &RenderData{
-		Info:     gen.config.Info,
-		Versions: versions,
+		Info:       gen.config.Info,
+		Unreleased: unreleased,
+		Versions:   versions,
 	})
 }

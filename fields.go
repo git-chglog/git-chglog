@@ -103,3 +103,13 @@ type Version struct {
 	RevertCommits []*Commit
 	NoteGroups    []*NoteGroup
 }
+
+// Unreleased is unreleased commit dataset
+type Unreleased struct {
+	Tag           *Tag
+	CommitGroups  []*CommitGroup
+	Commits       []*Commit
+	MergeCommits  []*Commit
+	RevertCommits []*Commit
+	NoteGroups    []*NoteGroup
+}

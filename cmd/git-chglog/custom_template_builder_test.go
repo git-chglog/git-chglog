@@ -19,28 +19,44 @@ func TestCustomTemplateBuilderDefault(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal(`{{range .Versions}}
-<a name="{{.Tag.Name}}"></a>
-## {{if .Tag.Previous}}[{{.Tag.Name}}]({{$.Info.RepositoryURL}}/compare/{{.Tag.Previous.Name}}...{{.Tag.Name}}){{else}}{{.Tag.Name}}{{end}} ({{datetime "2006-01-02" .Tag.Date}})
-{{range .CommitGroups}}
-### {{.Title}}
-{{range .Commits}}
-* {{if .Scope}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
-{{end}}{{if .RevertCommits}}
+	assert.Equal(`{{ range .Versions }}
+<a name="{{ .Tag.Name }}"></a>
+## {{ if .Tag.Previous }}[{{ .Tag.Name }}]({{ $.Info.RepositoryURL }}/compare/{{ .Tag.Previous.Name }}...{{ .Tag.Name }}){{ else }}{{ .Tag.Name }}{{ end }} ({{ datetime "2006-01-02" .Tag.Date }})
+
+{{ range .CommitGroups -}}
+### {{ .Title }}
+
+{{ range .Commits -}}
+* {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
+{{ end }}
+{{ end -}}
+
+{{- if .RevertCommits -}}
 ### Reverts
-{{range .RevertCommits}}
-* {{.Revert.Header}}{{end}}
-{{end}}{{if .MergeCommits}}
+
+{{ range .RevertCommits -}}
+* {{ .Revert.Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .MergeCommits -}}
 ### Pull Requests
-{{range .MergeCommits}}
-* {{.Header}}{{end}}
-{{end}}{{range .NoteGroups}}
-### {{.Title}}
-{{range .Notes}}
-{{.Body}}
-{{end}}
-{{end}}
-{{end}}`, out)
+
+{{ range .MergeCommits -}}
+* {{ .Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .NoteGroups -}}
+{{ range .NoteGroups -}}
+### {{ .Title }}
+
+{{ range .Notes }}
+{{ .Body }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+{{ end -}}`, out)
 }
 
 func TestCustomTemplateBuilderNone(t *testing.T) {
@@ -56,65 +72,43 @@ func TestCustomTemplateBuilderNone(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal(`{{range .Versions}}
-## {{.Tag.Name}} ({{datetime "2006-01-02" .Tag.Date}})
-{{range .CommitGroups}}
-### {{.Title}}
-{{range .Commits}}
-* {{if .Scope}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
-{{end}}{{if .RevertCommits}}
+	assert.Equal(`{{ range .Versions }}
+## {{ .Tag.Name }} ({{ datetime "2006-01-02" .Tag.Date }})
+
+{{ range .CommitGroups -}}
+### {{ .Title }}
+
+{{ range .Commits -}}
+* {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
+{{ end }}
+{{ end -}}
+
+{{- if .RevertCommits -}}
 ### Reverts
-{{range .RevertCommits}}
-* {{.Revert.Header}}{{end}}
-{{end}}{{if .MergeCommits}}
+
+{{ range .RevertCommits -}}
+* {{ .Revert.Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .MergeCommits -}}
 ### Merges
-{{range .MergeCommits}}
-* {{.Header}}{{end}}
-{{end}}{{range .NoteGroups}}
-### {{.Title}}
-{{range .Notes}}
-{{.Body}}
-{{end}}
-{{end}}
-{{end}}`, out)
-}
 
-func TestCustomTemplateBuilderCool(t *testing.T) {
-	assert := assert.New(t)
-	builder := NewCustomTemplateBuilder()
+{{ range .MergeCommits -}}
+* {{ .Header }}
+{{ end }}
+{{ end -}}
 
-	out, err := builder.Build(&Answer{
-		Style:               styleNone,
-		CommitMessageFormat: fmtTypeScopeSubject.Display,
-		Template:            tplCool,
-		IncludeMerges:       true,
-		IncludeReverts:      true,
-	})
+{{- if .NoteGroups -}}
+{{ range .NoteGroups -}}
+### {{ .Title }}
 
-	assert.Nil(err)
-	assert.Equal(`{{range .Versions}}
-## {{.Tag.Name}}
-
-> {{datetime "2006-01-02" .Tag.Date}}
-{{range .CommitGroups}}
-### {{.Title}}
-{{range .Commits}}
-* {{if .Scope}}**{{.Scope}}:** {{end}}{{.Subject}}{{end}}
-{{end}}{{if .RevertCommits}}
-### Reverts
-{{range .RevertCommits}}
-* {{.Revert.Header}}{{end}}
-{{end}}{{if .MergeCommits}}
-### Merges
-{{range .MergeCommits}}
-* {{.Header}}{{end}}
-{{end}}{{range .NoteGroups}}
-### {{.Title}}
-{{range .Notes}}
-{{.Body}}
-{{end}}
-{{end}}
-{{end}}`, out)
+{{ range .Notes }}
+{{ .Body }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+{{ end -}}`, out)
 }
 
 func TestCustomTemplateBuilderSubjectOnly(t *testing.T) {
@@ -130,26 +124,41 @@ func TestCustomTemplateBuilderSubjectOnly(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal(`{{range .Versions}}
-## {{.Tag.Name}} ({{datetime "2006-01-02" .Tag.Date}})
-{{range .CommitGroups}}
-{{range .Commits}}
-* {{.Header}}{{end}}
-{{end}}{{if .RevertCommits}}
+	assert.Equal(`{{ range .Versions }}
+## {{ .Tag.Name }} ({{ datetime "2006-01-02" .Tag.Date }})
+
+{{ range .CommitGroups -}}
+{{ range .Commits -}}
+* {{ .Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .RevertCommits -}}
 ### Reverts
-{{range .RevertCommits}}
-* {{.Revert.Header}}{{end}}
-{{end}}{{if .MergeCommits}}
+
+{{ range .RevertCommits -}}
+* {{ .Revert.Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .MergeCommits -}}
 ### Merges
-{{range .MergeCommits}}
-* {{.Header}}{{end}}
-{{end}}{{range .NoteGroups}}
-### {{.Title}}
-{{range .Notes}}
-{{.Body}}
-{{end}}
-{{end}}
-{{end}}`, out)
+
+{{ range .MergeCommits -}}
+* {{ .Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .NoteGroups -}}
+{{ range .NoteGroups -}}
+### {{ .Title }}
+
+{{ range .Notes }}
+{{ .Body }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+{{ end -}}`, out)
 }
 
 func TestCustomTemplateBuilderSubject(t *testing.T) {
@@ -165,27 +174,43 @@ func TestCustomTemplateBuilderSubject(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal(`{{range .Versions}}
-## {{.Tag.Name}} ({{datetime "2006-01-02" .Tag.Date}})
-{{range .CommitGroups}}
-### {{.Title}}
-{{range .Commits}}
-* {{.Subject}}{{end}}
-{{end}}{{if .RevertCommits}}
+	assert.Equal(`{{ range .Versions }}
+## {{ .Tag.Name }} ({{ datetime "2006-01-02" .Tag.Date }})
+
+{{ range .CommitGroups -}}
+### {{ .Title }}
+
+{{ range .Commits -}}
+* {{ .Subject }}
+{{ end }}
+{{ end -}}
+
+{{- if .RevertCommits -}}
 ### Reverts
-{{range .RevertCommits}}
-* {{.Revert.Header}}{{end}}
-{{end}}{{if .MergeCommits}}
+
+{{ range .RevertCommits -}}
+* {{ .Revert.Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .MergeCommits -}}
 ### Merges
-{{range .MergeCommits}}
-* {{.Header}}{{end}}
-{{end}}{{range .NoteGroups}}
-### {{.Title}}
-{{range .Notes}}
-{{.Body}}
-{{end}}
-{{end}}
-{{end}}`, out)
+
+{{ range .MergeCommits -}}
+* {{ .Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .NoteGroups -}}
+{{ range .NoteGroups -}}
+### {{ .Title }}
+
+{{ range .Notes }}
+{{ .Body }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+{{ end -}}`, out)
 }
 
 func TestCustomTemplateBuilderIgnoreReverts(t *testing.T) {
@@ -201,23 +226,35 @@ func TestCustomTemplateBuilderIgnoreReverts(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal(`{{range .Versions}}
-## {{.Tag.Name}} ({{datetime "2006-01-02" .Tag.Date}})
-{{range .CommitGroups}}
-### {{.Title}}
-{{range .Commits}}
-* {{.Subject}}{{end}}
-{{end}}{{if .MergeCommits}}
+	assert.Equal(`{{ range .Versions }}
+## {{ .Tag.Name }} ({{ datetime "2006-01-02" .Tag.Date }})
+
+{{ range .CommitGroups -}}
+### {{ .Title }}
+
+{{ range .Commits -}}
+* {{ .Subject }}
+{{ end }}
+{{ end -}}
+
+{{- if .MergeCommits -}}
 ### Merges
-{{range .MergeCommits}}
-* {{.Header}}{{end}}
-{{end}}{{range .NoteGroups}}
-### {{.Title}}
-{{range .Notes}}
-{{.Body}}
-{{end}}
-{{end}}
-{{end}}`, out)
+
+{{ range .MergeCommits -}}
+* {{ .Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .NoteGroups -}}
+{{ range .NoteGroups -}}
+### {{ .Title }}
+
+{{ range .Notes }}
+{{ .Body }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+{{ end -}}`, out)
 }
 
 func TestCustomTemplateBuilderIgnoreMerges(t *testing.T) {
@@ -233,21 +270,87 @@ func TestCustomTemplateBuilderIgnoreMerges(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal(`{{range .Versions}}
-## {{.Tag.Name}} ({{datetime "2006-01-02" .Tag.Date}})
-{{range .CommitGroups}}
-### {{.Title}}
-{{range .Commits}}
-* {{.Subject}}{{end}}
-{{end}}{{if .RevertCommits}}
+	assert.Equal(`{{ range .Versions }}
+## {{ .Tag.Name }} ({{ datetime "2006-01-02" .Tag.Date }})
+
+{{ range .CommitGroups -}}
+### {{ .Title }}
+
+{{ range .Commits -}}
+* {{ .Subject }}
+{{ end }}
+{{ end -}}
+
+{{- if .RevertCommits -}}
 ### Reverts
-{{range .RevertCommits}}
-* {{.Revert.Header}}{{end}}
-{{end}}{{range .NoteGroups}}
-### {{.Title}}
-{{range .Notes}}
-{{.Body}}
-{{end}}
-{{end}}
-{{end}}`, out)
+
+{{ range .RevertCommits -}}
+* {{ .Revert.Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .NoteGroups -}}
+{{ range .NoteGroups -}}
+### {{ .Title }}
+
+{{ range .Notes }}
+{{ .Body }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+{{ end -}}`, out)
+}
+
+func TestCustomTemplateBuilderCool(t *testing.T) {
+	assert := assert.New(t)
+	builder := NewCustomTemplateBuilder()
+
+	out, err := builder.Build(&Answer{
+		Style:               styleNone,
+		CommitMessageFormat: fmtTypeScopeSubject.Display,
+		Template:            tplCool,
+		IncludeMerges:       true,
+		IncludeReverts:      true,
+	})
+
+	assert.Nil(err)
+	assert.Equal(`{{ range .Versions }}
+## {{ .Tag.Name }}
+
+> {{ datetime "2006-01-02" .Tag.Date }}
+
+{{ range .CommitGroups -}}
+### {{ .Title }}
+
+{{ range .Commits -}}
+* {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
+{{ end }}
+{{ end -}}
+
+{{- if .RevertCommits -}}
+### Reverts
+
+{{ range .RevertCommits -}}
+* {{ .Revert.Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .MergeCommits -}}
+### Merges
+
+{{ range .MergeCommits -}}
+* {{ .Header }}
+{{ end }}
+{{ end -}}
+
+{{- if .NoteGroups -}}
+{{ range .NoteGroups -}}
+### {{ .Title }}
+
+{{ range .Notes }}
+{{ .Body }}
+{{ end }}
+{{ end -}}
+{{ end -}}
+{{ end -}}`, out)
 }
