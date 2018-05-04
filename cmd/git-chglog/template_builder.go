@@ -1,5 +1,7 @@
 package main
 
+const templateTagNameAnchor = "<a name=\"{{ .Tag.Name }}\"></a>\n"
+
 // TemplateBuilder ...
 type TemplateBuilder interface {
 	Builder

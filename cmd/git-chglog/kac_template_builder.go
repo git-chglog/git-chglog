@@ -46,36 +46,40 @@ func (t *kacTemplateBuilderImpl) Build(ans *Answer) (string, error) {
 
 func (t *kacTemplateBuilderImpl) unreleased(style, format string) string {
 	var (
+		id      = ""
 		title   = "Unreleased"
 		commits = t.commits(".Unreleased.CommitGroups", format)
 	)
 
 	switch style {
 	case styleGitHub, styleGitLab, styleBitbucket:
+		id = "<a name=\"unreleased\"></a>\n"
 		title = fmt.Sprintf("[%s]", title)
 	}
 
 	return fmt.Sprintf(`{{ if .Versions -}}
-## %s
+%s## %s
 
 {{ if .Unreleased.CommitGroups -}}
 %s{{ end -}}
 {{ end -}}
-`, title, commits)
+`, id, title, commits)
 }
 
 func (t *kacTemplateBuilderImpl) versionHeader(style string) string {
 	var (
+		id      = ""
 		tagName = "{{ .Tag.Name }}"
 		date    = "{{ datetime \"2006-01-02\" .Tag.Date }}"
 	)
 
 	switch style {
 	case styleGitHub, styleGitLab, styleBitbucket:
+		id = templateTagNameAnchor
 		tagName = "{{ if .Tag.Previous }}[{{ .Tag.Name }}]{{ else }}{{ .Tag.Name }}{{ end }}"
 	}
 
-	return fmt.Sprintf("## %s - %s\n", tagName, date)
+	return fmt.Sprintf("%s## %s - %s\n", id, tagName, date)
 }
 
 func (t *kacTemplateBuilderImpl) commits(commitGroups, format string) string {

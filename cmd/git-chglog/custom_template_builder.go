@@ -49,10 +49,10 @@ func (*customTemplateBuilderImpl) versionHeader(style, template string) string {
 	// parts
 	switch style {
 	case styleGitHub, styleGitLab:
-		tpl = "<a name=\"{{ .Tag.Name }}\"></a>\n"
+		tpl = templateTagNameAnchor
 		tagName = "{{ if .Tag.Previous }}[{{ .Tag.Name }}]({{ $.Info.RepositoryURL }}/compare/{{ .Tag.Previous.Name }}...{{ .Tag.Name }}){{ else }}{{ .Tag.Name }}{{ end }}"
 	case styleBitbucket:
-		tpl = "<a name=\"{{ .Tag.Name }}\"></a>\n"
+		tpl = templateTagNameAnchor
 		tagName = "{{ if .Tag.Previous }}[{{ .Tag.Name }}]({{ $.Info.RepositoryURL }}/compare/{{ .Tag.Name }}..{{ .Tag.Previous.Name }}){{ else }}{{ .Tag.Name }}{{ end }}"
 	}
 
