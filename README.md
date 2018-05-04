@@ -400,6 +400,7 @@ The basic templates are as follows.
 
 ```markdown
 {{ if .Versions -}}
+<a name="unreleased"></a>
 ## [Unreleased]
 
 {{ if .Unreleased.CommitGroups -}}
@@ -413,6 +414,7 @@ The basic templates are as follows.
 {{ end -}}
 
 {{ range .Versions }}
+<a name="{{ .Tag.Name }}"></a>
 ## {{ if .Tag.Previous }}[{{ .Tag.Name }}]{{ else }}{{ .Tag.Name }}{{ end }} - {{ datetime "2006-01-02" .Tag.Date }}
 {{ range .CommitGroups -}}
 ### {{ .Title }}
