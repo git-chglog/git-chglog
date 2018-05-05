@@ -15,6 +15,7 @@ type CLIContext struct {
 	NoColor    bool
 	NoEmoji    bool
 	Query      string
+	NextTag    string
 }
 
 // InitContext ...
