@@ -154,7 +154,7 @@ USAGE:
 
     There are the following specification methods for <tag query>.
 
-    1. <old>..<new> - Commit contained in <new> tags from <old>.
+    1. <old>..<new> - Commit contained in <old> tags from <new>.
     2. <name>..     - Commit from the <name> to the latest tag.
     3. ..<name>     - Commit from the oldest tag to <name>.
     4. <name>       - Commit contained in <name>.
@@ -163,6 +163,7 @@ OPTIONS:
   --init                    generate the git-chglog configuration file in interactive
   --config value, -c value  specifies a different configuration file to pick up (default: ".chglog/config.yml")
   --output value, -o value  output path and filename for the changelogs. If not specified, output to stdout
+  --next-tag value          treat unreleased commits as specified tags (EXPERIMENTAL)
   --silent                  disable stdout output
   --no-color                disable color output [$NO_COLOR]
   --no-emoji                disable emoji output [$NO_EMOJI]
@@ -194,7 +195,7 @@ EXAMPLE:
 
   $ git-chglog --config custom/dir/config.yml
 
-    The above is a command that uses a configuration file placed other than ".chglog/config.yml".
+    The adove is a command that uses a configuration file placed other than ".chglog/config.yml".
 ```
 
 
@@ -484,6 +485,25 @@ See godoc [RenderData][doc-render-data] for available variables.
 
   There are times when you need your hands to write a great CHANGELOG.  
   By displaying it on the standard output, it makes it easy to change the contents.
+</details>
+
+<details>
+  <summary>Can I commit CHANGELOG changes before creating tags?</summary>
+
+  Yes, it can be solved by using the `--next-tag` flag.
+
+  For example, let's say you want to upgrade your project to `2.0.0`.  
+  You can create CHANGELOG containing `2.0.0` as follows.
+
+  ```bash
+  $ git-chglog --next-tag 2.0.0 -o CHANGELOG.md
+  $ git commit -am "release 2.0.0"
+  $ git tag 2.0.0
+  ```
+
+  The point to notice is that before actually creating a tag with git, it is conveying the next version with `--next-tag` :+1:
+
+  This is a step that is necessary for project operation in many cases.
 </details>
 
 
