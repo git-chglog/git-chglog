@@ -17,6 +17,9 @@ var (
 	testRepoRoot = ".tmp"
 )
 
+type commitFunc = func(date, subject, body string)
+type tagFunc = func(name string)
+
 func TestMain(m *testing.M) {
 	cwd, _ = os.Getwd()
 	cleanup()
@@ -25,9 +28,10 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func setup(dir string, setupRepo func(gitcmd.Client)) {
+func setup(dir string, setupRepo func(commitFunc, tagFunc, gitcmd.Client)) {
 	testDir := filepath.Join(cwd, testRepoRoot, dir)
 
+	os.RemoveAll(testDir)
 	os.MkdirAll(testDir, os.ModePerm)
 	os.Chdir(testDir)
 
@@ -39,7 +43,21 @@ func setup(dir string, setupRepo func(gitcmd.Client)) {
 	git.Exec("config", "user.name", "test_user")
 	git.Exec("config", "user.email", "test@example.com")
 
-	setupRepo(git)
+	var commit = func(date, subject, body string) {
+		msg := subject
+		if body != "" {
+			msg += "\n\n" + body
+		}
+		t, _ := time.Parse("2006-01-02 15:04:05", date)
+		d := t.Format("Mon Jan 2 15:04:05 2006 +0000")
+		git.Exec("commit", "--allow-empty", "--date", d, "-m", msg)
+	}
+
+	var tag = func(name string) {
+		git.Exec("tag", name)
+	}
+
+	setupRepo(commit, tag, git)
 
 	os.Chdir(cwd)
 }
@@ -53,8 +71,8 @@ func TestGeneratorNotFoundTags(t *testing.T) {
 	assert := assert.New(t)
 	testName := "not_found"
 
-	setup(testName, func(git gitcmd.Client) {
-		git.Exec("commit", "--allow-empty", "--date", "Mon Jan 1 00:00:00 2018 +0000", "-m", "feat(*): New feature")
+	setup(testName, func(commit commitFunc, _ tagFunc, _ gitcmd.Client) {
+		commit("2018-01-01 00:00:00", "feat(*): New feature", "")
 	})
 
 	gen := NewGenerator(&Config{
@@ -78,9 +96,9 @@ func TestGeneratorNotFoundCommits(t *testing.T) {
 	assert := assert.New(t)
 	testName := "not_found"
 
-	setup(testName, func(git gitcmd.Client) {
-		git.Exec("commit", "--allow-empty", "--date", "Mon Jan 1 00:00:00 2018 +0000", "-m", "feat(*): New feature")
-		git.Exec("tag", "1.0.0")
+	setup(testName, func(commit commitFunc, tag tagFunc, _ gitcmd.Client) {
+		commit("2018-01-01 00:00:00", "feat(*): New feature", "")
+		tag("1.0.0")
 	})
 
 	gen := NewGenerator(&Config{
@@ -103,9 +121,9 @@ func TestGeneratorNotFoundCommitsOne(t *testing.T) {
 	assert := assert.New(t)
 	testName := "not_found"
 
-	setup(testName, func(git gitcmd.Client) {
-		git.Exec("commit", "--allow-empty", "--date", "Mon Jan 1 00:00:00 2018 +0000", "-m", "chore(*): First commit")
-		git.Exec("tag", "1.0.0")
+	setup(testName, func(commit commitFunc, tag tagFunc, _ gitcmd.Client) {
+		commit("2018-01-01 00:00:00", "chore(*): First commit", "")
+		tag("1.0.0")
 	})
 
 	gen := NewGenerator(&Config{
@@ -158,24 +176,29 @@ func TestGeneratorWithTypeScopeSubject(t *testing.T) {
 	assert := assert.New(t)
 	testName := "type_scope_subject"
 
-	setup(testName, func(git gitcmd.Client) {
-		git.Exec("commit", "--allow-empty", "--date", "Mon Jan 1 00:00:00 2018 +0000", "-m", "chore(*): First commit")
-		git.Exec("commit", "--allow-empty", "--date", "Mon Jan 1 00:01:00 2018 +0000", "-m", "feat(core): Add foo bar")
-		git.Exec("commit", "--allow-empty", "--date", "Mon Jan 1 00:02:00 2018 +0000", "-m", "docs(readme): Update usage #123")
+	setup(testName, func(commit commitFunc, tag tagFunc, _ gitcmd.Client) {
+		commit("2018-01-01 00:00:00", "chore(*): First commit", "")
+		commit("2018-01-01 00:01:00", "feat(core): Add foo bar", "")
+		commit("2018-01-01 00:02:00", "docs(readme): Update usage #123", "")
+		tag("1.0.0")
 
-		git.Exec("tag", "1.0.0")
-		git.Exec("commit", "--allow-empty", "--date", "Tue Jan 2 00:00:00 2018 +0000", "-m", "feat(parser): New some super options #333")
-		git.Exec("commit", "--allow-empty", "--date", "Tue Jan 2 00:01:00 2018 +0000", "-m", "Merge pull request #999 from tsuyoshiwada/patch-1")
-		git.Exec("commit", "--allow-empty", "--date", "Tue Jan 2 00:02:00 2018 +0000", "-m", "Merge pull request #1000 from tsuyoshiwada/patch-1")
-		git.Exec("commit", "--allow-empty", "--date", "Tue Jan 2 00:03:00 2018 +0000", "-m", "Revert \"feat(core): Add foo bar @mention and issue #987\"")
+		commit("2018-01-02 00:00:00", "feat(parser): New some super options #333", "")
+		commit("2018-01-02 00:01:00", "Merge pull request #999 from tsuyoshiwada/patch-1", "")
+		commit("2018-01-02 00:02:00", "Merge pull request #1000 from tsuyoshiwada/patch-1", "")
+		commit("2018-01-02 00:03:00", "Revert \"feat(core): Add foo bar @mention and issue #987\"", "")
+		tag("1.1.0")
 
-		git.Exec("tag", "1.1.0")
-		git.Exec("commit", "--allow-empty", "--date", "Wed Jan 3 00:00:00 2018 +0000", "-m", "feat(context): Online breaking change\n\nBREAKING CHANGE: Online breaking change message.")
-		git.Exec("commit", "--allow-empty", "--date", "Wed Jan 3 00:01:00 2018 +0000", "-m", "feat(router): Muliple breaking change\n\nThis is body,\n\nBREAKING CHANGE:\nMultiple\nbreaking\nchange message.")
+		commit("2018-01-03 00:00:00", "feat(context): Online breaking change", "BREAKING CHANGE: Online breaking change message.")
+		commit("2018-01-03 00:01:00", "feat(router): Muliple breaking change", `This is body,
 
-		git.Exec("tag", "2.0.0-beta.0")
-		git.Exec("commit", "--allow-empty", "--date", "Thu Jan 4 00:00:00 2018 +0000", "-m", "refactor(context): gofmt")
-		git.Exec("commit", "--allow-empty", "--date", "Thu Jan 4 00:01:00 2018 +0000", "-m", "fix(core): Fix commit\n\nThis is body message.")
+BREAKING CHANGE:
+Multiple
+breaking
+change message.`)
+		tag("2.0.0-beta.0")
+
+		commit("2018-01-04 00:00:00", "refactor(context): gofmt", "")
+		commit("2018-01-04 00:01:00", "fix(core): Fix commit\n\nThis is body message.", "")
 	})
 
 	gen := NewGenerator(&Config{
