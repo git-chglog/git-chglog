@@ -253,13 +253,18 @@ change message.`)
 	err := gen.Generate(buf, "")
 
 	assert.Nil(err)
-	assert.Equal(`<a name="2.0.0-beta.0"></a>
-## 2.0.0-beta.0 (2018-01-03)
+	assert.Equal(`<a name="unreleased"></a>
+## [Unreleased]
 
+### Bug Fixes
+- **core:** Fix commit
+
+
+<a name="2.0.0-beta.0"></a>
+## [2.0.0-beta.0] - 2018-01-03
 ### Features
-
-* **context:** Online breaking change
-* **router:** Muliple breaking change
+- **context:** Online breaking change
+- **router:** Muliple breaking change
 
 ### BREAKING CHANGE
 
@@ -270,28 +275,26 @@ change message.
 Online breaking change message.
 
 
-
 <a name="1.1.0"></a>
-## 1.1.0 (2018-01-02)
-
+## [1.1.0] - 2018-01-02
 ### Features
-
-* **parser:** New some super options #333
+- **parser:** New some super options #333
 
 ### Reverts
-
-* feat(core): Add foo bar @mention and issue #987
+- feat(core): Add foo bar @mention and issue #987
 
 ### Pull Requests
-
-* Merge pull request #1000 from tsuyoshiwada/patch-1
-* Merge pull request #999 from tsuyoshiwada/patch-1
+- Merge pull request #1000 from tsuyoshiwada/patch-1
+- Merge pull request #999 from tsuyoshiwada/patch-1
 
 
 <a name="1.0.0"></a>
-## 1.0.0 (2018-01-01)
-
+## 1.0.0 - 2018-01-01
 ### Features
+- **core:** Add foo bar
 
-* **core:** Add foo bar`, strings.TrimSpace(buf.String()))
+
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/2.0.0-beta.0...HEAD
+[2.0.0-beta.0]: https://github.com/git-chglog/git-chglog/compare/1.1.0...2.0.0-beta.0
+[1.1.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...1.1.0`, strings.TrimSpace(buf.String()))
 }
