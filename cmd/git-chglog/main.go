@@ -53,7 +53,7 @@ func main() {
 
   $ {{.Name}} --config custom/dir/config.yml
 
-    The adove is a command that uses a configuration file placed other than ".chglog/config.yml".
+    The above is a command that uses a configuration file placed other than ".chglog/config.yml".
 `,
 		ttl("USAGE:"),
 		ttl("OPTIONS:"),
@@ -87,6 +87,11 @@ func main() {
 		cli.StringFlag{
 			Name:  "output, o",
 			Usage: "output path and filename for the changelogs. If not specified, output to stdout",
+		},
+
+		cli.StringFlag{
+			Name:  "next-tag",
+			Usage: "treat unreleased commits as specified tags (EXPERIMENTAL)",
 		},
 
 		// silent
@@ -155,6 +160,7 @@ func main() {
 				NoColor:    c.Bool("no-color"),
 				NoEmoji:    c.Bool("no-emoji"),
 				Query:      c.Args().First(),
+				NextTag:    c.String("next-tag"),
 			},
 			fs,
 			NewConfigLoader(),

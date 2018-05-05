@@ -16,6 +16,7 @@ import (
 // Options is an option used to process commits
 type Options struct {
 	Processor            Processor
+	NextTag              string              // Treat unreleased commits as specified tags (EXPERIMENTAL)
 	CommitFilters        map[string][]string // Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value
 	CommitSortBy         string              // Property name to use for sorting `Commit` (e.g. `Scope`)
 	CommitGroupBy        string              // Property name of `Commit` to be grouped into `CommitGroup` (e.g. `Type`)
@@ -150,18 +151,30 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 }
 
 func (gen *Generator) readVersions(tags []*Tag, first string) ([]*Version, error) {
+	next := gen.config.Options.NextTag
 	versions := []*Version{}
 
 	for i, tag := range tags {
-		var rev string
+		var (
+			isNext = next == tag.Name
+			rev    string
+		)
 
-		if i+1 < len(tags) {
-			rev = tags[i+1].Name + ".." + tag.Name
-		} else {
-			if first != "" {
-				rev = first + ".." + tag.Name
+		if isNext {
+			if tag.Previous != nil {
+				rev = tag.Previous.Name + "..HEAD"
 			} else {
-				rev = tag.Name
+				rev = "HEAD"
+			}
+		} else {
+			if i+1 < len(tags) {
+				rev = tags[i+1].Name + ".." + tag.Name
+			} else {
+				if first != "" {
+					rev = first + ".." + tag.Name
+				} else {
+					rev = tag.Name
+				}
 			}
 		}
 
@@ -180,12 +193,21 @@ func (gen *Generator) readVersions(tags []*Tag, first string) ([]*Version, error
 			RevertCommits: revertCommits,
 			NoteGroups:    noteGroups,
 		})
+
+		// Instead of `getTags()`, assign the date to the tag
+		if isNext {
+			tag.Date = commits[0].Author.Date
+		}
 	}
 
 	return versions, nil
 }
 
 func (gen *Generator) readUnreleased(tags []*Tag) (*Unreleased, error) {
+	if gen.config.Options.NextTag != "" {
+		return &Unreleased{}, nil
+	}
+
 	rev := "HEAD"
 
 	if len(tags) > 0 {
@@ -214,6 +236,33 @@ func (gen *Generator) getTags(query string) ([]*Tag, string, error) {
 	tags, err := gen.tagReader.ReadAll()
 	if err != nil {
 		return nil, "", err
+	}
+
+	next := gen.config.Options.NextTag
+	if next != "" {
+		for _, tag := range tags {
+			if next == tag.Name {
+				return nil, "", fmt.Errorf("\"%s\" tag already exists", next)
+			}
+		}
+
+		var previous *RelateTag
+		if len(tags) > 0 {
+			previous = &RelateTag{
+				Name:    tags[0].Name,
+				Subject: tags[0].Subject,
+				Date:    tags[0].Date,
+			}
+		}
+
+		// Assign the date with `readVersions()`
+		tags = append([]*Tag{
+			&Tag{
+				Name:     next,
+				Subject:  next,
+				Previous: previous,
+			},
+		}, tags...)
 	}
 
 	if len(tags) == 0 {

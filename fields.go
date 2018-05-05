@@ -106,7 +106,6 @@ type Version struct {
 
 // Unreleased is unreleased commit dataset
 type Unreleased struct {
-	Tag           *Tag
 	CommitGroups  []*CommitGroup
 	Commits       []*Commit
 	MergeCommits  []*Commit
