@@ -13,8 +13,9 @@ import (
 )
 
 var (
-	cwd          string
-	testRepoRoot = ".tmp"
+	cwd                string
+	testRepoRoot       = ".tmp"
+	internalTimeFormat = "2006-01-02 15:04:05"
 )
 
 type commitFunc = func(date, subject, body string)
@@ -48,7 +49,7 @@ func setup(dir string, setupRepo func(commitFunc, tagFunc, gitcmd.Client)) {
 		if body != "" {
 			msg += "\n\n" + body
 		}
-		t, _ := time.Parse("2006-01-02 15:04:05", date)
+		t, _ := time.Parse(internalTimeFormat, date)
 		d := t.Format("Mon Jan 2 15:04:05 2006 +0000")
 		git.Exec("commit", "--allow-empty", "--date", d, "-m", msg)
 	}
@@ -297,4 +298,96 @@ Online breaking change message.
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/2.0.0-beta.0...HEAD
 [2.0.0-beta.0]: https://github.com/git-chglog/git-chglog/compare/1.1.0...2.0.0-beta.0
 [1.1.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...1.1.0`, strings.TrimSpace(buf.String()))
+}
+
+func TestGeneratorWithNextTag(t *testing.T) {
+	assert := assert.New(t)
+	testName := "type_scope_subject"
+
+	setup(testName, func(commit commitFunc, tag tagFunc, _ gitcmd.Client) {
+		commit("2018-01-01 00:00:00", "feat(core): version 1.0.0", "")
+		tag("1.0.0")
+
+		commit("2018-02-01 00:00:00", "feat(core): version 2.0.0", "")
+		tag("2.0.0")
+
+		commit("2018-03-01 00:00:00", "feat(core): version 3.0.0", "")
+	})
+
+	gen := NewGenerator(&Config{
+		Bin:        "git",
+		WorkingDir: filepath.Join(testRepoRoot, testName),
+		Template:   filepath.Join(cwd, "testdata", testName+".md"),
+		Info: &Info{
+			Title:         "CHANGELOG Example",
+			RepositoryURL: "https://github.com/git-chglog/git-chglog",
+		},
+		Options: &Options{
+			NextTag: "3.0.0",
+			CommitFilters: map[string][]string{
+				"Type": []string{
+					"feat",
+				},
+			},
+			CommitSortBy:      "Scope",
+			CommitGroupBy:     "Type",
+			CommitGroupSortBy: "Title",
+			CommitGroupTitleMaps: map[string]string{
+				"feat": "Features",
+			},
+			HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+			HeaderPatternMaps: []string{
+				"Type",
+				"Scope",
+				"Subject",
+			},
+		},
+	})
+
+	buf := &bytes.Buffer{}
+	err := gen.Generate(buf, "")
+
+	assert.Nil(err)
+	assert.Equal(`<a name="unreleased"></a>
+## [Unreleased]
+
+
+<a name="3.0.0"></a>
+## [3.0.0] - 2018-03-01
+### Features
+- **core:** version 3.0.0
+
+
+<a name="2.0.0"></a>
+## [2.0.0] - 2018-02-01
+### Features
+- **core:** version 2.0.0
+
+
+<a name="1.0.0"></a>
+## 1.0.0 - 2018-01-01
+### Features
+- **core:** version 1.0.0
+
+
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0
+[2.0.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...2.0.0`, strings.TrimSpace(buf.String()))
+
+	buf = &bytes.Buffer{}
+	err = gen.Generate(buf, "3.0.0")
+
+	assert.Nil(err)
+	assert.Equal(`<a name="unreleased"></a>
+## [Unreleased]
+
+
+<a name="3.0.0"></a>
+## [3.0.0] - 2018-03-01
+### Features
+- **core:** version 3.0.0
+
+
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0`, strings.TrimSpace(buf.String()))
 }

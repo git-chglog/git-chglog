@@ -89,6 +89,11 @@ func main() {
 			Usage: "output path and filename for the changelogs. If not specified, output to stdout",
 		},
 
+		cli.StringFlag{
+			Name:  "next-tag",
+			Usage: "treat unreleased commits as specified tags (EXPERIMENTAL)",
+		},
+
 		// silent
 		cli.BoolFlag{
 			Name:  "silent",
@@ -155,6 +160,7 @@ func main() {
 				NoColor:    c.Bool("no-color"),
 				NoEmoji:    c.Bool("no-emoji"),
 				Query:      c.Args().First(),
+				NextTag:    c.String("next-tag"),
 			},
 			fs,
 			NewConfigLoader(),
