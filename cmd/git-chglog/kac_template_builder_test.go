@@ -12,8 +12,8 @@ func TestKACTemplateBuilderDefault(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleGitHub,
-		CommitMessageFormat: fmtTypeScopeSubject.Display,
-		Template:            tplKeepAChangelog,
+		CommitMessageFormat: fmtTypeScopeSubject.display,
+		Template:            tplKeepAChangelog.display,
 		IncludeMerges:       true,
 		IncludeReverts:      true,
 	})
@@ -83,8 +83,8 @@ func TestKACTemplateBuilderNone(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
-		CommitMessageFormat: fmtTypeScopeSubject.Display,
-		Template:            tplKeepAChangelog,
+		CommitMessageFormat: fmtTypeScopeSubject.display,
+		Template:            tplKeepAChangelog.display,
 		IncludeMerges:       true,
 		IncludeReverts:      true,
 	})
@@ -143,8 +143,8 @@ func TestKACTemplateBuilderSubject(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
-		CommitMessageFormat: fmtSubject.Display,
-		Template:            tplKeepAChangelog,
+		CommitMessageFormat: fmtSubject.display,
+		Template:            tplKeepAChangelog.display,
 		IncludeMerges:       true,
 		IncludeReverts:      true,
 	})

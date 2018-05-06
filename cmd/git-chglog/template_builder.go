@@ -12,7 +12,7 @@ type TemplateBuilderFactory = func(string) TemplateBuilder
 
 func templateBuilderFactory(template string) TemplateBuilder {
 	switch template {
-	case tplKeepAChangelog:
+	case tplKeepAChangelog.display:
 		return NewKACTemplateBuilder()
 	default:
 		return NewCustomTemplateBuilder()

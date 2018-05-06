@@ -5,6 +5,12 @@ import (
 	"strings"
 )
 
+// Previewable ...
+type Previewable interface {
+	Display() string
+	Preview() string
+}
+
 // Defaults
 var (
 	defaultConfigDir        = ".chglog"
@@ -28,22 +34,32 @@ var (
 
 // CommitMessageFormat ...
 type CommitMessageFormat struct {
-	Preview     string
-	Display     string
-	Pattern     string
-	PatternMaps []string
+	display     string
+	preview     string
+	pattern     string
+	patternMaps []string
+}
+
+// Display ...
+func (f *CommitMessageFormat) Display() string {
+	return f.display
+}
+
+// Preview ...
+func (f *CommitMessageFormat) Preview() string {
+	return f.preview
 }
 
 // PatternMapString ...
 func (f *CommitMessageFormat) PatternMapString() string {
 	s := " []"
-	l := len(f.PatternMaps)
+	l := len(f.patternMaps)
 	if l == 0 {
 		return s
 	}
 
 	arr := make([]string, l)
-	for i, p := range f.PatternMaps {
+	for i, p := range f.patternMaps {
 		arr[i] = fmt.Sprintf(
 			"%s- %s",
 			strings.Repeat(" ", 6),
@@ -57,30 +73,30 @@ func (f *CommitMessageFormat) PatternMapString() string {
 // Formats
 var (
 	fmtTypeScopeSubject = &CommitMessageFormat{
-		Preview:     "feat(core): Add new feature",
-		Display:     "<type>(<scope>): <subject>",
-		Pattern:     `^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$`,
-		PatternMaps: []string{"Type", "Scope", "Subject"},
+		display:     "<type>(<scope>): <subject>",
+		preview:     "feat(core): Add new feature",
+		pattern:     `^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$`,
+		patternMaps: []string{"Type", "Scope", "Subject"},
 	}
 	fmtTypeSubject = &CommitMessageFormat{
-		Preview:     "feat: Add new feature",
-		Display:     "<type>: <subject>",
-		Pattern:     `^(\\w*)\\:\\s(.*)$`,
-		PatternMaps: []string{"Type", "Subject"},
+		display:     "<type>: <subject>",
+		preview:     "feat: Add new feature",
+		pattern:     `^(\\w*)\\:\\s(.*)$`,
+		patternMaps: []string{"Type", "Subject"},
 	}
 	fmtGitBasic = &CommitMessageFormat{
-		Preview:     "Add new feature",
-		Display:     "<<type> subject>",
-		Pattern:     `^((\\w+)\\s.*)$`,
-		PatternMaps: []string{"Subject", "Type"},
+		display:     "<<type> subject>",
+		preview:     "Add new feature",
+		pattern:     `^((\\w+)\\s.*)$`,
+		patternMaps: []string{"Subject", "Type"},
 	}
 	fmtSubject = &CommitMessageFormat{
-		Preview:     "Add new feature (Not detect `type` field)",
-		Display:     "<subject>",
-		Pattern:     `^(.*)$`,
-		PatternMaps: []string{"Subject"},
+		display:     "<subject>",
+		preview:     "Add new feature (Not detect `type` field)",
+		pattern:     `^(.*)$`,
+		patternMaps: []string{"Subject"},
 	}
-	formats = []*CommitMessageFormat{
+	formats = []Previewable{
 		fmtTypeScopeSubject,
 		fmtTypeSubject,
 		fmtGitBasic,
@@ -88,12 +104,37 @@ var (
 	}
 )
 
+// TemplateStyleFormat ...
+type TemplateStyleFormat struct {
+	preview string
+	display string
+}
+
+// Display ...
+func (t *TemplateStyleFormat) Display() string {
+	return t.display
+}
+
+// Preview ...
+func (t *TemplateStyleFormat) Preview() string {
+	return t.preview
+}
+
 // Templates
 var (
-	tplKeepAChangelog = "keep-a-changelog"
-	tplStandard       = "standard"
-	tplCool           = "cool"
-	templates         = []string{
+	tplKeepAChangelog = &TemplateStyleFormat{
+		display: "keep-a-changelog",
+		preview: "https://github.com/git-chglog/example-type-scope-subject/blob/master/CHANGELOG.kac.md",
+	}
+	tplStandard = &TemplateStyleFormat{
+		display: "standard",
+		preview: "https://github.com/git-chglog/example-type-scope-subject/blob/master/CHANGELOG.standard.md",
+	}
+	tplCool = &TemplateStyleFormat{
+		display: "cool",
+		preview: "https://github.com/git-chglog/example-type-scope-subject/blob/master/CHANGELOG.cool.md",
+	}
+	templates = []Previewable{
 		tplKeepAChangelog,
 		tplStandard,
 		tplCool,
