@@ -10,7 +10,7 @@ func TestCommitMessageFormatPatternMaps(t *testing.T) {
 	assert := assert.New(t)
 
 	f := &CommitMessageFormat{
-		PatternMaps: []string{
+		patternMaps: []string{
 			"Type",
 			"Scope",
 			"Subject",
@@ -23,7 +23,7 @@ func TestCommitMessageFormatPatternMaps(t *testing.T) {
       - Subject`, f.PatternMapString())
 
 	f = &CommitMessageFormat{
-		PatternMaps: []string{},
+		patternMaps: []string{},
 	}
 
 	assert.Equal(" []", f.PatternMapString())

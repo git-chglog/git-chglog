@@ -14,21 +14,21 @@ func TestConfigBulider(t *testing.T) {
 	out, err := builder.Build(&Answer{
 		RepositoryURL:       "https://github.com/git-chglog/git-chglog/git-chglog/",
 		Style:               styleNone,
-		CommitMessageFormat: fmtGitBasic.Display,
-		Template:            tplStandard,
+		CommitMessageFormat: fmtGitBasic.display,
+		Template:            tplStandard.display,
 	})
 
 	assert.Nil(err)
 	assert.Contains(out, "style: none")
 	assert.Contains(out, "template: CHANGELOG.tpl.md")
 	assert.Contains(out, "  repository_url: https://github.com/git-chglog/git-chglog/git-chglog")
-	assert.Contains(out, fmt.Sprintf("    pattern: \"%s\"", fmtGitBasic.Pattern))
+	assert.Contains(out, fmt.Sprintf("    pattern: \"%s\"", fmtGitBasic.pattern))
 	assert.Contains(out, fmt.Sprintf(
 		`    pattern_maps:
       - %s
       - %s`,
-		fmtGitBasic.PatternMaps[0],
-		fmtGitBasic.PatternMaps[1],
+		fmtGitBasic.patternMaps[0],
+		fmtGitBasic.patternMaps[1],
 	))
 }
 
@@ -39,8 +39,8 @@ func TestConfigBuliderEmptyRepoURL(t *testing.T) {
 	out, err := builder.Build(&Answer{
 		RepositoryURL:       "",
 		Style:               styleNone,
-		CommitMessageFormat: fmtGitBasic.Display,
-		Template:            tplStandard,
+		CommitMessageFormat: fmtGitBasic.display,
+		Template:            tplStandard.display,
 	})
 
 	assert.Nil(err)
@@ -55,7 +55,7 @@ func TestConfigBuliderInvalidFormat(t *testing.T) {
 		RepositoryURL:       "",
 		Style:               styleNone,
 		CommitMessageFormat: "",
-		Template:            tplStandard,
+		Template:            tplStandard.display,
 	})
 
 	assert.Contains(err.Error(), "invalid commit message format")

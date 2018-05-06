@@ -21,8 +21,9 @@ func NewConfigBuilder() ConfigBuilder {
 func (*configBuilderImpl) Build(ans *Answer) (string, error) {
 	var msgFormat *CommitMessageFormat
 
-	for _, f := range formats {
-		if f.Display == ans.CommitMessageFormat {
+	for _, ff := range formats {
+		f, _ := ff.(*CommitMessageFormat)
+		if f.display == ans.CommitMessageFormat {
 			msgFormat = f
 			break
 		}
@@ -65,7 +66,7 @@ options:
 		ans.Style,
 		defaultTemplateFilename,
 		repoURL,
-		msgFormat.Pattern,
+		msgFormat.pattern,
 		msgFormat.PatternMapString(),
 	)
 

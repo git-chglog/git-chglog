@@ -77,7 +77,15 @@ func (q *questionerImpl) Ask() (*Answer, error) {
 
 func (q *questionerImpl) ask() (*Answer, error) {
 	ans := &Answer{}
-	fmts := q.getFormats()
+	fmts := q.getPreviewableList(formats)
+	tpls := q.getPreviewableList(templates)
+
+	var previewableTransform = func(ans interface{}) (newAns interface{}) {
+		if s, ok := ans.(string); ok {
+			newAns = q.parsePreviewableList(s)
+		}
+		return
+	}
 
 	questions := []*survey.Question{
 		{
@@ -102,20 +110,16 @@ func (q *questionerImpl) ask() (*Answer, error) {
 				Options: fmts,
 				Default: fmts[0],
 			},
-			Transform: func(ans interface{}) (newAns interface{}) {
-				if s, ok := ans.(string); ok {
-					newAns = q.parseFormat(s)
-				}
-				return
-			},
+			Transform: previewableTransform,
 		},
 		{
 			Name: "template",
 			Prompt: &survey.Select{
 				Message: "What is your favorite template style?",
-				Options: templates,
-				Default: templates[0],
+				Options: tpls,
+				Default: tpls[0],
 			},
+			Transform: previewableTransform,
 		},
 		{
 			Name: "include_merges",
@@ -148,29 +152,29 @@ func (q *questionerImpl) ask() (*Answer, error) {
 	return ans, nil
 }
 
-func (*questionerImpl) getFormats() []string {
-	arr := make([]string, len(formats))
+func (*questionerImpl) getPreviewableList(list []Previewable) []string {
+	arr := make([]string, len(list))
 	max := 0
 
-	for _, f := range formats {
-		l := len(f.Display)
+	for _, p := range list {
+		l := len(p.Display())
 		if max < l {
 			max = l
 		}
 	}
 
-	for i, f := range formats {
+	for i, p := range list {
 		arr[i] = fmt.Sprintf(
 			"%s -- %s",
-			f.Display+strings.Repeat(" ", max-len(f.Display)),
-			f.Preview,
+			p.Display()+strings.Repeat(" ", max-len(p.Display())),
+			p.Preview(),
 		)
 	}
 
 	return arr
 }
 
-func (*questionerImpl) parseFormat(input string) string {
+func (*questionerImpl) parsePreviewableList(input string) string {
 	return strings.TrimSpace(strings.Split(input, "--")[0])
 }
 
