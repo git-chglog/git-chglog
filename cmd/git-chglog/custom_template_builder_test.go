@@ -12,8 +12,8 @@ func TestCustomTemplateBuilderDefault(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleGitHub,
-		CommitMessageFormat: fmtTypeScopeSubject.Display,
-		Template:            tplStandard,
+		CommitMessageFormat: fmtTypeScopeSubject.display,
+		Template:            tplStandard.display,
 		IncludeMerges:       true,
 		IncludeReverts:      true,
 	})
@@ -65,8 +65,8 @@ func TestCustomTemplateBuilderNone(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
-		CommitMessageFormat: fmtTypeScopeSubject.Display,
-		Template:            tplStandard,
+		CommitMessageFormat: fmtTypeScopeSubject.display,
+		Template:            tplStandard.display,
 		IncludeMerges:       true,
 		IncludeReverts:      true,
 	})
@@ -117,8 +117,8 @@ func TestCustomTemplateBuilderSubjectOnly(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
-		CommitMessageFormat: fmtSubject.Display,
-		Template:            tplStandard,
+		CommitMessageFormat: fmtSubject.display,
+		Template:            tplStandard.display,
 		IncludeMerges:       true,
 		IncludeReverts:      true,
 	})
@@ -167,8 +167,8 @@ func TestCustomTemplateBuilderSubject(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
-		CommitMessageFormat: fmtTypeSubject.Display,
-		Template:            tplStandard,
+		CommitMessageFormat: fmtTypeSubject.display,
+		Template:            tplStandard.display,
 		IncludeMerges:       true,
 		IncludeReverts:      true,
 	})
@@ -219,8 +219,8 @@ func TestCustomTemplateBuilderIgnoreReverts(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
-		CommitMessageFormat: fmtTypeSubject.Display,
-		Template:            tplStandard,
+		CommitMessageFormat: fmtTypeSubject.display,
+		Template:            tplStandard.display,
 		IncludeMerges:       true,
 		IncludeReverts:      false,
 	})
@@ -263,8 +263,8 @@ func TestCustomTemplateBuilderIgnoreMerges(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
-		CommitMessageFormat: fmtTypeSubject.Display,
-		Template:            tplStandard,
+		CommitMessageFormat: fmtTypeSubject.display,
+		Template:            tplStandard.display,
 		IncludeMerges:       false,
 		IncludeReverts:      true,
 	})
@@ -307,8 +307,8 @@ func TestCustomTemplateBuilderCool(t *testing.T) {
 
 	out, err := builder.Build(&Answer{
 		Style:               styleNone,
-		CommitMessageFormat: fmtTypeScopeSubject.Display,
-		Template:            tplCool,
+		CommitMessageFormat: fmtTypeScopeSubject.display,
+		Template:            tplCool.display,
 		IncludeMerges:       true,
 		IncludeReverts:      true,
 	})

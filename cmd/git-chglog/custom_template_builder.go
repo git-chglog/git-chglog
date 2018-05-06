@@ -58,13 +58,13 @@ func (*customTemplateBuilderImpl) versionHeader(style, template string) string {
 
 	// format
 	switch template {
-	case tplStandard:
+	case tplStandard.display:
 		tpl = fmt.Sprintf("%s## %s (%s)\n\n",
 			tpl,
 			tagName,
 			date,
 		)
-	case tplCool:
+	case tplCool.display:
 		tpl = fmt.Sprintf("%s## %s\n\n> %s\n\n",
 			tpl,
 			tagName,
@@ -82,13 +82,13 @@ func (*customTemplateBuilderImpl) commits(template, format string) string {
 	)
 
 	switch format {
-	case fmtSubject.Display:
+	case fmtSubject.display:
 		body = `{{ range .Commits -}}
 * {{ .Header }}
 {{ end }}`
 
 	default:
-		if format == fmtTypeScopeSubject.Display {
+		if format == fmtTypeScopeSubject.display {
 			header = "{{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}"
 		} else {
 			header = "{{ .Subject }}"

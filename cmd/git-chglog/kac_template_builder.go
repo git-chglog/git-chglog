@@ -88,7 +88,7 @@ func (t *kacTemplateBuilderImpl) commits(commitGroups, format string) string {
 	)
 
 	switch format {
-	case fmtSubject.Display:
+	case fmtSubject.display:
 		body = `{{ range .Commits -}}
 - {{ .Header }}
 {{ end }}`
