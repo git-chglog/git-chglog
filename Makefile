@@ -33,6 +33,4 @@ install:
 
 .PHONY: changelog
 changelog:
-	@git tag $(tag) > /dev/null 2>&1
-	@git-chglog $(tag)
-	@git tag -d $(tag) > /dev/null 2>&1
+	@git-chglog --next-tag $(tag) $(tag)
