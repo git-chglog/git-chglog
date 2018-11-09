@@ -467,7 +467,7 @@ See godoc [RenderData][doc-render-data] for available variables.
 | Name                                       | Status             | Features                                               |
 |:-------------------------------------------|:-------------------|:-------------------------------------------------------|
 | [GitHub](https://github.com/)              | :white_check_mark: | Mentions automatic link. Automatic link to references. |
-| [GitLab](https://about.gitlab.com/)        | :white_check_mark: | Mentions automatic link. Automatic link to refkrentes. |
+| [GitLab](https://about.gitlab.com/)        | :white_check_mark: | Mentions automatic link. Automatic link to references. |
 | [Bitbucket](https://bitbucket.org/product) | :white_check_mark: | Mentions automatic link. Automatic link to references. |
 
 > :memo: Even with styles that are not yet supported, it is possible to make ordinary CHANGELOG.
