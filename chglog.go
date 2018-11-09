@@ -195,7 +195,7 @@ func (gen *Generator) readVersions(tags []*Tag, first string) ([]*Version, error
 		})
 
 		// Instead of `getTags()`, assign the date to the tag
-		if isNext {
+		if isNext && len(commits) != 0 {
 			tag.Date = commits[0].Author.Date
 		}
 	}
