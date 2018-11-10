@@ -6,6 +6,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ## [Unreleased]
 
 
+<a name="0.7.1"></a>
+## [0.7.1] - 2018-11-10
+### Bug Fixes
+- Panic occured when exec --next-tag with HEAD with tag
+
+
 <a name="0.7.0"></a>
 ## [0.7.0] - 2018-05-06
 ### Bug Fixes
@@ -117,7 +123,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.7.1...HEAD
+[0.7.1]: https://github.com/git-chglog/git-chglog/compare/0.7.0...0.7.1
 [0.7.0]: https://github.com/git-chglog/git-chglog/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/git-chglog/git-chglog/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/git-chglog/git-chglog/compare/0.4.0...0.5.0
