@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 	"time"
 
@@ -302,8 +303,33 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 	}
 
 	fmap := template.FuncMap{
+		// format the input time according to layout
 		"datetime": func(layout string, input time.Time) string {
 			return input.Format(layout)
+		},
+		// check whether substs is withing s
+		"contains": func(s, substr string) bool {
+			return strings.Contains(s, substr)
+		},
+		// check whether s begins with prefix
+		"hasPrefix": func(s, prefix string) bool {
+			return strings.HasPrefix(s, prefix)
+		},
+		// check whether s ends with suffix
+		"hasSuffix": func(s, suffix string) bool {
+			return strings.HasSuffix(s, suffix)
+		},
+		// replace the first n instances of old with new
+		"replace": func(s, old, new string, n int) string {
+			return strings.Replace(s, old, new, n)
+		},
+		// lower case a string
+		"lower": func(s string) string {
+			return strings.ToLower(s)
+		},
+		// upper case a string
+		"upper": func(s string) string {
+			return strings.ToUpper(s)
 		},
 	}
 
