@@ -1,9 +1,15 @@
 # CHANGELOG
-All notable changes to this project will be documented in this file.  
+All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
 
 <a name="unreleased"></a>
 ## [Unreleased]
+
+
+<a name="0.8.0"></a>
+## [0.8.0] - 2019-02-23
+### Features
+- add the contains, hasPrefix, hasSuffix, replace, lower and upper functions to the template functions map
 
 
 <a name="0.7.1"></a>
@@ -123,7 +129,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.7.1...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.8.0...HEAD
+[0.8.0]: https://github.com/git-chglog/git-chglog/compare/0.7.1...0.8.0
 [0.7.1]: https://github.com/git-chglog/git-chglog/compare/0.7.0...0.7.1
 [0.7.0]: https://github.com/git-chglog/git-chglog/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/git-chglog/git-chglog/compare/0.5.0...0.6.0
