@@ -85,6 +85,12 @@ $ brew tap git-chglog/git-chglog
 $ brew install git-chglog
 ```
 
+#### [Scoop](https://scoop.sh) (for Windows users)
+
+```
+$ scoop install git-chglog
+```
+
 #### Go users
 
 ```bash
