@@ -86,6 +86,7 @@ type Commit struct {
 	JiraIssueID string     // (e.g. `RNWY-310`)
 	Body        string
 	TrimmedBody string // Body without any Notes/Refs/Mentions/CoAuthors/Signers
+	AllHeaders []*Commit // when multiple headers are matched in a single commit
 }
 
 // CommitGroup is a collection of commits grouped according to the `CommitGroupBy` option

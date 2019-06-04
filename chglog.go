@@ -38,6 +38,7 @@ type Options struct {
 	RevertPattern               string              // A regular expression to use for parsing the revert commit
 	RevertPatternMaps           []string            // Similar to `HeaderPatternMaps`
 	NoteKeywords                []string            // Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`)
+	MultilineCommit      				bool                // Attempt to match header several times in commit body. Useful to parse squashed commits.
 	JiraUsername                string
 	JiraToken                   string
 	JiraURL                     string

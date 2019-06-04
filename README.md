@@ -116,15 +116,19 @@ go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
 ```
 
 ### [Docker](https://www.docker.com/)
-The compiled docker images are maintained on [quay.io](https://quay.io/repository/git-chglog/git-chglog). 
+
+The compiled docker images are maintained on [quay.io](https://quay.io/repository/git-chglog/git-chglog).
 We maintain the following tags:
+
 - `edge`: Image that is build from the current `HEAD` of the main line branch.
 - `latest`: Image that is built from the [latest released version](https://github.com/git-chglog/git-chglog/releases)
 - `x.y.y` (versions): Images that are build from the tagged versions within Github.
+
 ```bash
 docker pull quay.io/git-chglog/git-chglog:latest
 docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog --version
 ```
+
 ---
 
 If you are using another platform, you can download a binary from the [releases page]
@@ -253,7 +257,7 @@ You can specify which commits to include in the generation of CHANGELOG using `<
 The table below shows Query patterns and summaries, and Query examples.
 
 | Query          | Description                                    | Example                     |
-|:---------------|:-----------------------------------------------|:----------------------------|
+| :------------- | :--------------------------------------------- | :-------------------------- |
 | `<old>..<new>` | Commit contained in `<new>` tags from `<old>`. | `$ git-chglog 1.0.0..2.0.0` |
 | `<name>..`     | Commit from the `<name>` to the latest tag.    | `$ git-chglog 1.0.0..`      |
 | `..<name>`     | Commit from the oldest tag to `<name>`.        | `$ git-chglog ..2.0.0`      |
@@ -275,7 +279,7 @@ info:
   repository_url: https://github.com/git-chglog/git-chglog
 
 options:
-  tag_filter_pattern: '^v'
+  tag_filter_pattern: "^v"
   sort: "date"
 
   commits:
@@ -283,6 +287,7 @@ options:
       Type:
         - feat
     sort_by: Scope
+    multiline_commits: false # when true, allows for parsing body and retrieve squashed commits independently
 
   commit_groups:
     group_by: Type
@@ -299,7 +304,7 @@ options:
 
   issues:
     prefix:
-      - #
+      -  #
 
   refs:
     actions:
@@ -326,7 +331,7 @@ options:
 Git execution command.
 
 | Required | Type   | Default | Description |
-|:---------|:-------|:--------|:------------|
+| :------- | :----- | :------ | :---------- |
 | N        | String | `"git"` | -           |
 
 ### `style`
@@ -335,7 +340,7 @@ CHANGELOG style. Automatic linking of issues and notices, initial value setting
 such as merges etc. are done automatically.
 
 | Required | Type   | Default  | Description                                            |
-|:---------|:-------|:---------|:-------------------------------------------------------|
+| :------- | :----- | :------- | :----------------------------------------------------- |
 | N        | String | `"none"` | Should be `"github"` `"gitlab"` `"bitbucket"` `"none"` |
 
 ### `template`
@@ -344,7 +349,7 @@ Path for the template file. It is specified by a relative path from the setting
 file. Absolute paths are also ok.
 
 | Required | Type   | Default              | Description |
-|:---------|:-------|:---------------------|:------------|
+| :------- | :----- | :------------------- | :---------- |
 | N        | String | `"CHANGELOG.tpl.md"` | -           |
 
 ### `info`
@@ -353,7 +358,7 @@ Metadata for CHANGELOG. Depending on Style, it is sometimes used in processing,
 so it is recommended to specify it.
 
 | Key              | Required | Type   | Default       | Description            |
-|:-----------------|:---------|:-------|:--------------|:-----------------------|
+| :--------------- | :------- | :----- | :------------ | :--------------------- |
 | `title`          | N        | String | `"CHANGELOG"` | Title of CHANGELOG.    |
 | `repository_url` | N        | String | none          | URL of git repository. |
 
@@ -365,25 +370,26 @@ Options used to process commits.
 
 Options concerning the acquisition and sort of commits.
 
-| Required | Type        | Default   | Description                                                                                                         |
-|:---------|:------------|:----------|:--------------------------------------------------------------------------------------------------------------------|
-| N        | String      | `"date"` | Defines how tags are sorted in the generated change log. Values: "date", "semver". |
+| Required | Type   | Default  | Description                                                                        |
+| :------- | :----- | :------- | :--------------------------------------------------------------------------------- |
+| N        | String | `"date"` | Defines how tags are sorted in the generated change log. Values: "date", "semver". |
 
 #### `options.commits`
 
 Options concerning the acquisition and sort of commits.
 
-| Key       | Required | Type        | Default   | Description                                                                                         |
-|:----------|:---------|:------------|:----------|:----------------------------------------------------------------------------------------------------|
-| `filters` | N        | Map in List | none      | Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value. |
-| `sort_by` | N        | String      | `"Scope"` | Property name to use for sorting `Commit`. See [Commit].                                            |
+| Key                  | Required | Type        | Default   | Description                                                                                         |
+| :------------------- | :------- | :---------- | :-------- | :-------------------------------------------------------------------------------------------------- |
+| `filters`            | N        | Map in List | none      | Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value. |
+| `sort_by`            | N        | String      | `"Scope"` | Property name to use for sorting `Commit`. See [Commit].                                            |
+| `multiline_commits:` | N        | Bool        | `false`   | Allows for commit body parsing to find change log entries.                                          |
 
 #### `options.commit_groups`
 
 Options for groups of commits.
 
 | Key           | Required | Type        | Default   | Description                                                                                |
-|:--------------|:---------|:------------|:----------|:-------------------------------------------------------------------------------------------|
+| :------------ | :------- | :---------- | :-------- | :----------------------------------------------------------------------------------------- |
 | `group_by`    | N        | String      | `"Type"`  | Property name of `Commit` to be grouped into `CommitGroup`. See [CommitGroup][doc-commit]. |
 | `sort_by`     | N        | String      | `"Title"` | Property name to use for sorting `CommitGroup`. See [CommitGroup][doc-commit-group].       |
 | `title_order` | N        | List        | none      | Predefined order of titles to use for sorting `CommitGroup`. Only if `sort_by` is `Custom` |
@@ -394,7 +400,7 @@ Options for groups of commits.
 This option is used for parsing the commit header.
 
 | Key            | Required | Type   | Default | Description                                                                                             |
-|:---------------|:---------|:-------|:--------|:--------------------------------------------------------------------------------------------------------|
+| :------------- | :------- | :----- | :------ | :------------------------------------------------------------------------------------------------------ |
 | `pattern`      | Y        | String | none    | A regular expression to use for parsing the commit header.                                              |
 | `pattern_maps` | Y        | List   | none    | A rule for mapping the result of `HeaderPattern` to the property of `Commit`. See [Commit][doc-commit]. |
 
@@ -403,7 +409,7 @@ This option is used for parsing the commit header.
 This option is used to detect issues.
 
 | Key      | Required | Type | Default | Description                                |
-|:---------|:---------|:-----|:--------|:-------------------------------------------|
+| :------- | :------- | :--- | :------ | :----------------------------------------- |
 | `prefix` | N        | List | none    | Prefix used for issues. (e.g. `#`, `#gh-`) |
 
 #### `options.refs`
@@ -411,7 +417,7 @@ This option is used to detect issues.
 This option is for parsing references.
 
 | Key       | Required | Type | Default | Description                                    |
-|:----------|:---------|:-----|:--------|:-----------------------------------------------|
+| :-------- | :------- | :--- | :------ | :--------------------------------------------- |
 | `actions` | N        | List | none    | Word list of `Ref.Action`. See [Ref][doc-ref]. |
 
 #### `options.merges`
@@ -419,7 +425,7 @@ This option is for parsing references.
 Options to detect and parse merge commits.
 
 | Key            | Required | Type   | Default | Description                               |
-|:---------------|:---------|:-------|:--------|:------------------------------------------|
+| :------------- | :------- | :----- | :------ | :---------------------------------------- |
 | `pattern`      | N        | String | none    | Similar to `options.header.pattern`.      |
 | `pattern_maps` | N        | List   | none    | Similar to `options.header.pattern_maps`. |
 
@@ -428,7 +434,7 @@ Options to detect and parse merge commits.
 Options to detect and parse revert commits.
 
 | Key            | Required | Type   | Default | Description                               |
-|:---------------|:---------|:-------|:--------|:------------------------------------------|
+| :------------- | :------- | :----- | :------ | :---------------------------------------- |
 | `pattern`      | N        | String | none    | Similar to `options.header.pattern`.      |
 | `pattern_maps` | N        | List   | none    | Similar to `options.header.pattern_maps`. |
 
@@ -437,7 +443,7 @@ Options to detect and parse revert commits.
 Options to detect notes contained in commit bodies.
 
 | Key        | Required | Type | Default | Description                                                                                          |
-|:-----------|:---------|:-----|:--------|:-----------------------------------------------------------------------------------------------------|
+| :--------- | :------- | :--- | :------ | :--------------------------------------------------------------------------------------------------- |
 | `keywords` | N        | List | none    | Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`). |
 
 ## Templates
@@ -470,45 +476,62 @@ The basic templates are as follows.
 ```markdown
 {{ if .Versions -}}
 <a name="unreleased"></a>
+
 ## [Unreleased]
 
 {{ if .Unreleased.CommitGroups -}}
 {{ range .Unreleased.CommitGroups -}}
+
 ### {{ .Title }}
+
 {{ range .Commits -}}
+
 - {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
-{{ end }}
-{{ end -}}
-{{ end -}}
-{{ end -}}
+  {{ end }}
+  {{ end -}}
+  {{ end -}}
+  {{ end -}}
 
 {{ range .Versions }}
 <a name="{{ .Tag.Name }}"></a>
+
 ## {{ if .Tag.Previous }}[{{ .Tag.Name }}]{{ else }}{{ .Tag.Name }}{{ end }} - {{ datetime "2006-01-02" .Tag.Date }}
+
 {{ range .CommitGroups -}}
+
 ### {{ .Title }}
+
 {{ range .Commits -}}
+
 - {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
-{{ end }}
-{{ end -}}
+  {{ end }}
+  {{ end -}}
 
 {{- if .RevertCommits -}}
+
 ### Reverts
+
 {{ range .RevertCommits -}}
+
 - {{ .Revert.Header }}
-{{ end }}
-{{ end -}}
+  {{ end }}
+  {{ end -}}
 
 {{- if .MergeCommits -}}
+
 ### Pull Requests
+
 {{ range .MergeCommits -}}
+
 - {{ .Header }}
-{{ end }}
-{{ end -}}
+  {{ end }}
+  {{ end -}}
 
 {{- if .NoteGroups -}}
 {{ range .NoteGroups -}}
+
 ### {{ .Title }}
+
 {{ range .Notes }}
 {{ .Body }}
 {{ end }}
@@ -531,13 +554,13 @@ See the godoc [RenderData][doc-render-data] documentation for available variable
 ## Supported Styles
 
 | Name                                       | Status             | Features                                               |
-|:-------------------------------------------|:-------------------|:-------------------------------------------------------|
+| :----------------------------------------- | :----------------- | :----------------------------------------------------- |
 | [GitHub](https://github.com/)              | :white_check_mark: | Mentions automatic link. Automatic link to references. |
 | [GitLab](https://about.gitlab.com/)        | :white_check_mark: | Mentions automatic link. Automatic link to references. |
 | [Bitbucket](https://bitbucket.org/product) | :white_check_mark: | Mentions automatic link. Automatic link to references. |
 
 > :memo: Even with styles that are not yet supported, it is possible to make
-ordinary CHANGELOG.
+> ordinary CHANGELOG.
 
 ## Jira Integration
 
@@ -551,18 +574,18 @@ Take the following steps to add Jira integration:
 
 ### 1. Change the header parse pattern to recognize Jira issue id in the configure file
 
-__Where Jira issue is identical Jira story.__
+**Where Jira issue is identical Jira story.**
 
 The following is a sample pattern:
 
-  ```yaml
-  header:
-    pattern: "^(?:(\\w*)|(?:\\[(.*)\\])?)\\:\\s(.*)$"
-    pattern_maps:
-      - Type
-      - JiraIssueID
-      - Subject
-  ```
+```yaml
+header:
+  pattern: "^(?:(\\w*)|(?:\\[(.*)\\])?)\\:\\s(.*)$"
+  pattern_maps:
+    - Type
+    - JiraIssueID
+    - Subject
+```
 
 This sample pattern can match both forms of commit headers:
 
@@ -573,18 +596,18 @@ This sample pattern can match both forms of commit headers:
 
 The following is a sample:
 
-  ```yaml
-  jira:
-    info:
-      username: u
-      token: p
-      url: https://jira.com
-    issue:
-      type_maps:
-        Task: fix
-        Story: feat
-      description_pattern: "<changelog>(.*)</changelog>"
-  ```
+```yaml
+jira:
+  info:
+    username: u
+    token: p
+    url: https://jira.com
+  issue:
+    type_maps:
+      Task: fix
+      Story: feat
+    description_pattern: "<changelog>(.*)</changelog>"
+```
 
 Here you need to define Jira URL, access username and token (password). If you
 don't want to write your Jira access credential in configure file, you may define
@@ -605,13 +628,16 @@ data. For example:
 
 ```markdown
 {{ range .CommitGroups -}}
+
 ### {{ .Title }}
+
 {{ range .Commits -}}
+
 - {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
-{{ if .JiraIssue }} {{ .JiraIssue.Description }}
-{{ end }}
-{{ end }}
-{{ end -}}
+  {{ if .JiraIssue }} {{ .JiraIssue.Description }}
+  {{ end }}
+  {{ end }}
+  {{ end -}}
 ```
 
 Within a `Commit`, the following Jira data can be used in template:
@@ -628,44 +654,46 @@ Within a `Commit`, the following Jira data can be used in template:
   This is not for the purpose of completely automating the generation of CHANGELOG
   files, it is only for assisting generation.
 
-  It is ideal to describe everything included in CHANGELOG in your commits. But
-  actually it is very difficult to do it perfectly.
+It is ideal to describe everything included in CHANGELOG in your commits. But
+actually it is very difficult to do it perfectly.
 
-  There are times when you need to edit the generated output to write a great CHANGELOG.
+There are times when you need to edit the generated output to write a great CHANGELOG.
 
-  By displaying it on the standard output, it makes it easy to change the contents.
+By displaying it on the standard output, it makes it easy to change the contents.
+
 </details>
 
 <details>
   <summary>Can I commit CHANGELOG changes before creating tags?</summary>
 
-  Yes, it can be solved by using the `--next-tag` flag.
+Yes, it can be solved by using the `--next-tag` flag.
 
-  For example, let's say you want to upgrade your project to `2.0.0`.
-  You can create CHANGELOG containing `2.0.0` as follows.
+For example, let's say you want to upgrade your project to `2.0.0`.
+You can create CHANGELOG containing `2.0.0` as follows.
 
-  ```bash
-  git-chglog --next-tag 2.0.0 -o CHANGELOG.md
-  git commit -am "release 2.0.0"
-  git tag 2.0.0
-  ```
+```bash
+git-chglog --next-tag 2.0.0 -o CHANGELOG.md
+git commit -am "release 2.0.0"
+git tag 2.0.0
+```
 
-  The point to notice is that before actually creating a tag with `git`, it is
-  conveying the next version with `--next-tag` :+1:
+The point to notice is that before actually creating a tag with `git`, it is
+conveying the next version with `--next-tag` :+1:
 
-  This is a step that is necessary for project operation in many cases.
+This is a step that is necessary for project operation in many cases.
+
 </details>
 
 <details>
   <summary>Can I generate a CHANGELOG based on certain tags?</summary>
 
-  Yes, it can be solved by use the `--tag-filter-pattern` flag.
+Yes, it can be solved by use the `--tag-filter-pattern` flag.
 
-  For example, the following command will only include tags starting with "v":
+For example, the following command will only include tags starting with "v":
 
-  ```bash
-  git-chglog --tag-filter-pattern '^v'
-  ```
+```bash
+git-chglog --tag-filter-pattern '^v'
+```
 
 </details>
 
