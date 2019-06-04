@@ -16,8 +16,9 @@ type Info struct {
 
 // CommitOptions ...
 type CommitOptions struct {
-	Filters map[string][]string `yaml:"filters"`
-	SortBy  string              `yaml:"sort_by"`
+	Filters         map[string][]string `yaml:"filters"`
+	SortBy          string              `yaml:"sort_by"`
+	MultilineCommit bool                `yaml:"multiline_commit"`
 }
 
 // CommitGroupOptions ...
@@ -272,6 +273,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 			RevertPattern:        opts.Reverts.Pattern,
 			RevertPatternMaps:    opts.Reverts.PatternMaps,
 			NoteKeywords:         opts.Notes.Keywords,
+			MultilineCommit:      opts.Commits.MultilineCommit,
 		},
 	}
 }
