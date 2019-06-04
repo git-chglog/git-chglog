@@ -6,8 +6,17 @@ import (
 
 func commitFilter(commits []*Commit, filters map[string][]string, noCaseSensitive bool) []*Commit {
 	res := []*Commit{}
+	expandedCommits := []*Commit{}
 
 	for _, commit := range commits {
+		// expand squashed entries
+		expandedCommits = append(expandedCommits, commit)
+		if len(commit.AllHeaders) > 0 {
+			expandedCommits = append(expandedCommits, commit.AllHeaders...)
+		}
+	}
+
+	for _, commit := range expandedCommits {
 		include := false
 
 		if len(filters) == 0 {

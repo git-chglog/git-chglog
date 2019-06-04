@@ -54,19 +54,20 @@ type NoteGroup struct {
 
 // Commit data
 type Commit struct {
-	Hash      *Hash
-	Author    *Author
-	Committer *Committer
-	Merge     *Merge  // If it is not a merge commit, `nil` is assigned
-	Revert    *Revert // If it is not a revert commit, `nil` is assigned
-	Refs      []*Ref
-	Notes     []*Note
-	Mentions  []string // Name of the user included in the commit header or body
-	Header    string   // (e.g. `feat(core): Add new feature`)
-	Type      string   // (e.g. `feat`)
-	Scope     string   // (e.g. `core`)
-	Subject   string   // (e.g. `Add new feature`)
-	Body      string
+	Hash       *Hash
+	Author     *Author
+	Committer  *Committer
+	Merge      *Merge  // If it is not a merge commit, `nil` is assigned
+	Revert     *Revert // If it is not a revert commit, `nil` is assigned
+	Refs       []*Ref
+	Notes      []*Note
+	Mentions   []string // Name of the user included in the commit header or body
+	Header     string   // (e.g. `feat(core): Add new feature`)
+	Type       string   // (e.g. `feat`)
+	Scope      string   // (e.g. `core`)
+	Subject    string   // (e.g. `Add new feature`)
+	Body       string
+	AllHeaders []*Commit // when multiple headers are matched in a single commit
 }
 
 // CommitGroup is a collection of commits grouped according to the `CommitGroupBy` option
