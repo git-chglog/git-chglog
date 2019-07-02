@@ -252,6 +252,7 @@ change message.`)
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
+	output := strings.Replace(strings.TrimSpace(buf.String()), "\r\n", "\n", -1)
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -297,7 +298,7 @@ Online breaking change message.
 
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/2.0.0-beta.0...HEAD
 [2.0.0-beta.0]: https://github.com/git-chglog/git-chglog/compare/1.1.0...2.0.0-beta.0
-[1.1.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...1.1.0`, strings.TrimSpace(buf.String()))
+[1.1.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...1.1.0`, output)
 }
 
 func TestGeneratorWithNextTag(t *testing.T) {
@@ -346,6 +347,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
+	output := strings.Replace(strings.TrimSpace(buf.String()), "\r\n", "\n", -1)
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -372,10 +374,11 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
 [3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0
-[2.0.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...2.0.0`, strings.TrimSpace(buf.String()))
+[2.0.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...2.0.0`, output)
 
 	buf = &bytes.Buffer{}
 	err = gen.Generate(buf, "3.0.0")
+	output = strings.Replace(strings.TrimSpace(buf.String()), "\r\n", "\n", -1)
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -389,5 +392,5 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
-[3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0`, strings.TrimSpace(buf.String()))
+[3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0`, output)
 }
