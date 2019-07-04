@@ -391,3 +391,64 @@ func TestGeneratorWithNextTag(t *testing.T) {
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
 [3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0`, strings.TrimSpace(buf.String()))
 }
+
+func TestGeneratorWithTagFiler(t *testing.T) {
+	assert := assert.New(t)
+	testName := "type_scope_subject"
+
+	setup(testName, func(commit commitFunc, tag tagFunc, _ gitcmd.Client) {
+		commit("2018-01-01 00:00:00", "feat(core): version dev-1.0.0", "")
+		tag("dev-1.0.0")
+
+		commit("2018-02-01 00:00:00", "feat(core): version v1.0.0", "")
+		tag("v1.0.0")
+	})
+
+	gen := NewGenerator(&Config{
+		Bin:        "git",
+		WorkingDir: filepath.Join(testRepoRoot, testName),
+		Template:   filepath.Join(cwd, "testdata", testName+".md"),
+		Info: &Info{
+			Title:         "CHANGELOG Example",
+			RepositoryURL: "https://github.com/git-chglog/git-chglog",
+		},
+		Options: &Options{
+			TagFilterPattern: "^v",
+			CommitFilters: map[string][]string{
+				"Type": []string{
+					"feat",
+				},
+			},
+			CommitSortBy:      "Scope",
+			CommitGroupBy:     "Type",
+			CommitGroupSortBy: "Title",
+			CommitGroupTitleMaps: map[string]string{
+				"feat": "Features",
+			},
+			HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+			HeaderPatternMaps: []string{
+				"Type",
+				"Scope",
+				"Subject",
+			},
+		},
+	})
+
+	buf := &bytes.Buffer{}
+	err := gen.Generate(buf, "")
+
+	assert.Nil(err)
+	assert.Equal(`<a name="unreleased"></a>
+## [Unreleased]
+
+
+<a name="v1.0.0"></a>
+## v1.0.0 - 2018-02-01
+### Features
+- **core:** version v1.0.0
+- **core:** version dev-1.0.0
+
+
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v1.0.0...HEAD`, strings.TrimSpace(buf.String()))
+
+}

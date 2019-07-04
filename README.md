@@ -166,15 +166,16 @@ USAGE:
     4. <name>       - Commit contained in <name>.
 
 OPTIONS:
-  --init                    generate the git-chglog configuration file in interactive
-  --config value, -c value  specifies a different configuration file to pick up (default: ".chglog/config.yml")
-  --output value, -o value  output path and filename for the changelogs. If not specified, output to stdout
-  --next-tag value          treat unreleased commits as specified tags (EXPERIMENTAL)
-  --silent                  disable stdout output
-  --no-color                disable color output [$NO_COLOR]
-  --no-emoji                disable emoji output [$NO_EMOJI]
-  --help, -h                show help
-  --version, -v             print the version
+  --init                                generate the git-chglog configuration file in interactive
+  --config value, -c value              specifies a different configuration file to pick up (default: ".chglog/config.yml")
+  --output value, -o value              output path and filename for the changelogs. If not specified, output to stdout
+  --next-tag value                      treat unreleased commits as specified tags (EXPERIMENTAL)
+  --silent                              disable stdout output
+  --no-color                            disable color output [$NO_COLOR]
+  --no-emoji                            disable emoji output [$NO_EMOJI]
+  --tag-filter-pattern value, -p value  regular expression of tag filter. Is specified, only matched tags will be picked
+  --help, -h                            show help
+  --version, -v                         print the version
 
 EXAMPLE:
 
@@ -512,7 +513,16 @@ See godoc [RenderData][doc-render-data] for available variables.
   This is a step that is necessary for project operation in many cases.
 </details>
 
-
+<details>
+  <summary>Can I generated CHANGELOG based on certain tags?</summary>
+  
+  Yes, it can be solved by use the `--tag-filter-pattern` flag.
+  
+  For example, the following command will only include tags starting with "v":
+  ```bash
+  $ git-chglog --tag-filter-pattern '^v'
+  ```
+</details>
 
 
 ## TODO
