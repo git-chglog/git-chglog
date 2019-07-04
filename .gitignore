@@ -10,6 +10,7 @@
 *.dll
 *.so
 *.dylib
+git-chglog
 
 # Test binary, build with `go test -c`
 *.test
@@ -30,6 +31,10 @@ Icon
 
 # Thumbnails
 ._*
+
+# Intellij IDEA
+*.iml
+.idea
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100

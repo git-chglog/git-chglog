@@ -2,6 +2,7 @@ package chglog
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -13,12 +14,14 @@ type tagReader struct {
 	client    gitcmd.Client
 	format    string
 	separator string
+	reFilter  *regexp.Regexp
 }
 
-func newTagReader(client gitcmd.Client) *tagReader {
+func newTagReader(client gitcmd.Client, filterPattern string) *tagReader {
 	return &tagReader{
 		client:    client,
 		separator: "@@__CHGLOG__@@",
+		reFilter:  regexp.MustCompile(filterPattern),
 	}
 }
 
@@ -54,6 +57,12 @@ func (r *tagReader) ReadAll() ([]*Tag, error) {
 				return nil, err2
 			}
 			date = t
+		}
+
+		if r.reFilter != nil {
+			if !r.reFilter.MatchString(name) {
+				continue
+			}
 		}
 
 		tags = append(tags, &Tag{

@@ -11,7 +11,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-func main() {
+func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 	ttl := color.New(color.FgYellow).SprintFunc()
 
 	cli.AppHelpTemplate = fmt.Sprintf(`
@@ -114,63 +114,77 @@ func main() {
 			EnvVar: "NO_EMOJI",
 		},
 
+		// tag-filter-pattern
+		cli.StringFlag{
+			Name:   "tag-filter-pattern, p",
+			Usage:  "Regular expression of tag filter. Is specified, only matched tags will be picked",
+		},
+
 		// help & version
 		cli.HelpFlag,
 		cli.VersionFlag,
 	}
 
-	app.Action = func(c *cli.Context) error {
-		wd, err := os.Getwd()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "failed to get working directory", err)
-			os.Exit(ExitCodeError)
-		}
+	app.Action = actionFunc
 
-		// initializer
-		if c.Bool("init") {
-			initializer := NewInitializer(
-				&InitContext{
-					WorkingDir: wd,
-					Stdout:     colorable.NewColorableStdout(),
-					Stderr:     colorable.NewColorableStderr(),
-				},
-				fs,
-				NewQuestioner(
-					gitcmd.New(&gitcmd.Config{
-						Bin: "git",
-					}),
-					fs,
-				),
-				NewConfigBuilder(),
-				templateBuilderFactory,
-			)
+	return app
+}
 
-			os.Exit(initializer.Run())
-		}
+func AppAction(c *cli.Context) error {
+	wd, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "failed to get working directory", err)
+		os.Exit(ExitCodeError)
+	}
 
-		// chglog
-		chglogCLI := NewCLI(
-			&CLIContext{
+	// initializer
+	if c.Bool("init") {
+		initializer := NewInitializer(
+			&InitContext{
 				WorkingDir: wd,
 				Stdout:     colorable.NewColorableStdout(),
 				Stderr:     colorable.NewColorableStderr(),
-				ConfigPath: c.String("config"),
-				OutputPath: c.String("output"),
-				Silent:     c.Bool("silent"),
-				NoColor:    c.Bool("no-color"),
-				NoEmoji:    c.Bool("no-emoji"),
-				Query:      c.Args().First(),
-				NextTag:    c.String("next-tag"),
 			},
 			fs,
-			NewConfigLoader(),
-			NewGenerator(),
+			NewQuestioner(
+				gitcmd.New(&gitcmd.Config{
+					Bin: "git",
+				}),
+				fs,
+			),
+			NewConfigBuilder(),
+			templateBuilderFactory,
 		)
 
-		os.Exit(chglogCLI.Run())
-
-		return nil
+		os.Exit(initializer.Run())
 	}
 
+	// chglog
+	chglogCLI := NewCLI(
+		&CLIContext{
+			WorkingDir: wd,
+			Stdout:     colorable.NewColorableStdout(),
+			Stderr:     colorable.NewColorableStderr(),
+			ConfigPath: c.String("config"),
+			OutputPath: c.String("output"),
+			Silent:     c.Bool("silent"),
+			NoColor:    c.Bool("no-color"),
+			NoEmoji:    c.Bool("no-emoji"),
+			Query:      c.Args().First(),
+			NextTag:    c.String("next-tag"),
+			TagFilterPattern: c.String("tag-filter-pattern"),
+		},
+		fs,
+		NewConfigLoader(),
+		NewGenerator(),
+	)
+
+	os.Exit(chglogCLI.Run())
+
+	return nil
+}
+
+func main() {
+	app := CreateApp(AppAction)
 	app.Run(os.Args)
 }
