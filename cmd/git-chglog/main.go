@@ -11,6 +11,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// CreateApp
 func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 	ttl := color.New(color.FgYellow).SprintFunc()
 
