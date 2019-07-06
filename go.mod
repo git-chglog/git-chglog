@@ -1,4 +1,4 @@
-module github.com/git-chglog/git-chglog
+module github.com/fredbi/git-chglog
 
 go 1.19
 
