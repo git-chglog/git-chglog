@@ -3,7 +3,7 @@ package main
 import (
 	"io"
 
-	chglog "github.com/git-chglog/git-chglog"
+	chglog "github.com/fredbi/git-chglog"
 )
 
 type mockGeneratorImpl struct {

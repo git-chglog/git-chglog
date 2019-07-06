@@ -4,6 +4,7 @@ require (
 	github.com/Netflix/go-expect v0.0.0-20180928190340-9d1f4485533b // indirect
 	github.com/davecgh/go-spew v1.1.1
 	github.com/fatih/color v1.7.0
+	github.com/git-chglog/git-chglog v0.0.0-20190611050339-63a4e637021f
 	github.com/hinshun/vt10x v0.0.0-20180809195222-d55458df857c // indirect
 	github.com/imdario/mergo v0.3.7
 	github.com/kr/pty v1.1.8 // indirect

@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	chglog "github.com/git-chglog/git-chglog"
+	chglog "github.com/fredbi/git-chglog"
 	"github.com/imdario/mergo"
 )
 
