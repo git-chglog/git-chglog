@@ -1,4 +1,4 @@
-module github.com/git-chglog/git-chglog
+module github.com/fredbi/git-chglog
 
 require (
 	github.com/Netflix/go-expect v0.0.0-20180928190340-9d1f4485533b // indirect
