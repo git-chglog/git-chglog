@@ -11,7 +11,6 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// CreateApp
 func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 	ttl := color.New(color.FgYellow).SprintFunc()
 
@@ -84,6 +83,18 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 			Value: ".chglog/config.yml",
 		},
 
+		// template
+		cli.StringFlag{
+			Name:  "template, t",
+			Usage: "specifies a template file to pick up. If not specified, use the one in config",
+		},
+
+		// repository url
+		cli.StringFlag{
+			Name: "repository-url",
+			Usage: "specifies git repo URL. If not specified, use 'repository_url' in config",
+		},
+
 		// output
 		&cli.StringFlag{
 			Name:  "output, o",
@@ -125,6 +136,24 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 		&cli.StringFlag{
 			Name:  "tag-filter-pattern, p",
 			Usage: "Regular expression of tag filter. Is specified, only matched tags will be picked",
+		},
+
+		cli.StringFlag{
+			Name:   "jira-url",
+			Usage:  "Jira URL",
+			EnvVar: "JIRA_URL",
+		},
+
+		cli.StringFlag{
+			Name:   "jira-username",
+			Usage:  "Jira username",
+			EnvVar: "JIRA_USERNAME",
+		},
+
+		cli.StringFlag{
+			Name:   "jira-token",
+			Usage:  "Jira token",
+			EnvVar: "JIRA_TOKEN",
 		},
 
 		// help & version
@@ -181,6 +210,9 @@ func AppAction(c *cli.Context) error {
 			Query:            c.Args().First(),
 			NextTag:          c.String("next-tag"),
 			TagFilterPattern: c.String("tag-filter-pattern"),
+			JiraUsername:     c.String("jira-username"),
+			JiraToken:        c.String("jira-token"),
+			JiraUrl:          c.String("jira-url"),
 		},
 		fs,
 		NewConfigLoader(),

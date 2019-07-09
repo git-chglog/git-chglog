@@ -486,6 +486,88 @@ See the godoc [RenderData][doc-render-data] documentation for available variable
 
 > :memo: Even with styles that are not yet supported, it is possible to make ordinary CHANGELOG.
 
+
+## Jira Integration
+
+
+Jira is a popular project management tool. When a project uses Jira to track feature development and bug fixes,
+it may also want to generate change log based information stored in Jira. With embedding a Jira story id in git
+commit header, the git-chglog tool may automatically fetch data of the story from Jira, those data then can be 
+used to render the template.
+
+Take the following steps to add Jira integration:
+
+#### 1. Change the header parse pattern to recognize Jira issue id in the configure file.
+
+__Where Jira issue is identical Jira story.__
+
+The following is a sample pattern:
+
+  ```yaml
+  header:
+    pattern: "^(\\w*)[\\[(\\w*)\\]]\\:\\s(.*)$"
+    pattern_maps:
+      - Type
+      - JiraIssueId
+      - Subject
+  ```
+
+This sample pattern can match both forms of commit headers:
+
+* `feat: new feature of something`
+* `[JIRA-ID]: something`
+
+#### 2. Add Jira configuration to the configure file.
+
+The following is a sample:
+
+  ```yaml
+  jira:
+    info:
+      username: u
+      token: p
+      url: https://jira.com
+    issue:
+      type_maps:
+        Task: fix
+        Story: feat
+      description_pattern: "<changelog>(.*)</changelog>"
+  ```
+
+Here you need to define Jira URL, access username and token (password). If you don't want to
+write your Jira access credential in configure file, you may define them with environment variables:
+`JIRA_URL`, `JIRA_USERNAME` and `JIRA_TOKEN`.
+
+You also needs to define a issue type map. In above sample, Jira issue type `Task` will be
+mapped to `fix` and `Story` will be mapped to `feat`.
+
+As a Jira story's description could be very long, you might not want to include the entire
+description into change log. In that case, you may define `description_pattern` like above,
+so that only content embraced with `<changelog> ... </changelog>` will be included.
+
+#### 3. Update the template to show Jira data.
+
+In the template, if a commit contains a Jira issue id, then you may show Jira data. For example:
+
+```markdown
+{{ range .CommitGroups -}}
+### {{ .Title }}
+{{ range .Commits -}}
+- {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
+{{ if .JiraIssue }} {{ .JiraIssue.Description }}
+{{ end }}
+{{ end }}
+{{ end -}}
+```
+
+Within a `Commit`, the following Jira data can be used in template:
+
+* `.JiraIssue.Summary` - Summary of the Jira story
+* `.JiraIssue.Description` - Description of the Jira story
+* `.JiraIssue.Type` - Original type of the Jira story, and `.Type` will be mapped type.
+* `.JiraIssue.Labels` - A list of strings, each is a Jira label.
+
+
 ## FAQ
 
 <details>

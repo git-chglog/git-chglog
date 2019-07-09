@@ -52,21 +52,31 @@ type NoteGroup struct {
 	Notes []*Note
 }
 
+// JiraIssue
+type JiraIssue struct {
+	Type        string
+	Summary     string
+	Description string
+	Labels      []string
+}
+
 // Commit data
 type Commit struct {
-	Hash      *Hash
-	Author    *Author
-	Committer *Committer
-	Merge     *Merge  // If it is not a merge commit, `nil` is assigned
-	Revert    *Revert // If it is not a revert commit, `nil` is assigned
-	Refs      []*Ref
-	Notes     []*Note
-	Mentions  []string // Name of the user included in the commit header or body
-	Header    string   // (e.g. `feat(core): Add new feature`)
-	Type      string   // (e.g. `feat`)
-	Scope     string   // (e.g. `core`)
-	Subject   string   // (e.g. `Add new feature`)
-	Body      string
+	Hash        *Hash
+	Author      *Author
+	Committer   *Committer
+	Merge       *Merge  // If it is not a merge commit, `nil` is assigned
+	Revert      *Revert // If it is not a revert commit, `nil` is assigned
+	Refs        []*Ref
+	Notes       []*Note
+	Mentions    []string // Name of the user included in the commit header or body
+	JiraIssue   *JiraIssue // If no issue id found in header, `nil` is assigned
+	Header      string   // (e.g. `feat(core)[RNWY-310]: Add new feature`)
+	Type        string   // (e.g. `feat`)
+	Scope       string   // (e.g. `core`)
+	Subject     string   // (e.g. `Add new feature`)
+	JiraIssueId string   // (e.g. `RNWY-310`)
+	Body        string
 }
 
 // CommitGroup is a collection of commits grouped according to the `CommitGroupBy` option
