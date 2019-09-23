@@ -6,6 +6,18 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ## [Unreleased]
 
 
+<a name="0.9.1"></a>
+## [0.9.1] - 2019-09-23
+
+<a name="0.9.0"></a>
+## [0.9.0] - 2019-09-23
+### Bug Fixes
+- Fixing tests on windows
+
+### Features
+- Add --tag-filter-pattern flag.
+
+
 <a name="0.8.0"></a>
 ## [0.8.0] - 2019-02-23
 ### Features
@@ -130,6 +142,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.8.0...HEAD
+[0.9.1]: https://github.com/git-chglog/git-chglog/compare/0.9.0...0.9.1
+[0.9.0]: https://github.com/git-chglog/git-chglog/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/git-chglog/git-chglog/compare/0.7.1...0.8.0
 [0.7.1]: https://github.com/git-chglog/git-chglog/compare/0.7.0...0.7.1
 [0.7.0]: https://github.com/git-chglog/git-chglog/compare/0.6.0...0.7.0
