@@ -6,16 +6,17 @@ import (
 
 // CLIContext ...
 type CLIContext struct {
-	WorkingDir string
-	Stdout     io.Writer
-	Stderr     io.Writer
-	ConfigPath string
-	OutputPath string
-	Silent     bool
-	NoColor    bool
-	NoEmoji    bool
-	Query      string
-	NextTag    string
+	WorkingDir       string
+	Stdout           io.Writer
+	Stderr           io.Writer
+	ConfigPath       string
+	OutputPath       string
+	Silent           bool
+	NoColor          bool
+	NoEmoji          bool
+	Query            string
+	NextTag          string
+	TagFilterPattern string
 }
 
 // InitContext ...

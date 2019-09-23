@@ -28,7 +28,7 @@ func TestTagReader(t *testing.T) {
 		},
 	}
 
-	actual, err := newTagReader(client).ReadAll()
+	actual, err := newTagReader(client, "").ReadAll()
 	assert.Nil(err)
 
 	assert.Equal(
@@ -102,5 +102,20 @@ func TestTagReader(t *testing.T) {
 			},
 		},
 		actual,
+	)
+
+	actual_filtered, err_filtered := newTagReader(client, "^v").ReadAll()
+	assert.Nil(err_filtered)
+	assert.Equal(
+		[]*Tag{
+			&Tag{
+				Name:    "v2.0.4-beta.1",
+				Subject: "Release v2.0.4-beta.1",
+				Date:    time.Date(2018, 2, 1, 0, 0, 0, 0, time.UTC),
+				Next: nil,
+				Previous: nil,
+			},
+		},
+		actual_filtered,
 	)
 }
