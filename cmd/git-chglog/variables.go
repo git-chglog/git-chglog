@@ -32,12 +32,18 @@ var (
 	}
 )
 
+type typeSample struct {
+	typeName string
+	title string
+}
+
 // CommitMessageFormat ...
 type CommitMessageFormat struct {
 	display     string
 	preview     string
 	pattern     string
 	patternMaps []string
+	typeSamples []typeSample
 }
 
 // Display ...
@@ -52,13 +58,11 @@ func (f *CommitMessageFormat) Preview() string {
 
 // PatternMapString ...
 func (f *CommitMessageFormat) PatternMapString() string {
-	s := " []"
-	l := len(f.patternMaps)
-	if l == 0 {
-		return s
+	if len(f.patternMaps) == 0 {
+		return " []"
 	}
 
-	arr := make([]string, l)
+	arr := make([]string, len(f.patternMaps))
 	for i, p := range f.patternMaps {
 		arr[i] = fmt.Sprintf(
 			"%s- %s",
@@ -70,6 +74,38 @@ func (f *CommitMessageFormat) PatternMapString() string {
 	return fmt.Sprintf("\n%s", strings.Join(arr, "\n"))
 }
 
+// FilterTypeString ...
+func (f *CommitMessageFormat) FilterTypesString() string {
+	if len(f.typeSamples) == 0 {
+		return " []"
+	}
+
+	arr := make([]string, len(f.typeSamples))
+	for i, t := range f.typeSamples {
+		arr[i] = fmt.Sprintf(
+			"%s#%s- %s",
+			strings.Repeat(" ", 4), strings.Repeat(" ", 5),
+			t.typeName)
+	}
+	return fmt.Sprintf("\n%s", strings.Join(arr, "\n"))
+}
+
+// TitleMapsString ...
+func (f *CommitMessageFormat) TitleMapsString() string {
+	if len(f.typeSamples) == 0 {
+		return " []"
+	}
+
+	arr := make([]string, len(f.typeSamples))
+	for i, t := range f.typeSamples {
+		arr[i] = fmt.Sprintf(
+			"%s#%s%s: %s",
+			strings.Repeat(" ", 4), strings.Repeat(" ", 3),
+			t.typeName, t.title)
+	}
+	return fmt.Sprintf("\n%s", strings.Join(arr, "\n"))
+}
+
 // Formats
 var (
 	fmtTypeScopeSubject = &CommitMessageFormat{
@@ -77,30 +113,50 @@ var (
 		preview:     "feat(core): Add new feature",
 		pattern:     `^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$`,
 		patternMaps: []string{"Type", "Scope", "Subject"},
+		typeSamples: []typeSample{
+			{"feat", "Features"}, {"fix", "Bug Fixes"},
+			{"perf", "Performance Improvements"}, {"refactor", "Code Refactoring"},},
 	}
 	fmtTypeSubject = &CommitMessageFormat{
 		display:     "<type>: <subject>",
 		preview:     "feat: Add new feature",
 		pattern:     `^(\\w*)\\:\\s(.*)$`,
 		patternMaps: []string{"Type", "Subject"},
+		typeSamples: []typeSample{
+			{"feat", "Features"}, {"fix", "Bug Fixes"},
+			{"perf", "Performance Improvements"}, {"refactor", "Code Refactoring"},},
 	}
 	fmtGitBasic = &CommitMessageFormat{
 		display:     "<<type> subject>",
 		preview:     "Add new feature",
 		pattern:     `^((\\w+)\\s.*)$`,
 		patternMaps: []string{"Subject", "Type"},
+		typeSamples: []typeSample{
+			{"feat", "Features"}, {"fix", "Bug Fixes"},
+			{"perf", "Performance Improvements"}, {"refactor", "Code Refactoring"},},
 	}
 	fmtSubject = &CommitMessageFormat{
 		display:     "<subject>",
 		preview:     "Add new feature (Not detect `type` field)",
 		pattern:     `^(.*)$`,
 		patternMaps: []string{"Subject"},
+		typeSamples: []typeSample{},
+	}
+	fmtCommitEmoji = &CommitMessageFormat{
+		display:     ":<type>: <subject>",
+		preview:     ":sparkles: Add new feature (Commit message with emoji format)",
+		pattern:     `^:(\\w*)\\:\\s(.*)$`,
+		patternMaps: []string{"Type", "Subject"},
+		typeSamples: []typeSample{
+			{"sparkles", "Features"}, {"bug", "Bug Fixes"},
+			{"zap", "Performance Improvements"}, {"recycle", "Code Refactoring"},},
 	}
 	formats = []Previewable{
 		fmtTypeScopeSubject,
 		fmtTypeSubject,
 		fmtGitBasic,
 		fmtSubject,
+		fmtCommitEmoji,
 	}
 )
 
