@@ -86,12 +86,20 @@ func newCommitParser(logger *Logger, client gitcmd.Client, jiraClient JiraClient
 }
 
 func (p *commitParser) Parse(rev string) ([]*Commit, error) {
-	out, err := p.client.Exec(
-		"log",
+	paths := p.config.Options.Paths
+
+	args := []string{
 		rev,
 		"--no-decorate",
-		"--pretty="+logFormat,
-	)
+		"--pretty=" + logFormat,
+	}
+
+	if len(paths) > 0 {
+		args = append(args, "--")
+		args = append(args, paths...)
+	}
+
+	out, err := p.client.Exec("log", args...)
 
 	if err != nil {
 		return nil, err

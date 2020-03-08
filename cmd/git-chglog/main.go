@@ -76,6 +76,12 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 			Usage: "generate the git-chglog configuration file in interactive",
 		},
 
+		// path
+		&cli.StringSliceFlag{
+			Name:  "path",
+			Usage: "Paths to include in changelog",
+		},
+
 		// config
 		&cli.StringFlag{
 			Name:  "config, c",
@@ -216,6 +222,7 @@ func AppAction(c *cli.Context) error {
 			JiraUsername:     c.String("jira-username"),
 			JiraToken:        c.String("jira-token"),
 			JiraUrl:          c.String("jira-url"),
+			Paths:            c.StringSlice("path"),
 		},
 		fs,
 		NewConfigLoader(),
