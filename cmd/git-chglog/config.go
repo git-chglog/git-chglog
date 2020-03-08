@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	chglog "github.com/fredbi/git-chglog"
+	chglog "github.com/git-chglog/git-chglog"
 	"github.com/imdario/mergo"
 )
 
@@ -266,6 +266,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 		Options: &chglog.Options{
 			NextTag:               ctx.NextTag,
 			TagFilterPattern:      ctx.TagFilterPattern,
+			Paths:                 ctx.Paths,
 			NoCaseSensitive:       ctx.NoCaseSensitive,
 			CommitFilters:         opts.Commits.Filters,
 			CommitSortBy:          opts.Commits.SortBy,

@@ -76,6 +76,12 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 			Usage: "generate the git-chglog configuration file in interactive",
 		},
 
+		// path
+		cli.StringSliceFlag{
+			Name:  "path",
+			Usage: "Paths to include in changelog",
+		},
+
 		// config
 		cli.StringFlag{
 			Name:  "config, c",
@@ -180,6 +186,7 @@ func AppAction(c *cli.Context) error {
 			Query:            c.Args().First(),
 			NextTag:          c.String("next-tag"),
 			TagFilterPattern: c.String("tag-filter-pattern"),
+				Paths:            c.StringSlice("path"),
 		},
 		fs,
 		NewConfigLoader(),
