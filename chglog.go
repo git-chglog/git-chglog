@@ -19,6 +19,7 @@ type Options struct {
 	Processor            Processor
 	NextTag              string              // Treat unreleased commits as specified tags (EXPERIMENTAL)
 	TagFilterPattern     string              // Filter tag by regexp
+	NoCaseSensitive      bool                // Filter commits in a case insensitive way
 	CommitFilters        map[string][]string // Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value
 	CommitSortBy         string              // Property name to use for sorting `Commit` (e.g. `Scope`)
 	CommitGroupBy        string              // Property name of `Commit` to be grouped into `CommitGroup` (e.g. `Type`)

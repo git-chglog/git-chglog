@@ -38,6 +38,11 @@ func TestCommitFilter(t *testing.T) {
 			Scope:   "fuga",
 			Subject: "4",
 		},
+		&Commit{
+			Type:    "Bar",
+			Scope:   "hogera",
+			Subject: "5",
+		},
 	}
 
 	assert.Equal(
@@ -46,8 +51,9 @@ func TestCommitFilter(t *testing.T) {
 			"2",
 			"3",
 			"4",
+			"5",
 		},
-		pickCommitSubjects(commitFilter(fixtures, map[string][]string{})),
+		pickCommitSubjects(commitFilter(fixtures, map[string][]string{}, false)),
 	)
 
 	assert.Equal(
@@ -59,7 +65,20 @@ func TestCommitFilter(t *testing.T) {
 		},
 		pickCommitSubjects(commitFilter(fixtures, map[string][]string{
 			"Type": {"foo", "bar"},
-		})),
+		}, false)),
+	)
+
+	assert.Equal(
+		[]string{
+			"1",
+			"2",
+			"3",
+			"4",
+			"5",
+		},
+		pickCommitSubjects(commitFilter(fixtures, map[string][]string{
+			"Type": {"foo", "bar"},
+		}, true)),
 	)
 
 	assert.Equal(
@@ -69,7 +88,7 @@ func TestCommitFilter(t *testing.T) {
 		},
 		pickCommitSubjects(commitFilter(fixtures, map[string][]string{
 			"Type": {"foo"},
-		})),
+		}, false)),
 	)
 
 	assert.Equal(
@@ -79,7 +98,18 @@ func TestCommitFilter(t *testing.T) {
 		},
 		pickCommitSubjects(commitFilter(fixtures, map[string][]string{
 			"Type": {"bar"},
-		})),
+		}, false)),
+	)
+
+	assert.Equal(
+		[]string{
+			"3",
+			"4",
+			"5",
+		},
+		pickCommitSubjects(commitFilter(fixtures, map[string][]string{
+			"Type": {"bar"},
+		}, true)),
 	)
 
 	assert.Equal(
@@ -89,7 +119,7 @@ func TestCommitFilter(t *testing.T) {
 		},
 		pickCommitSubjects(commitFilter(fixtures, map[string][]string{
 			"Scope": {"fuga"},
-		})),
+		}, false)),
 	)
 
 	assert.Equal(
@@ -99,7 +129,7 @@ func TestCommitFilter(t *testing.T) {
 		pickCommitSubjects(commitFilter(fixtures, map[string][]string{
 			"Type":  {"bar"},
 			"Scope": {"hoge"},
-		})),
+		}, false)),
 	)
 
 	assert.Equal(
@@ -110,6 +140,6 @@ func TestCommitFilter(t *testing.T) {
 		pickCommitSubjects(commitFilter(fixtures, map[string][]string{
 			"Type":  {"foo"},
 			"Scope": {"fuga", "hoge"},
-		})),
+		}, false)),
 	)
 }
