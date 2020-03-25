@@ -21,7 +21,7 @@ func (e *commitExtractor) Extract(commits []*Commit) ([]*CommitGroup, []*Commit,
 	mergeCommits := []*Commit{}
 	revertCommits := []*Commit{}
 
-	filteredCommits := commitFilter(commits, e.opts.CommitFilters)
+	filteredCommits := commitFilter(commits, e.opts.CommitFilters, e.opts.NoCaseSensitive)
 
 	for _, commit := range commits {
 		if commit.Merge != nil {
@@ -37,7 +37,7 @@ func (e *commitExtractor) Extract(commits []*Commit) ([]*CommitGroup, []*Commit,
 
 	for _, commit := range filteredCommits {
 		if commit.Merge == nil && commit.Revert == nil {
-			e.processCommitGroups(&commitGroups, commit)
+			e.processCommitGroups(&commitGroups, commit, e.opts.NoCaseSensitive)
 		}
 
 		e.processNoteGroups(&noteGroups, commit)
@@ -49,14 +49,23 @@ func (e *commitExtractor) Extract(commits []*Commit) ([]*CommitGroup, []*Commit,
 	return commitGroups, mergeCommits, revertCommits, noteGroups
 }
 
-func (e *commitExtractor) processCommitGroups(groups *[]*CommitGroup, commit *Commit) {
+func (e *commitExtractor) processCommitGroups(groups *[]*CommitGroup, commit *Commit, noCaseSensitive bool) {
 	var group *CommitGroup
 
 	// commit group
 	raw, ttl := e.commitGroupTitle(commit)
 
 	for _, g := range *groups {
-		if g.RawTitle == raw {
+		rawTitleTmp := g.RawTitle
+		if noCaseSensitive {
+			rawTitleTmp = strings.ToLower(g.RawTitle)
+		}
+
+		rawTmp := raw
+		if noCaseSensitive {
+			rawTmp = strings.ToLower(raw)
+		}
+		if rawTitleTmp == rawTmp {
 			group = g
 		}
 	}
