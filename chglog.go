@@ -332,6 +332,13 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 		"upper": func(s string) string {
 			return strings.ToUpper(s)
 		},
+		// upper case the first character of a string
+		"upperFirst": func(s string) string {
+			if len(s) > 0 {
+				return strings.ToUpper(string(s[0])) + s[1:]
+			}
+			return ""
+		},
 	}
 
 	fname := filepath.Base(gen.config.Template)
