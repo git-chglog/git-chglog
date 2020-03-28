@@ -12,8 +12,6 @@
 > _Anytime, anywhere, Write your CHANGELOG._
 
 
-
-
 ## Table of Contents
 
 * [Features](#features)
@@ -54,31 +52,24 @@
     - CHANGELOG's style (Template) and ...
     - etc ...
 
-
-
-
 ## How it works
 
-`git-chglog` internally uses the `git` command to get data to include in CHANGELOG.  
+`git-chglog` internally uses the `git` command to get data to include in the CHANGELOG.  
 The basic steps are as follows.
 
 1. Get all the tags.
-1. Get the commit contained between `tagA` and `tagB`.
-1. Execute with all tags corresponding to [tag query](#tag-query) that specified Step 1 to 2.
-
-
-
+1. Get the commits contained between `tagA` and `tagB`.
+1. Execute with all tags corresponding to [tag query](#tag-query) that were specified in Step 1 and 2.
 
 ## Getting Started
 
 We will start with installation and introduce the steps up to the automatic generation of the configuration file and template.
 
-
 ### Installation
 
 Please install `git-chglog` in a way that matches your environment.
 
-#### Homebrew (for macOS users)
+#### [Homebrew](https://brew.sh) (for macOS users)
 
 ```bash
 $ brew tap git-chglog/git-chglog
@@ -99,25 +90,26 @@ $ go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
 
 ---
 
-If you are in another platform, you can download binary from [release page](https://github.com/git-chglog/git-chglog/releases) and place it in `$PATH` directory.
+If you are using another platform, you can download a binary from the [releases page](https://github.com/git-chglog/git-chglog/releases) and place it in a directory in your `$PATH`.
 
 
 ### Test Installation
 
-You can check with the following command whether the `git-chglog` command was included in a valid `$PATH`.
+You can check with the following command whether the `git-chglog` command was included in a directory that is in your `$PATH`.
 
 ```bash
 $ git-chglog --version
-# output the git-chglog version
+# outputs the git-chglog version
 ```
 
 
 ### Quick Start
 
-`git-chglog` requires configuration files and templates to generate CHANGELOG.  
-However, it is a waste of time to create configuration files and templates with scratch.
+`git-chglog` requires configuration files and templates to generate a CHANGELOG.  
 
-Therefore we recommend using the `--init` option which can create them interactively :+1:
+However, it is a waste of time to create configuration files and templates from scratch.
+
+Therefore we recommend using the `--init` option which will create them interactively :+1:
 
 ```bash
 $ git-chglog --init
@@ -129,14 +121,14 @@ $ git-chglog --init
 
 You are now ready for configuration files and templates!
 
-Let's immediately generate CHANGELOG of your project.  
-By doing the following simple command, Markdown of CHANGELOG is displayed on stdout.
+Let's immediately generate a CHANGELOG of your project.  
+By doing the following simple command, Markdown for your CHANGELOG is displayed on stdout.
 
 ```bash
 $ git-chglog
 ```
 
-Use `-o` (`--output`) option if you want to output to file instead of stdout.
+Use `-o` (`--output`) option if you want to output to a file instead of stdout.
 
 ```bash
 $ git-chglog -o CHANGELOG.md
@@ -144,11 +136,9 @@ $ git-chglog -o CHANGELOG.md
 
 ---
 
-This is how basic usage is over!  
-In order to make better CHANGELOG, please refer to the following document and customize it.
+You now know basic usage of `git-chglog`!
 
-
-
+In order to make a better CHANGELOG, please refer to the following document and customize it.
 
 ## CLI Usage
 
@@ -205,10 +195,10 @@ EXAMPLE:
     The above is a command that uses a configuration file placed other than ".chglog/config.yml".
 ```
 
-
 ### `tag query`
 
-You can specify a commit to include in the generation of CHANGELOG using `<tag query>`.  
+You can specify which commits to include in the generation of CHANGELOG using `<tag query>`.
+
 The table below shows Query patterns and summaries, and Query examples.
 
 | Query          | Description                                    | Example                     |
@@ -218,12 +208,9 @@ The table below shows Query patterns and summaries, and Query examples.
 | `..<name>`     | Commit from the oldest tag to `<name>`.        | `$ git-chglog ..2.0.0`      |
 | `<name>`       | Commit contained in `<name>`.                  | `$ git-chglog 1.0.0`        |
 
-
-
-
 ## Configuration
 
-The `git-chglog` configuration is write with the yaml file. Default location is `.chglog/config.yml`.
+The `git-chglog` configuration is a yaml file. The default location is `.chglog/config.yml`.
 
 Below is a complete list that you can use with `git-chglog`.
 
@@ -277,7 +264,6 @@ options:
       - BREAKING CHANGE
 ```
 
-
 ### `bin`
 
 Git execution command.
@@ -285,7 +271,6 @@ Git execution command.
 | Required | Type   | Default | Description |
 |:---------|:-------|:--------|:------------|
 | N        | String | `"git"` | -           |
-
 
 ### `style`
 
@@ -295,15 +280,13 @@ CHANGELOG style. Automatic linking of issues and notices, initial value setting 
 |:---------|:-------|:---------|:-------------------------------------------------------|
 | N        | String | `"none"` | Should be `"github"` `"gitlab"` `"bitbucket"` `"none"` |
 
-
 ### `template`
 
-Path for template file. It is specified by a relative path from the setting file. Absolute pass is ok.
+Path for the template file. It is specified by a relative path from the setting file. Absolute paths are also ok.
 
 | Required | Type   | Default              | Description |
 |:---------|:-------|:---------------------|:------------|
 | N        | String | `"CHANGELOG.tpl.md"` | -           |
-
 
 ### `info`
 
@@ -314,14 +297,13 @@ Metadata for CHANGELOG. Depending on Style, it is sometimes used in processing, 
 | `title`          | N        | String | `"CHANGELOG"` | Title of CHANGELOG.    |
 | `repository_url` | N        | String | none          | URL of git repository. |
 
-
 ### `options`
 
 Options used to process commits.
 
 #### `options.commits`
 
-Option concerning acquisition and sort of commit.
+Options concerning the acquisition and sort of commits.
 
 | Key       | Required | Type        | Default   | Description                                                                                                         |
 |:----------|:---------|:------------|:----------|:--------------------------------------------------------------------------------------------------------------------|
@@ -330,7 +312,7 @@ Option concerning acquisition and sort of commit.
 
 #### `options.commit_groups`
 
-Option for groups of commits.
+Options for groups of commits.
 
 | Key          | Required | Type        | Default   | Description                                                                                |
 |:-------------|:---------|:------------|:----------|:-------------------------------------------------------------------------------------------|
@@ -365,7 +347,7 @@ This option is for parsing references.
 
 #### `options.merges`
 
-Option to detect and parse merge commit.
+Options to detect and parse merge commits.
 
 | Key            | Required | Type   | Default | Description                               |
 |:---------------|:---------|:-------|:--------|:------------------------------------------|
@@ -374,7 +356,7 @@ Option to detect and parse merge commit.
 
 #### `options.reverts`
 
-Option to detect and parse revert commit.
+Options to detect and parse revert commits.
 
 | Key            | Required | Type   | Default | Description                               |
 |:---------------|:---------|:-------|:--------|:------------------------------------------|
@@ -383,14 +365,11 @@ Option to detect and parse revert commit.
 
 #### `options.notes`
 
-Option to detect notes contained in commit body.
+Options to detect notes contained in commit bodies.
 
 | Key        | Required | Type | Default | Description                                                                                          |
 |:-----------|:---------|:-----|:--------|:-----------------------------------------------------------------------------------------------------|
 | `keywords` | N        | List | none    | Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`). |
-
-
-
 
 ## Templates
 
@@ -398,7 +377,7 @@ The `git-chglog` template uses the `text/template` package. For basic usage plea
 
 > [text/template](https://golang.org/pkg/text/template/)
 
-If you are not satisfied with the prepared template please try customizing.
+If you are not satisfied with the prepared template please try customizing one.
 
 ---
 
@@ -465,9 +444,7 @@ The basic templates are as follows.
 {{ end -}}
 ```
 
-See godoc [RenderData][doc-render-data] for available variables.
-
-
+See the godoc [RenderData][doc-render-data] documentation for available variables.
 
 ## Supported Styles
 
@@ -479,18 +456,16 @@ See godoc [RenderData][doc-render-data] for available variables.
 
 > :memo: Even with styles that are not yet supported, it is possible to make ordinary CHANGELOG.
 
-
-
-
 ## FAQ
 
 <details>
   <summary>Why do not you output files by default?</summary>
-  This is not for the purpose of completely automating the generation of CHANGELOG, because it is only for the purpose of assisting generation.
+  This is not for the purpose of completely automating the generation of CHANGELOG files, it is only for assisting generation.
 
-  It is ideal to describe everything included in CHANGELOG in commit. But actually it is very difficult to do it perfectly.
+  It is ideal to describe everything included in CHANGELOG in your commits. But actually it is very difficult to do it perfectly.
 
-  There are times when you need your hands to write a great CHANGELOG.  
+  There are times when you need to edit the generated output to write a great CHANGELOG.  
+
   By displaying it on the standard output, it makes it easy to change the contents.
 </details>
 
@@ -508,13 +483,13 @@ See godoc [RenderData][doc-render-data] for available variables.
   $ git tag 2.0.0
   ```
 
-  The point to notice is that before actually creating a tag with git, it is conveying the next version with `--next-tag` :+1:
+  The point to notice is that before actually creating a tag with `git`, it is conveying the next version with `--next-tag` :+1:
 
   This is a step that is necessary for project operation in many cases.
 </details>
 
 <details>
-  <summary>Can I generated CHANGELOG based on certain tags?</summary>
+  <summary>Can I generate a CHANGELOG based on certain tags?</summary>
   
   Yes, it can be solved by use the `--tag-filter-pattern` flag.
   
@@ -524,7 +499,6 @@ See godoc [RenderData][doc-render-data] for available variables.
   ```
 </details>
 
-
 ## TODO
 
 * [x] Windows Support
@@ -532,20 +506,13 @@ See godoc [RenderData][doc-render-data] for available variables.
 * [ ] Snippetization of configuration files (improvement of reusability)
 * [ ] More test test test ... (and example)
 
-
-
-
 ## Thanks
 
 `git-chglog` is inspired by [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog). Thank you!
 
-
-
-
 ## Contributing
 
-We are always welcoming your contribution :clap:
-
+We alway welcome your contributions :clap:
 
 ### Development
 
@@ -558,7 +525,6 @@ We are always welcoming your contribution :clap:
 
 Bugs, feature requests and comments are more than welcome in the [issues](https://github.com/git-chglog/git-chglog/issues).
 
-
 ### Feedback
 
 I would like to make `git-chglog` a better tool.  
@@ -567,29 +533,17 @@ The goal is to be able to use in various projects.
 Therefore, your feedback is very useful.  
 I am very happy to tell you your opinions on Issues and PR :heart:
 
-
-
-
 ## CHANGELOG
 
 See [CHANGELOG.md](./CHANGELOG.md)
-
-
-
 
 ## Related Projects
 
 * [git-chglog/artwork](https://github.com/git-chglog/artwork) - Assets for `git-chglog`.
 
-
-
-
 ## License
 
 [MIT © tsuyoshiwada](./LICENSE)
-
-
-
 
 [doc-commit]: https://godoc.org/github.com/git-chglog/git-chglog#Commit
 [doc-commit-group]: https://godoc.org/github.com/git-chglog/git-chglog#Commit
