@@ -46,17 +46,9 @@ info:
 options:
   commits:
     # filters:
-    #   Type:
-    #     - feat
-    #     - fix
-    #     - perf
-    #     - refactor
+    #   Type:%s
   commit_groups:
-    # title_maps:
-    #   feat: Features
-    #   fix: Bug Fixes
-    #   perf: Performance Improvements
-    #   refactor: Code Refactoring
+    # title_maps:%s
   header:
     pattern: "%s"
     pattern_maps:%s
@@ -66,6 +58,8 @@ options:
 		ans.Style,
 		defaultTemplateFilename,
 		repoURL,
+		msgFormat.FilterTypesString(),
+		msgFormat.TitleMapsString(),
 		msgFormat.pattern,
 		msgFormat.PatternMapString(),
 	)
