@@ -109,10 +109,10 @@ func TestTagReader(t *testing.T) {
 	assert.Equal(
 		[]*Tag{
 			&Tag{
-				Name:    "v2.0.4-beta.1",
-				Subject: "Release v2.0.4-beta.1",
-				Date:    time.Date(2018, 2, 1, 0, 0, 0, 0, time.UTC),
-				Next: nil,
+				Name:     "v2.0.4-beta.1",
+				Subject:  "Release v2.0.4-beta.1",
+				Date:     time.Date(2018, 2, 1, 0, 0, 0, 0, time.UTC),
+				Next:     nil,
 				Previous: nil,
 			},
 		},
