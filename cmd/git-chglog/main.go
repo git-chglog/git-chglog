@@ -116,8 +116,8 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 
 		// no-case
 		cli.BoolFlag{
-			Name:   "no-case",
-			Usage:  "disable case sensitive filters",
+			Name:  "no-case",
+			Usage: "disable case sensitive filters",
 		},
 
 		// tag-filter-pattern
