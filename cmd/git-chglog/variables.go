@@ -34,7 +34,7 @@ var (
 
 type typeSample struct {
 	typeName string
-	title string
+	title    string
 }
 
 // CommitMessageFormat ...
@@ -115,7 +115,7 @@ var (
 		patternMaps: []string{"Type", "Scope", "Subject"},
 		typeSamples: []typeSample{
 			{"feat", "Features"}, {"fix", "Bug Fixes"},
-			{"perf", "Performance Improvements"}, {"refactor", "Code Refactoring"},},
+			{"perf", "Performance Improvements"}, {"refactor", "Code Refactoring"}},
 	}
 	fmtTypeSubject = &CommitMessageFormat{
 		display:     "<type>: <subject>",
@@ -124,7 +124,7 @@ var (
 		patternMaps: []string{"Type", "Subject"},
 		typeSamples: []typeSample{
 			{"feat", "Features"}, {"fix", "Bug Fixes"},
-			{"perf", "Performance Improvements"}, {"refactor", "Code Refactoring"},},
+			{"perf", "Performance Improvements"}, {"refactor", "Code Refactoring"}},
 	}
 	fmtGitBasic = &CommitMessageFormat{
 		display:     "<<type> subject>",
@@ -133,7 +133,7 @@ var (
 		patternMaps: []string{"Subject", "Type"},
 		typeSamples: []typeSample{
 			{"feat", "Features"}, {"fix", "Bug Fixes"},
-			{"perf", "Performance Improvements"}, {"refactor", "Code Refactoring"},},
+			{"perf", "Performance Improvements"}, {"refactor", "Code Refactoring"}},
 	}
 	fmtSubject = &CommitMessageFormat{
 		display:     "<subject>",
@@ -149,7 +149,7 @@ var (
 		patternMaps: []string{"Type", "Subject"},
 		typeSamples: []typeSample{
 			{"sparkles", "Features"}, {"bug", "Bug Fixes"},
-			{"zap", "Performance Improvements"}, {"recycle", "Code Refactoring"},},
+			{"zap", "Performance Improvements"}, {"recycle", "Code Refactoring"}},
 	}
 	formats = []Previewable{
 		fmtTypeScopeSubject,
