@@ -233,6 +233,8 @@ options:
   commit_groups:
     group_by: Type
     sort_by: Title
+    title_order:
+      - feat
     title_maps:
       feat: Features
 
@@ -315,11 +317,12 @@ Options concerning the acquisition and sort of commits.
 
 Options for groups of commits.
 
-| Key          | Required | Type        | Default   | Description                                                                                |
-|:-------------|:---------|:------------|:----------|:-------------------------------------------------------------------------------------------|
-| `group_by`   | N        | String      | `"Type"`  | Property name of `Commit` to be grouped into `CommitGroup`. See [CommitGroup][doc-commit]. |
-| `sort_by`    | N        | String      | `"Title"` | Property name to use for sorting `CommitGroup`. See [CommitGroup][doc-commit-group].       |
-| `title_maps` | N        | Map in List | none      | Map for `CommitGroup` title conversion.                                                    |
+| Key           | Required | Type        | Default   | Description                                                                                |
+|:--------------|:---------|:------------|:----------|:-------------------------------------------------------------------------------------------|
+| `group_by`    | N        | String      | `"Type"`  | Property name of `Commit` to be grouped into `CommitGroup`. See [CommitGroup][doc-commit]. |
+| `sort_by`     | N        | String      | `"Title"` | Property name to use for sorting `CommitGroup`. See [CommitGroup][doc-commit-group].       |
+| `title_order` | N        | List        | none      | Predefined order of titles to use for sorting `CommitGroup`. Only if `sort_by` is `Custom` |
+| `title_maps`  | N        | Map in List | none      | Map for `CommitGroup` title conversion.                                                    |
 
 #### `options.header`
 
@@ -547,6 +550,6 @@ See [CHANGELOG.md](./CHANGELOG.md)
 [MIT © tsuyoshiwada](./LICENSE)
 
 [doc-commit]: https://godoc.org/github.com/git-chglog/git-chglog#Commit
-[doc-commit-group]: https://godoc.org/github.com/git-chglog/git-chglog#Commit
+[doc-commit-group]: https://godoc.org/github.com/git-chglog/git-chglog#CommitGroup
 [doc-ref]: https://godoc.org/github.com/git-chglog/git-chglog#Ref
 [doc-render-data]: https://godoc.org/github.com/git-chglog/git-chglog#RenderData
