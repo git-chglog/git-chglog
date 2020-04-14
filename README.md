@@ -163,6 +163,7 @@ OPTIONS:
   --silent                              disable stdout output
   --no-color                            disable color output [$NO_COLOR]
   --no-emoji                            disable emoji output [$NO_EMOJI]
+  --no-case                             disable case sensitive filters
   --tag-filter-pattern value, -p value  regular expression of tag filter. Is specified, only matched tags will be picked
   --help, -h                            show help
   --version, -v                         print the version
