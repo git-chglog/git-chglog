@@ -12,7 +12,7 @@ func TestConfigBulider(t *testing.T) {
 	builder := NewConfigBuilder()
 
 	out, err := builder.Build(&Answer{
-		RepositoryURL:       "https://github.com/git-chglog/git-chglog/git-chglog/",
+		RepositoryURL:       "https://github.com/fredbi/git-chglog/",
 		Style:               styleNone,
 		CommitMessageFormat: fmtGitBasic.display,
 		Template:            tplStandard.display,
@@ -21,7 +21,7 @@ func TestConfigBulider(t *testing.T) {
 	assert.Nil(err)
 	assert.Contains(out, "style: none")
 	assert.Contains(out, "template: CHANGELOG.tpl.md")
-	assert.Contains(out, "  repository_url: https://github.com/git-chglog/git-chglog/git-chglog")
+	assert.Contains(out, "  repository_url: https://github.com/fredbi/git-chglog/git-chglog")
 	assert.Contains(out, fmt.Sprintf("    pattern: \"%s\"", fmtGitBasic.pattern))
 	assert.Contains(out, fmt.Sprintf(
 		`    pattern_maps:
