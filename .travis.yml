@@ -1,11 +1,12 @@
 language: go
-sudo: false
 notifications:
   email: false
+os: linux
+dist: bionic
 go:
-  - 1.9
+  - '1.13'
 before_install:
-  - go get github.com/mattn/goveralls
+  - GO111MODULE=off go get github.com/mattn/goveralls
 before_script:
   - export TZ=Asia/Tokyo
   - sudo timedatectl set-timezone Asia/Tokyo
@@ -15,8 +16,8 @@ script:
 after_success:
   - goveralls -service=travis-ci
 before_deploy:
-  - go get github.com/mitchellh/gox
-  - go get github.com/tcnksm/ghr
+  - GO111MODULE=off go get github.com/mitchellh/gox
+  - GO111MODULE=off go get github.com/tcnksm/ghr
 deploy:
   provider: script
   script: ./scripts/release.sh
