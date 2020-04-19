@@ -224,6 +224,8 @@ info:
   repository_url: https://github.com/git-chglog/git-chglog
 
 options:
+  tag_filter_pattern: '^v'
+
   commits:
     filters:
       Type:
