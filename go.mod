@@ -1,10 +1,9 @@
-module git-chglog
+module github.com/git-chglog/git-chglog
 
 go 1.13
 
 require (
 	github.com/fatih/color v1.9.0
-	github.com/git-chglog/git-chglog v0.0.0-20200414013904-db796966b373
 	github.com/imdario/mergo v0.3.9
 	github.com/mattn/go-colorable v0.1.6
 	github.com/stretchr/testify v1.5.1

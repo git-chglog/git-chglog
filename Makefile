@@ -10,7 +10,7 @@ clean:
 
 .PHONY: bulid
 build:
-	go build -o git-chglog ./cmd/git-chglog
+	go build -o git-chglog github.com/git-chglog/git-chglog/cmd/git-chglog
 
 .PHONY: test
 test:
