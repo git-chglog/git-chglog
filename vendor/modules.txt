@@ -1,0 +1,77 @@
+# github.com/Masterminds/goutils v1.1.0
+## explicit
+github.com/Masterminds/goutils
+# github.com/Masterminds/semver v1.5.0
+## explicit
+github.com/Masterminds/semver
+# github.com/Masterminds/sprig v2.22.0+incompatible
+## explicit
+github.com/Masterminds/sprig
+# github.com/davecgh/go-spew v1.1.1
+github.com/davecgh/go-spew/spew
+# github.com/fatih/color v1.7.0
+## explicit
+github.com/fatih/color
+# github.com/fredbi/git-chglog v0.0.0-20190706071416-d35c598eac81
+## explicit
+github.com/fredbi/git-chglog
+# github.com/google/uuid v1.1.1
+## explicit
+github.com/google/uuid
+# github.com/huandu/xstrings v1.3.1
+## explicit
+github.com/huandu/xstrings
+# github.com/imdario/mergo v0.3.7
+## explicit
+github.com/imdario/mergo
+# github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
+github.com/kballard/go-shellquote
+# github.com/mattn/go-colorable v0.1.2
+## explicit
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.8
+github.com/mattn/go-isatty
+# github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b
+## explicit
+github.com/mgutz/ansi
+# github.com/mitchellh/copystructure v1.0.0
+## explicit
+github.com/mitchellh/copystructure
+# github.com/mitchellh/reflectwalk v1.0.0
+github.com/mitchellh/reflectwalk
+# github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e
+## explicit
+# github.com/pmezard/go-difflib v1.0.0
+## explicit
+github.com/pmezard/go-difflib/difflib
+# github.com/r26D/git-chglog v0.0.0-20200414013904-db796966b373
+## explicit
+github.com/r26D/git-chglog
+# github.com/stretchr/testify v1.3.0
+## explicit
+github.com/stretchr/testify/assert
+# github.com/tsuyoshiwada/go-gitcmd v0.0.0-20180205145712-5f1f5f9475df
+## explicit
+github.com/tsuyoshiwada/go-gitcmd
+# github.com/urfave/cli v1.20.0
+## explicit
+github.com/urfave/cli
+# golang.org/x/crypto v0.0.0-20200602180216-279210d13fed
+## explicit
+golang.org/x/crypto/pbkdf2
+golang.org/x/crypto/scrypt
+# golang.org/x/sys v0.0.0-20190626221950-04f50cda93cb
+golang.org/x/sys/unix
+# gopkg.in/AlecAivazis/survey.v1 v1.8.5
+## explicit
+gopkg.in/AlecAivazis/survey.v1
+gopkg.in/AlecAivazis/survey.v1/core
+gopkg.in/AlecAivazis/survey.v1/terminal
+# gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f
+## explicit
+# gopkg.in/kyokomi/emoji.v1 v1.5.1
+## explicit
+gopkg.in/kyokomi/emoji.v1
+# gopkg.in/yaml.v2 v2.2.2
+## explicit
+gopkg.in/yaml.v2
