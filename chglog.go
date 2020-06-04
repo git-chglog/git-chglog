@@ -4,6 +4,7 @@ package chglog
 import (
 	"errors"
 	"fmt"
+	"github.com/Masterminds/sprig"
 	"io"
 	"os"
 	"path/filepath"
@@ -345,7 +346,7 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 
 	fname := filepath.Base(gen.config.Template)
 
-	t := template.Must(template.New(fname).Funcs(fmap).ParseFiles(gen.config.Template))
+	t := template.Must(template.New(fname).Funcs(fmap).Funcs(sprig.HermeticTxtFuncMap()).ParseFiles(gen.config.Template))
 
 	return t.Execute(w, &RenderData{
 		Info:       gen.config.Info,
