@@ -11,6 +11,11 @@
 > CHANGELOG generator implemented in Go (Golang).  
 > _Anytime, anywhere, Write your CHANGELOG._
 
+#Experimental
+
+This branch has pulled in a number of pull requests from the actual project. I am using this branch to confirm that they will 
+work in production.  **USE AT YOUR OWN RISK** Once the experiment is complete I hope to get this merged to either the master here or the
+real master.
 
 ## Table of Contents
 
