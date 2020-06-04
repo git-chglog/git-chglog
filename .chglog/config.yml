@@ -2,7 +2,7 @@ style: github
 template: CHANGELOG.tpl.md
 info:
   title: CHANGELOG
-  repository_url: https://github.com/git-chglog/git-chglog
+  repository_url: https://github.com/r26D/git-chglog
 options:
   commits:
     filters:
