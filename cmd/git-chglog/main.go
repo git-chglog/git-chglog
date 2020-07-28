@@ -178,6 +178,13 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 			EnvVars: []string{"JIRA_TOKEN"},
 		},
 
+		// sort
+		&cli.StringFlag{
+			Name:        "sort",
+			Usage:       "Specify how to sort tags; currently supports \"date\" or by \"semver\"",
+			DefaultText: "date",
+		},
+
 		// help & version
 		cli.HelpFlag,
 		cli.VersionFlag,
@@ -240,6 +247,7 @@ func AppAction(c *cli.Context) error {
 			JiraToken:        c.String("jira-token"),
 			JiraURL:          c.String("jira-url"),
 			Paths:            c.StringSlice("path"),
+			Sort:             c.String("sort"),
 		},
 		fs,
 		NewConfigLoader(),
