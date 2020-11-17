@@ -82,6 +82,13 @@ $ brew install git-chglog
 $ scoop install git-chglog
 ```
 
+#### [asdf](https://asdf-vm.com/)
+
+```bash
+$ asdf plugin-add git-chglog https://github.com/GoodwayGroup/asdf-git-chglog.git
+$ asdf install git-chglog latest
+```
+
 #### Go users
 
 ```bash
