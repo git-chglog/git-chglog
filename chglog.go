@@ -2,6 +2,8 @@
 package chglog
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -34,6 +36,7 @@ type Options struct {
 	RevertPattern        string              // A regular expression to use for parsing the revert commit
 	RevertPatternMaps    []string            // Similar to `HeaderPatternMaps`
 	NoteKeywords         []string            // Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`)
+	JsonOutput           bool                // Output a JSON encoded string of the rendered changelog
 }
 
 // Info is metadata related to CHANGELOG
@@ -346,9 +349,27 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 
 	t := template.Must(template.New(fname).Funcs(fmap).ParseFiles(gen.config.Template))
 
-	return t.Execute(w, &RenderData{
+	var renderedTpl bytes.Buffer
+
+	if err := t.Execute(&renderedTpl, &RenderData{
 		Info:       gen.config.Info,
 		Unreleased: unreleased,
 		Versions:   versions,
-	})
+	}); err != nil {
+		return err
+	}
+
+	var renderedForOutput []byte
+	renderedForOutput = renderedTpl.Bytes()
+
+	if gen.config.Options.JsonOutput {
+		var err error
+		renderedForOutput , err = json.Marshal(renderedTpl.String())
+		if err != nil {
+			return err
+		}
+	}
+
+	_, writeRes := w.Write(renderedForOutput)
+	return writeRes
 }

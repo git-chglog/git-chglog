@@ -47,6 +47,10 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 
     The above is a command to generate CHANGELOG with the commit included in the latest tag.
 
+  $ {{.Name}} --json
+
+    The above is a command to output a JSON encooded string to standard output.
+
   $ {{.Name}} --output CHANGELOG.md
 
     The above is a command to output to CHANGELOG.md instead of standard output.
@@ -126,6 +130,12 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 			Usage: "Regular expression of tag filter. Is specified, only matched tags will be picked",
 		},
 
+		// json
+		cli.BoolFlag{
+			Name:  "json",
+			Usage: "output a JSON encoded string of the changelog",
+		},
+
 		// help & version
 		cli.HelpFlag,
 		cli.VersionFlag,
@@ -180,6 +190,7 @@ func AppAction(c *cli.Context) error {
 			Query:            c.Args().First(),
 			NextTag:          c.String("next-tag"),
 			TagFilterPattern: c.String("tag-filter-pattern"),
+			JsonOutput:       c.Bool("json"),
 		},
 		fs,
 		NewConfigLoader(),
