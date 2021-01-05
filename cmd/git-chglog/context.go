@@ -18,6 +18,7 @@ type CLIContext struct {
 	Query            string
 	NextTag          string
 	TagFilterPattern string
+	JsonOutput       bool
 }
 
 // InitContext ...
