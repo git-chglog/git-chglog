@@ -21,6 +21,9 @@ git-chglog
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
+# in https://github.com/git-chglog/git-chglog/pull/85 we moved from dep to gomod
+vendor
+
 ### macOS ###
 *.DS_Store
 .AppleDouble
