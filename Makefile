@@ -1,13 +1,5 @@
-.PHONY: bootstrap
-bootstrap: clean deps
-
-.PHONY: deps
-deps:
-	dep ensure -v
-
 .PHONY: clean
 clean:
-	rm -rf ./vendor/
 	rm -rf ./dist/
 	rm -rf ./git-chglog
 	rm -rf $(GOPATH)/bin/git-chglog
@@ -19,11 +11,11 @@ build:
 
 .PHONY: test
 test:
-	go test -v `go list ./... | grep -v /vendor/`
+	go test -v `go list ./...`
 
 .PHONY: coverage
 coverage:
-	goverage -coverprofile=cover.out `go list ./... | grep -v /vendor/`
+	goverage -coverprofile=cover.out `go list ./...`
 	go tool cover -func=cover.out
 	@rm -rf cover.out
 
