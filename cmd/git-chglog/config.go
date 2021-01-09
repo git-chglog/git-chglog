@@ -50,14 +50,15 @@ type NoteOptions struct {
 
 // Options ...
 type Options struct {
-	Commits      CommitOptions      `yaml:"commits"`
-	CommitGroups CommitGroupOptions `yaml:"commit_groups"`
-	Header       PatternOptions     `yaml:"header"`
-	Issues       IssueOptions       `yaml:"issues"`
-	Refs         RefOptions         `yaml:"refs"`
-	Merges       PatternOptions     `yaml:"merges"`
-	Reverts      PatternOptions     `yaml:"reverts"`
-	Notes        NoteOptions        `yaml:"notes"`
+	TagFilterPattern string             `yaml:"tag_filter_pattern"`
+	Commits          CommitOptions      `yaml:"commits"`
+	CommitGroups     CommitGroupOptions `yaml:"commit_groups"`
+	Header           PatternOptions     `yaml:"header"`
+	Issues           IssueOptions       `yaml:"issues"`
+	Refs             RefOptions         `yaml:"refs"`
+	Merges           PatternOptions     `yaml:"merges"`
+	Reverts          PatternOptions     `yaml:"reverts"`
+	Notes            NoteOptions        `yaml:"notes"`
 }
 
 // Config ...
@@ -247,6 +248,10 @@ func (config *Config) normalizeStyleOfBitbucket() {
 func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 	info := config.Info
 	opts := config.Options
+
+	if ctx.TagFilterPattern == "" {
+		ctx.TagFilterPattern = opts.TagFilterPattern
+	}
 
 	return &chglog.Config{
 		Bin:        config.Bin,
