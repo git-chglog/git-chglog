@@ -1,7 +1,5 @@
-# This GitHub action runs your tests for each commit push and/or PR. Optionally
-# you can turn it on using a cron schedule for regular testing.
-#
 name: Tests
+
 on:
   pull_request:
     paths-ignore:
@@ -10,14 +8,22 @@ on:
     paths-ignore:
       - 'README.md'
 jobs:
-  unit-test:
+  unit:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: true
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      -
+        name: Checkout
+        uses: actions/checkout@v2
         with:
-          go-version: '1.15'
-      - run: |
+          fetch-depth: 0
+      -
+        name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+      - 
+        name: Run tests
+        run: |
           make test

@@ -2,11 +2,15 @@ name: goreleaser
 
 on:
   pull_request:
+    paths-ignore:
+      - 'README.md'
   push:
+    paths-ignore:
+      - 'README.md'
 
 jobs:
   goreleaser:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       -
         name: Checkout
