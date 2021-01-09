@@ -1,0 +1,26 @@
+# This GitHub action runs your tests for each commit push and/or PR. Optionally
+# you can turn it on using a cron schedule for regular testing.
+#
+name: Tests
+on:
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+  push:
+    paths-ignore:
+      - 'README.md'
+jobs:
+  unit-test:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.15'
+      - run: |
+        export TZ=Asia/Tokyo
+        sudo timedatectl set-timezone Asia/Tokyo
+        timedatectl
+        make test
