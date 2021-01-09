@@ -128,8 +128,19 @@ func (e *commitExtractor) commitGroupTitle(commit *Commit) (string, string) {
 }
 
 func (e *commitExtractor) sortCommitGroups(groups []*CommitGroup) {
+	order := make(map[string]int)
+	if e.opts.CommitGroupSortBy == "Custom" {
+		for i, t := range e.opts.CommitGroupTitleOrder {
+			order[t] = i
+		}
+	}
+
 	// groups
 	sort.Slice(groups, func(i, j int) bool {
+		if e.opts.CommitGroupSortBy == "Custom" {
+			return order[groups[i].RawTitle] < order[groups[j].RawTitle]
+		}
+
 		var (
 			a, b interface{}
 			ok   bool

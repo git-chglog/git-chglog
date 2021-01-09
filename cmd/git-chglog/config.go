@@ -22,9 +22,10 @@ type CommitOptions struct {
 
 // CommitGroupOptions ...
 type CommitGroupOptions struct {
-	GroupBy   string            `yaml:"group_by"`
-	SortBy    string            `yaml:"sort_by"`
-	TitleMaps map[string]string `yaml:"title_maps"`
+	GroupBy    string            `yaml:"group_by"`
+	SortBy     string            `yaml:"sort_by"`
+	TitleOrder []string          `yaml:"title_order"`
+	TitleMaps  map[string]string `yaml:"title_maps"`
 }
 
 // PatternOptions ...
@@ -262,23 +263,24 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 			RepositoryURL: info.RepositoryURL,
 		},
 		Options: &chglog.Options{
-			NextTag:              ctx.NextTag,
-			TagFilterPattern:     ctx.TagFilterPattern,
-			NoCaseSensitive:      ctx.NoCaseSensitive,
-			CommitFilters:        opts.Commits.Filters,
-			CommitSortBy:         opts.Commits.SortBy,
-			CommitGroupBy:        opts.CommitGroups.GroupBy,
-			CommitGroupSortBy:    opts.CommitGroups.SortBy,
-			CommitGroupTitleMaps: opts.CommitGroups.TitleMaps,
-			HeaderPattern:        opts.Header.Pattern,
-			HeaderPatternMaps:    opts.Header.PatternMaps,
-			IssuePrefix:          opts.Issues.Prefix,
-			RefActions:           opts.Refs.Actions,
-			MergePattern:         opts.Merges.Pattern,
-			MergePatternMaps:     opts.Merges.PatternMaps,
-			RevertPattern:        opts.Reverts.Pattern,
-			RevertPatternMaps:    opts.Reverts.PatternMaps,
-			NoteKeywords:         opts.Notes.Keywords,
+			NextTag:               ctx.NextTag,
+			TagFilterPattern:      ctx.TagFilterPattern,
+			NoCaseSensitive:       ctx.NoCaseSensitive,
+			CommitFilters:         opts.Commits.Filters,
+			CommitSortBy:          opts.Commits.SortBy,
+			CommitGroupBy:         opts.CommitGroups.GroupBy,
+			CommitGroupSortBy:     opts.CommitGroups.SortBy,
+			CommitGroupTitleMaps:  opts.CommitGroups.TitleMaps,
+			CommitGroupTitleOrder: opts.CommitGroups.TitleOrder,
+			HeaderPattern:         opts.Header.Pattern,
+			HeaderPatternMaps:     opts.Header.PatternMaps,
+			IssuePrefix:           opts.Issues.Prefix,
+			RefActions:            opts.Refs.Actions,
+			MergePattern:          opts.Merges.Pattern,
+			MergePatternMaps:      opts.Merges.PatternMaps,
+			RevertPattern:         opts.Reverts.Pattern,
+			RevertPatternMaps:     opts.Reverts.PatternMaps,
+			NoteKeywords:          opts.Notes.Keywords,
 		},
 	}
 }
