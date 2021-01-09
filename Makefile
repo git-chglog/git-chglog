@@ -5,7 +5,7 @@ clean:
 	rm -rf $(GOPATH)/bin/git-chglog
 	rm -rf cover.out
 
-.PHONY: bulid
+.PHONY: build
 build:
 	go build -i -o git-chglog
 
