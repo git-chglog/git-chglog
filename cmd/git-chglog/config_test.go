@@ -41,3 +41,30 @@ func TestConfigNormalize(t *testing.T) {
 	assert.Nil(err)
 	assert.Equal(filepath.Join(cwd, "CHANGELOG.tpl.md"), config.Template)
 }
+
+func TestConfigConvert(t *testing.T) {
+	var patternInFile = "pattern in config"
+	var patternInArgs = "pattern in cli"
+	assert := assert.New(t)
+	// basic
+	config := &Config{
+		Info: Info{
+			RepositoryURL: "https://example.com/foo/bar/",
+		},
+		Options: Options{TagFilterPattern: patternInFile},
+	}
+	cli := &CLIContext{TagFilterPattern: patternInArgs}
+	cfg := config.Convert(cli)
+	assert.Equal(cfg.Options.TagFilterPattern, patternInArgs)
+
+	config = &Config{
+		Info: Info{
+			RepositoryURL: "https://example.com/foo/bar/",
+		},
+		Options: Options{TagFilterPattern: patternInFile},
+	}
+	cli = &CLIContext{}
+	cfg = config.Convert(cli)
+	assert.Equal(cfg.Options.TagFilterPattern, patternInFile)
+
+}
