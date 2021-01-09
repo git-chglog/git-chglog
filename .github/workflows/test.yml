@@ -20,7 +20,4 @@ jobs:
         with:
           go-version: '1.15'
       - run: |
-        export TZ=Asia/Tokyo
-        sudo timedatectl set-timezone Asia/Tokyo
-        timedatectl
         make test
