@@ -2,9 +2,12 @@ name: Tests
 
 on:
   pull_request:
+    types: ['opened', 'synchronize']
     paths-ignore:
       - 'README.md'
   push:
+    branches:
+      - master
     paths-ignore:
       - 'README.md'
 jobs:
