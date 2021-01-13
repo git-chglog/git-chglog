@@ -31,8 +31,12 @@ jobs:
         run: |
           make test
       - 
-        name: Coveralls
-        uses: coverallsapp/github-action@v1.1.2
-        with:
-          path-to-lcov: cover.out
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        name: Install goveralls
+        env:
+          GO111MODULE: off
+        run: go get github.com/mattn/goveralls
+      - 
+        name: Send coverage
+        env:
+          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: goveralls -coverprofile=cover.out -service=github
