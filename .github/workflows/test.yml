@@ -29,9 +29,7 @@ jobs:
       - 
         name: Run tests
         run: |
-          GO111MODULE=off go get github.com/mattn/goveralls
           make test
-          make coverage
       - 
         name: Coveralls
         uses: coverallsapp/github-action@v1.1.2
