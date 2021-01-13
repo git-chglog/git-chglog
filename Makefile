@@ -11,7 +11,7 @@ build:
 
 .PHONY: test
 test:
-	go test -coverprofile cover.out -v `go list ./...`
+	go test -covermode atomic -coverprofile cover.out -v `go list ./...`
 
 .PHONY: install
 install:
