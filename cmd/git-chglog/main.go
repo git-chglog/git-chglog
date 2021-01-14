@@ -53,7 +53,11 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 
   $ {{.Name}} --config custom/dir/config.yml
 
-    The above is a command that uses a configuration file placed other than ".chglog/config.yml".
+		The above is a command that uses a configuration file placed other than ".chglog/config.yml".
+
+	$ {{.Name}} --path path/to/my/component --output CHANGELOG.component.md
+
+		Filter commits by specific paths or files in git and output to a component specific changelog.
 `,
 		ttl("USAGE:"),
 		ttl("OPTIONS:"),
@@ -79,7 +83,7 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 		// path
 		&cli.StringSliceFlag{
 			Name:  "path",
-			Usage: "Paths to include in changelog",
+			Usage: "Filter commits by path(s). Can use multiple times.",
 		},
 
 		// config
