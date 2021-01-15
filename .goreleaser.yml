@@ -34,9 +34,7 @@ snapshot:
   name_template: "{{ .Tag }}-next"
 
 brews:
--
-  skip_upload: true
-  tap:
+- tap:
     owner: git-chglog
     name: homebrew-git-chglog
   homepage: "https://godoc.org/github.com/git-chglog/git-chglog"
