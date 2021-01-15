@@ -23,6 +23,9 @@ builds:
       - 6
 
 archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
 
 checksum:
   name_template: 'checksums.txt'
@@ -34,12 +37,12 @@ snapshot:
   name_template: "{{ .Tag }}-next"
 
 brews:
-- tap:
-    owner: git-chglog
-    name: homebrew-git-chglog
-  homepage: "https://godoc.org/github.com/git-chglog/git-chglog"
-  description: "CHANGELOG generator implemented in Go (Golang)."
-  test: |
-    system "#{bin}/git-chglog --help"
-  install: |
-    bin.install "git-chglog"
+  - tap:
+      owner: git-chglog
+      name: homebrew-git-chglog
+    homepage: "https://godoc.org/github.com/git-chglog/git-chglog"
+    description: "CHANGELOG generator implemented in Go (Golang)."
+    test: |
+      system "#{bin}/git-chglog --help"
+    install: |
+      bin.install "git-chglog"
