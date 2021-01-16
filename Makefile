@@ -11,13 +11,7 @@ build:
 
 .PHONY: test
 test:
-	go test -v `go list ./...`
-
-.PHONY: coverage
-coverage:
-	goverage -coverprofile=cover.out `go list ./...`
-	go tool cover -func=cover.out
-	@rm -rf cover.out
+	go test -covermode atomic -coverprofile cover.out -v ./...
 
 .PHONY: install
 install:

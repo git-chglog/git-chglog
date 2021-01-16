@@ -1,156 +1,48 @@
-env:
-  - GO111MODULE=on
+# This is an example .goreleaser.yml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+project_name: git-chglog
+
 before:
   hooks:
-    - go mod tidy
-    - ./scripts/completions.sh
-gomod:
-  proxy: true
+    # You may remove this if you don't use go modules.
+    - go mod download
+
 builds:
-- env:
-    - CGO_ENABLED=0
-  goos:
-    - linux
-    - darwin
-    - windows
-  goarch:
-    - 386
-    - amd64
-    - arm
-    - arm64
-  mod_timestamp: '{{ .CommitTimestamp }}'
-  flags:
-    - -trimpath
-  ldflags:
-    - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
+  - dir: cmd/git-chglog
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - 6
+
+archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
+
 checksum:
-  name_template: '{{ .ProjectName }}_checksums.txt'
+  name_template: 'checksums.txt'
+
 changelog:
   sort: asc
-  filters:
-    exclude:
-    - '^docs:'
-    - '^test:'
-    - Merge pull request
-    - Merge branch
-    - go mod tidy
-dockers:
-- image_templates:
-  - 'goreleaser/goreleaser:{{ .Tag }}-amd64'
-  - 'ghcr.io/goreleaser/goreleaser:{{ .Tag }}-amd64'
-  dockerfile: Dockerfile
-  use_buildx: true
-  build_flag_templates:
-  - "--pull"
-  - "--label=org.opencontainers.image.created={{.Date}}"
-  - "--label=org.opencontainers.image.name={{.ProjectName}}"
-  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-  - "--label=org.opencontainers.image.version={{.Version}}"
-  - "--label=org.opencontainers.image.source={{.GitURL}}"
-  - "--platform=linux/amd64"
-  extra_files:
-  - scripts/entrypoint.sh
-- image_templates:
-  - 'goreleaser/goreleaser:{{ .Tag }}-arm64'
-  - 'ghcr.io/goreleaser/goreleaser:{{ .Tag }}-arm64'
-  dockerfile: Dockerfile
-  use_buildx: true
-  build_flag_templates:
-  - "--pull"
-  - "--label=org.opencontainers.image.created={{.Date}}"
-  - "--label=org.opencontainers.image.name={{.ProjectName}}"
-  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-  - "--label=org.opencontainers.image.version={{.Version}}"
-  - "--label=org.opencontainers.image.source={{.GitURL}}"
-  - "--platform=linux/arm64"
-  goarch: arm64
-  extra_files:
-  - scripts/entrypoint.sh
-docker_manifests:
-- name_template: 'goreleaser/goreleaser:{{ .Tag }}'
-  image_templates:
-  - 'goreleaser/goreleaser:{{ .Tag }}-amd64'
-  - 'goreleaser/goreleaser:{{ .Tag }}-arm64'
-- name_template: 'ghcr.io/goreleaser/goreleaser:{{ .Tag }}'
-  image_templates:
-  - 'ghcr.io/goreleaser/goreleaser:{{ .Tag }}-amd64'
-  - 'ghcr.io/goreleaser/goreleaser:{{ .Tag }}-arm64'
-- name_template: 'goreleaser/goreleaser:latest'
-  image_templates:
-  - 'goreleaser/goreleaser:{{ .Tag }}-amd64'
-  - 'goreleaser/goreleaser:{{ .Tag }}-arm64'
-- name_template: 'ghcr.io/goreleaser/goreleaser:latest'
-  image_templates:
-  - 'ghcr.io/goreleaser/goreleaser:{{ .Tag }}-amd64'
-  - 'ghcr.io/goreleaser/goreleaser:{{ .Tag }}-arm64'
-archives:
-  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
-    format_overrides:
-    - goos: windows
-      format: zip
-    files:
-      - README.md
-      - LICENSE.md
-      - completions/*
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
 brews:
   - tap:
-      owner: goreleaser
-      name: homebrew-tap
-    folder: Formula
-    homepage:  https://goreleaser.com
-    description: Deliver Go binaries as fast and easily as possible
-    license: MIT
+      owner: git-chglog
+      name: homebrew-git-chglog
+    homepage: "https://godoc.org/github.com/git-chglog/git-chglog"
+    description: "CHANGELOG generator implemented in Go (Golang)."
     test: |
-      system "#{bin}/goreleaser -v"
-    dependencies:
-    - name: go
-    install: |-
-      bin.install "goreleaser"
-      bash_completion.install "completions/goreleaser.bash" => "goreleaser"
-      zsh_completion.install "completions/goreleaser.zsh" => "_goreleaser"
-      fish_completion.install "completions/goreleaser.fish"
-scoop:
-  bucket:
-    owner: goreleaser
-    name: scoop-bucket
-  homepage:  https://goreleaser.com
-  description: Deliver Go binaries as fast and easily as possible
-  license: MIT
-nfpms:
-  - file_name_template: '{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    homepage:  https://goreleaser.com
-    description: Deliver Go binaries as fast and easily as possible
-    maintainer: Carlos Alexandro Becker <root@carlosbecker.com>
-    license: MIT
-    vendor: GoReleaser
-    contents:
-      - src: ./completions/goreleaser.bash
-        dst: /etc/bash_completion.d/goreleaser
-      - src: ./completions/goreleaser.fish
-        dst: /usr/share/fish/completions/goreleaser.fish
-      - src: ./completions/goreleaser.zsh
-        dst: /usr/local/share/zsh/site-functions/_goreleaser
-    formats:
-    - apk
-    - deb
-    - rpm
-    dependencies:
-    - git
-    recommends:
-    - golang
-snapcrafts:
-  - name_template: '{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    summary: Deliver Go binaries as fast and easily as possible
-    description: |
-      GoReleaser builds Go binaries for several platforms, creates a GitHub
-      release and then pushes a Homebrew formula to a repository. All that
-      wrapped in your favorite CI.
-    grade: stable
-    confinement: classic
-    publish: true
+      system "#{bin}/git-chglog --help"
+    install: |
+      bin.install "git-chglog"
