@@ -31,7 +31,10 @@ checksum:
   name_template: 'checksums.txt'
 
 changelog:
-  sort: asc
+  sort: desc
+  filters:
+    exclude:
+      - '^Merge'
 
 snapshot:
   name_template: "{{ .Tag }}-next"
