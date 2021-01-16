@@ -10,7 +10,7 @@
 *.dll
 *.so
 *.dylib
-git-chglog
+/git-chglog
 
 # Test binary, build with `go test -c`
 *.test
