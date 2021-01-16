@@ -6,6 +6,32 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ## [Unreleased]
 
 
+<a name="v0.10.0"></a>
+## [v0.10.0] - 2021-01-16
+
+### BREAKING CHANGE
+We adapted the naming schema of the uploaded binaries by adding a `v` prefix for tags/versions starting from `v0.10.0`: 
+```
+# up to 0.9.1
+https://github.com/git-chglog/git-chglog/releases/download/<VERSION>/git-chglog_<OS>_<ARCH>
+
+# from v0.10.0
+https://github.com/git-chglog/git-chglog/releases/download/v<VERSION>/git-chglog_<OS>_<ARCH>
+
+```
+
+### Bug Fixes
+- ignore only git-chglog binary in root and not subfolder
+
+### Features
+- Adds 'Custom' sort_type to CommitGroup ([#69](https://github.com/git-chglog/git-chglog/issues/69))
+- enable tag_filter_pattern in config options ([#72](https://github.com/git-chglog/git-chglog/issues/72))
+- switch from dep to go mod ([#85](https://github.com/git-chglog/git-chglog/issues/85))
+- add option to filter commits in a case insensitive way
+- add upperFirst template function
+- Add emoji format and some formatters in variables
+
+
 <a name="0.9.1"></a>
 ## [0.9.1] - 2019-09-23
 
@@ -141,7 +167,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.8.0...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.10.0...HEAD
+[v0.10.0]: https://github.com/git-chglog/git-chglog/compare/0.9.1...v0.10.0
 [0.9.1]: https://github.com/git-chglog/git-chglog/compare/0.9.0...0.9.1
 [0.9.0]: https://github.com/git-chglog/git-chglog/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/git-chglog/git-chglog/compare/0.7.1...0.8.0
