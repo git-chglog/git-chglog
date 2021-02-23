@@ -180,15 +180,15 @@ func (t *TemplateStyleFormat) Preview() string {
 var (
 	tplKeepAChangelog = &TemplateStyleFormat{
 		display: "keep-a-changelog",
-		preview: "https://github.com/git-chglog/example-type-scope-subject/blob/master/CHANGELOG.kac.md",
+		preview: "https://github.com/r26D/example-type-scope-subject/blob/master/CHANGELOG.kac.md",
 	}
 	tplStandard = &TemplateStyleFormat{
 		display: "standard",
-		preview: "https://github.com/git-chglog/example-type-scope-subject/blob/master/CHANGELOG.standard.md",
+		preview: "https://github.com/r26D/example-type-scope-subject/blob/master/CHANGELOG.standard.md",
 	}
 	tplCool = &TemplateStyleFormat{
 		display: "cool",
-		preview: "https://github.com/git-chglog/example-type-scope-subject/blob/master/CHANGELOG.cool.md",
+		preview: "https://github.com/r26D/example-type-scope-subject/blob/master/CHANGELOG.cool.md",
 	}
 	templates = []Previewable{
 		tplKeepAChangelog,

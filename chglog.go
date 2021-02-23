@@ -4,7 +4,7 @@ package chglog
 import (
 	"errors"
 	"fmt"
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	"io"
 	"os"
 	"path/filepath"

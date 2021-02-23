@@ -79,12 +79,20 @@ func newCommitParser(client gitcmd.Client, config *Config) *commitParser {
 }
 
 func (p *commitParser) Parse(rev string) ([]*Commit, error) {
-	out, err := p.client.Exec(
-		"log",
+	paths := p.config.Options.Paths
+
+	args := []string{
 		rev,
 		"--no-decorate",
-		"--pretty="+logFormat,
-	)
+		"--pretty=" + logFormat,
+	}
+
+	if len(paths) > 0 {
+		args = append(args, "--")
+		args = append(args, paths...)
+	}
+
+	out, err := p.client.Exec("log", args...)
 
 	if err != nil {
 		return nil, err
@@ -213,6 +221,29 @@ func (p *commitParser) processBody(commit *Commit, input string) {
 
 	// body
 	commit.Body = input
+
+	opts := p.config.Options
+	if opts.MultilineCommit {
+		// additional headers in body
+		body := input
+		body = p.reNotes.ReplaceAllString(body, "") // strip notes from mody
+		res := p.reHeader.FindAllStringSubmatch(body, -1)
+		if len(res) > 0 {
+			assignDynamicValues(commit, opts.HeaderPatternMaps, res[0][1:])
+			if len(res) > 1 {
+				commit.AllHeaders = make([]*Commit, 0, len(res)-1)
+				for _, matchGroups := range res[1:] {
+					// parses all matches
+					h := *commit
+					h.Header = matchGroups[0]
+					h.AllHeaders = nil
+					h.Body = ""
+					assignDynamicValues(&h, opts.HeaderPatternMaps, matchGroups[1:])
+					commit.AllHeaders = append(commit.AllHeaders, &h)
+				}
+			}
+		}
+	}
 
 	// notes & refs & mentions
 	commit.Notes = []*Note{}

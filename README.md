@@ -11,6 +11,11 @@
 > CHANGELOG generator implemented in Go (Golang).  
 > _Anytime, anywhere, Write your CHANGELOG._
 
+#Experimental
+
+This branch has pulled in a number of pull requests from the actual project. I am using this branch to confirm that they will 
+work in production.  **USE AT YOUR OWN RISK** Once the experiment is complete I hope to get this merged to either the master here or the
+real master.
 
 ## Table of Contents
 
@@ -255,6 +260,7 @@ options:
       Type:
         - feat
     sort_by: Scope
+    multiline_commits: false  # when true, allows for parsing body and retrieve squashed commits independently
 
   commit_groups:
     group_by: Type
@@ -338,6 +344,7 @@ Options concerning the acquisition and sort of commits.
 |:----------|:---------|:------------|:----------|:--------------------------------------------------------------------------------------------------------------------|
 | `filters` | N        | Map in List | none      | Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value.                 |
 | `sort_by` | N        | String      | `"Scope"` | Property name to use for sorting `Commit`. See [Commit](https://godoc.org/github.com/git-chglog/git-chglog#Commit). |
+| `multiline_commits:` | N       | Bool      | `false` | Allows for commit body parsing to find change log entries. |
 
 #### `options.commit_groups`
 

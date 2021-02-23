@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	chglog "github.com/git-chglog/git-chglog"
 	"github.com/imdario/mergo"
+	chglog "github.com/r26D/git-chglog"
 )
 
 // Info ...
@@ -16,8 +16,9 @@ type Info struct {
 
 // CommitOptions ...
 type CommitOptions struct {
-	Filters map[string][]string `yaml:"filters"`
-	SortBy  string              `yaml:"sort_by"`
+	Filters         map[string][]string `yaml:"filters"`
+	SortBy          string              `yaml:"sort_by"`
+	MultilineCommit bool                `yaml:"multiline_commit"`
 }
 
 // CommitGroupOptions ...
@@ -265,6 +266,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 		Options: &chglog.Options{
 			NextTag:               ctx.NextTag,
 			TagFilterPattern:      ctx.TagFilterPattern,
+			Paths:                 ctx.Paths,
 			NoCaseSensitive:       ctx.NoCaseSensitive,
 			CommitFilters:         opts.Commits.Filters,
 			CommitSortBy:          opts.Commits.SortBy,
@@ -281,6 +283,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 			RevertPattern:         opts.Reverts.Pattern,
 			RevertPatternMaps:     opts.Reverts.PatternMaps,
 			NoteKeywords:          opts.Notes.Keywords,
+			MultilineCommit:      opts.Commits.MultilineCommit,
 		},
 	}
 }

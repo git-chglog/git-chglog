@@ -81,7 +81,7 @@ func TestGeneratorNotFoundTags(t *testing.T) {
 		WorkingDir: filepath.Join(testRepoRoot, testName),
 		Template:   filepath.Join(cwd, "testdata", testName+".md"),
 		Info: &Info{
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			RepositoryURL: "https://github.com/r26D/git-chglog",
 		},
 		Options: &Options{},
 	})
@@ -107,7 +107,7 @@ func TestGeneratorNotFoundCommits(t *testing.T) {
 		WorkingDir: filepath.Join(testRepoRoot, testName),
 		Template:   filepath.Join(cwd, "testdata", testName+".md"),
 		Info: &Info{
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			RepositoryURL: "https://github.com/r26D/git-chglog",
 		},
 		Options: &Options{},
 	})
@@ -132,7 +132,7 @@ func TestGeneratorNotFoundCommitsOne(t *testing.T) {
 		WorkingDir: filepath.Join(testRepoRoot, testName),
 		Template:   filepath.Join(cwd, "testdata", testName+".md"),
 		Info: &Info{
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			RepositoryURL: "https://github.com/r26D/git-chglog",
 		},
 		Options: &Options{
 			CommitFilters:        map[string][]string{},
@@ -208,7 +208,7 @@ change message.`)
 		Template:   filepath.Join(cwd, "testdata", testName+".md"),
 		Info: &Info{
 			Title:         "CHANGELOG Example",
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			RepositoryURL: "https://github.com/r26D/git-chglog",
 		},
 		Options: &Options{
 			CommitFilters: map[string][]string{
@@ -296,9 +296,9 @@ Online breaking change message.
 - **core:** Add foo bar
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/2.0.0-beta.0...HEAD
-[2.0.0-beta.0]: https://github.com/git-chglog/git-chglog/compare/1.1.0...2.0.0-beta.0
-[1.1.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...1.1.0`, output)
+[Unreleased]: https://github.com/r26D/git-chglog/compare/2.0.0-beta.0...HEAD
+[2.0.0-beta.0]: https://github.com/r26D/git-chglog/compare/1.1.0...2.0.0-beta.0
+[1.1.0]: https://github.com/r26D/git-chglog/compare/1.0.0...1.1.0`, output)
 }
 
 func TestGeneratorWithNextTag(t *testing.T) {
@@ -321,7 +321,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 		Template:   filepath.Join(cwd, "testdata", testName+".md"),
 		Info: &Info{
 			Title:         "CHANGELOG Example",
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			RepositoryURL: "https://github.com/r26D/git-chglog",
 		},
 		Options: &Options{
 			NextTag: "3.0.0",
@@ -372,9 +372,9 @@ func TestGeneratorWithNextTag(t *testing.T) {
 - **core:** version 1.0.0
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
-[3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0
-[2.0.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...2.0.0`, output)
+[Unreleased]: https://github.com/r26D/git-chglog/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/r26D/git-chglog/compare/2.0.0...3.0.0
+[2.0.0]: https://github.com/r26D/git-chglog/compare/1.0.0...2.0.0`, output)
 
 	buf = &bytes.Buffer{}
 	err = gen.Generate(buf, "3.0.0")
@@ -391,8 +391,8 @@ func TestGeneratorWithNextTag(t *testing.T) {
 - **core:** version 3.0.0
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
-[3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0`, output)
+[Unreleased]: https://github.com/r26D/git-chglog/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/r26D/git-chglog/compare/2.0.0...3.0.0`, output)
 }
 
 func TestGeneratorWithTagFiler(t *testing.T) {
@@ -413,7 +413,7 @@ func TestGeneratorWithTagFiler(t *testing.T) {
 		Template:   filepath.Join(cwd, "testdata", testName+".md"),
 		Info: &Info{
 			Title:         "CHANGELOG Example",
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			RepositoryURL: "https://github.com/r26D/git-chglog",
 		},
 		Options: &Options{
 			TagFilterPattern: "^v",
@@ -452,6 +452,6 @@ func TestGeneratorWithTagFiler(t *testing.T) {
 - **core:** version dev-1.0.0
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v1.0.0...HEAD`, strings.TrimSpace(buf.String()))
+[Unreleased]: https://github.com/r26D/git-chglog/compare/v1.0.0...HEAD`, strings.TrimSpace(buf.String()))
 
 }
