@@ -4,7 +4,7 @@ package chglog
 import (
 	"errors"
 	"fmt"
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	"io"
 	"os"
 	"path/filepath"
@@ -36,8 +36,8 @@ type Options struct {
 	RevertPattern         string              // A regular expression to use for parsing the revert commit
 	RevertPatternMaps     []string            // Similar to `HeaderPatternMaps`
 	NoteKeywords          []string            // Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`)
-	MultilineCommit      bool                // Attempt to match header several times in commit body. Useful to parse squashed commits.
-	Paths                []string            // Path filter
+	MultilineCommit       bool                // Attempt to match header several times in commit body. Useful to parse squashed commits.
+	Paths                 []string            // Path filter
 
 }
 

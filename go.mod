@@ -1,8 +1,9 @@
-module github.com/fredbi/git-chglog
+module github.com/r26D/git-chglog
 
 go 1.15
 
 require (
+	github.com/Masterminds/sprig/v3 v3.2.1
 	github.com/fatih/color v1.10.0
 	github.com/imdario/mergo v0.3.11
 	github.com/mattn/go-colorable v0.1.8
