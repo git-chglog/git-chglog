@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 	"testing"
 )
 
