@@ -10,6 +10,6 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/tsuyoshiwada/go-gitcmd v0.0.0-20180205145712-5f1f5f9475df
 	github.com/urfave/cli v1.22.5
-	gopkg.in/kyokomi/emoji.v1 v1.5.1
+	gopkg.in/kyokomi/emoji.v2 v2.2.8
 	gopkg.in/yaml.v2 v2.4.0
 )
