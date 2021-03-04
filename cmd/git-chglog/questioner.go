@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
-	survey "gopkg.in/AlecAivazis/survey.v1"
+	survey "github.com/AlecAivazis/survey/v2"
 )
 
 // Answer ...
