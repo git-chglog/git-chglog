@@ -8,7 +8,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/mattn/go-colorable"
 	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func CreateApp(actionFunc cli.ActionFunc) *cli.App {
@@ -71,57 +71,57 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 
 	app.Flags = []cli.Flag{
 		// init
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:  "init",
 			Usage: "generate the git-chglog configuration file in interactive",
 		},
 
 		// config
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "config, c",
 			Usage: "specifies a different configuration file to pick up",
 			Value: ".chglog/config.yml",
 		},
 
 		// output
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "output, o",
 			Usage: "output path and filename for the changelogs. If not specified, output to stdout",
 		},
 
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "next-tag",
 			Usage: "treat unreleased commits as specified tags (EXPERIMENTAL)",
 		},
 
 		// silent
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:  "silent",
 			Usage: "disable stdout output",
 		},
 
 		// no-color
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:   "no-color",
 			Usage:  "disable color output",
-			EnvVar: "NO_COLOR",
+			EnvVars: []string{"NO_COLOR"},
 		},
 
 		// no-emoji
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:   "no-emoji",
 			Usage:  "disable emoji output",
-			EnvVar: "NO_EMOJI",
+			EnvVars: []string{"NO_EMOJI"},
 		},
 
 		// no-case
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:  "no-case",
 			Usage: "disable case sensitive filters",
 		},
 
 		// tag-filter-pattern
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "tag-filter-pattern, p",
 			Usage: "Regular expression of tag filter. Is specified, only matched tags will be picked",
 		},
