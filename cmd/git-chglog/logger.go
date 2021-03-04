@@ -7,7 +7,7 @@ import (
 	"regexp"
 
 	"github.com/fatih/color"
-	emoji "gopkg.in/kyokomi/emoji.v1"
+	emoji "github.com/kyokomi/emoji/v2"
 )
 
 // Logger ...
