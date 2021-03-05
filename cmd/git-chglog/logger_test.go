@@ -7,7 +7,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/stretchr/testify/assert"
-	emoji "gopkg.in/kyokomi/emoji.v1"
+	emoji "github.com/kyokomi/emoji/v2"
 )
 
 func TestLoggerLogSilent(t *testing.T) {
