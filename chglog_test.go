@@ -76,15 +76,16 @@ func TestGeneratorNotFoundTags(t *testing.T) {
 		commit("2018-01-01 00:00:00", "feat(*): New feature", "")
 	})
 
-	gen := NewGenerator(&Config{
-		Bin:        "git",
-		WorkingDir: filepath.Join(testRepoRoot, testName),
-		Template:   filepath.Join(cwd, "testdata", testName+".md"),
-		Info: &Info{
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
-		},
-		Options: &Options{},
-	})
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			},
+			Options: &Options{},
+		})
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
@@ -102,15 +103,16 @@ func TestGeneratorNotFoundCommits(t *testing.T) {
 		tag("1.0.0")
 	})
 
-	gen := NewGenerator(&Config{
-		Bin:        "git",
-		WorkingDir: filepath.Join(testRepoRoot, testName),
-		Template:   filepath.Join(cwd, "testdata", testName+".md"),
-		Info: &Info{
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
-		},
-		Options: &Options{},
-	})
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			},
+			Options: &Options{},
+		})
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "foo")
@@ -127,44 +129,45 @@ func TestGeneratorNotFoundCommitsOne(t *testing.T) {
 		tag("1.0.0")
 	})
 
-	gen := NewGenerator(&Config{
-		Bin:        "git",
-		WorkingDir: filepath.Join(testRepoRoot, testName),
-		Template:   filepath.Join(cwd, "testdata", testName+".md"),
-		Info: &Info{
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
-		},
-		Options: &Options{
-			CommitFilters:        map[string][]string{},
-			CommitSortBy:         "Scope",
-			CommitGroupBy:        "Type",
-			CommitGroupSortBy:    "Title",
-			CommitGroupTitleMaps: map[string]string{},
-			HeaderPattern:        "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
-			HeaderPatternMaps: []string{
-				"Type",
-				"Scope",
-				"Subject",
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
 			},
-			IssuePrefix: []string{
-				"#",
-				"gh-",
+			Options: &Options{
+				CommitFilters:        map[string][]string{},
+				CommitSortBy:         "Scope",
+				CommitGroupBy:        "Type",
+				CommitGroupSortBy:    "Title",
+				CommitGroupTitleMaps: map[string]string{},
+				HeaderPattern:        "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"Scope",
+					"Subject",
+				},
+				IssuePrefix: []string{
+					"#",
+					"gh-",
+				},
+				RefActions:   []string{},
+				MergePattern: "^Merge pull request #(\\d+) from (.*)$",
+				MergePatternMaps: []string{
+					"Ref",
+					"Source",
+				},
+				RevertPattern: "^Revert \"([\\s\\S]*)\"$",
+				RevertPatternMaps: []string{
+					"Header",
+				},
+				NoteKeywords: []string{
+					"BREAKING CHANGE",
+				},
 			},
-			RefActions:   []string{},
-			MergePattern: "^Merge pull request #(\\d+) from (.*)$",
-			MergePatternMaps: []string{
-				"Ref",
-				"Source",
-			},
-			RevertPattern: "^Revert \"([\\s\\S]*)\"$",
-			RevertPatternMaps: []string{
-				"Header",
-			},
-			NoteKeywords: []string{
-				"BREAKING CHANGE",
-			},
-		},
-	})
+		})
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "foo")
@@ -202,53 +205,54 @@ change message.`)
 		commit("2018-01-04 00:01:00", "fix(core): Fix commit\n\nThis is body message.", "")
 	})
 
-	gen := NewGenerator(&Config{
-		Bin:        "git",
-		WorkingDir: filepath.Join(testRepoRoot, testName),
-		Template:   filepath.Join(cwd, "testdata", testName+".md"),
-		Info: &Info{
-			Title:         "CHANGELOG Example",
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
-		},
-		Options: &Options{
-			CommitFilters: map[string][]string{
-				"Type": []string{
-					"feat",
-					"fix",
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				Title:         "CHANGELOG Example",
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			},
+			Options: &Options{
+				CommitFilters: map[string][]string{
+					"Type": []string{
+						"feat",
+						"fix",
+					},
+				},
+				CommitSortBy:      "Scope",
+				CommitGroupBy:     "Type",
+				CommitGroupSortBy: "Title",
+				CommitGroupTitleMaps: map[string]string{
+					"feat": "Features",
+					"fix":  "Bug Fixes",
+				},
+				HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"Scope",
+					"Subject",
+				},
+				IssuePrefix: []string{
+					"#",
+					"gh-",
+				},
+				RefActions:   []string{},
+				MergePattern: "^Merge pull request #(\\d+) from (.*)$",
+				MergePatternMaps: []string{
+					"Ref",
+					"Source",
+				},
+				RevertPattern: "^Revert \"([\\s\\S]*)\"$",
+				RevertPatternMaps: []string{
+					"Header",
+				},
+				NoteKeywords: []string{
+					"BREAKING CHANGE",
 				},
 			},
-			CommitSortBy:      "Scope",
-			CommitGroupBy:     "Type",
-			CommitGroupSortBy: "Title",
-			CommitGroupTitleMaps: map[string]string{
-				"feat": "Features",
-				"fix":  "Bug Fixes",
-			},
-			HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
-			HeaderPatternMaps: []string{
-				"Type",
-				"Scope",
-				"Subject",
-			},
-			IssuePrefix: []string{
-				"#",
-				"gh-",
-			},
-			RefActions:   []string{},
-			MergePattern: "^Merge pull request #(\\d+) from (.*)$",
-			MergePatternMaps: []string{
-				"Ref",
-				"Source",
-			},
-			RevertPattern: "^Revert \"([\\s\\S]*)\"$",
-			RevertPatternMaps: []string{
-				"Header",
-			},
-			NoteKeywords: []string{
-				"BREAKING CHANGE",
-			},
-		},
-	})
+		})
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
@@ -315,35 +319,36 @@ func TestGeneratorWithNextTag(t *testing.T) {
 		commit("2018-03-01 00:00:00", "feat(core): version 3.0.0", "")
 	})
 
-	gen := NewGenerator(&Config{
-		Bin:        "git",
-		WorkingDir: filepath.Join(testRepoRoot, testName),
-		Template:   filepath.Join(cwd, "testdata", testName+".md"),
-		Info: &Info{
-			Title:         "CHANGELOG Example",
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
-		},
-		Options: &Options{
-			NextTag: "3.0.0",
-			CommitFilters: map[string][]string{
-				"Type": []string{
-					"feat",
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				Title:         "CHANGELOG Example",
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			},
+			Options: &Options{
+				NextTag: "3.0.0",
+				CommitFilters: map[string][]string{
+					"Type": []string{
+						"feat",
+					},
+				},
+				CommitSortBy:      "Scope",
+				CommitGroupBy:     "Type",
+				CommitGroupSortBy: "Title",
+				CommitGroupTitleMaps: map[string]string{
+					"feat": "Features",
+				},
+				HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"Scope",
+					"Subject",
 				},
 			},
-			CommitSortBy:      "Scope",
-			CommitGroupBy:     "Type",
-			CommitGroupSortBy: "Title",
-			CommitGroupTitleMaps: map[string]string{
-				"feat": "Features",
-			},
-			HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
-			HeaderPatternMaps: []string{
-				"Type",
-				"Scope",
-				"Subject",
-			},
-		},
-	})
+		})
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
@@ -407,35 +412,36 @@ func TestGeneratorWithTagFiler(t *testing.T) {
 		tag("v1.0.0")
 	})
 
-	gen := NewGenerator(&Config{
-		Bin:        "git",
-		WorkingDir: filepath.Join(testRepoRoot, testName),
-		Template:   filepath.Join(cwd, "testdata", testName+".md"),
-		Info: &Info{
-			Title:         "CHANGELOG Example",
-			RepositoryURL: "https://github.com/git-chglog/git-chglog",
-		},
-		Options: &Options{
-			TagFilterPattern: "^v",
-			CommitFilters: map[string][]string{
-				"Type": []string{
-					"feat",
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				Title:         "CHANGELOG Example",
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			},
+			Options: &Options{
+				TagFilterPattern: "^v",
+				CommitFilters: map[string][]string{
+					"Type": []string{
+						"feat",
+					},
+				},
+				CommitSortBy:      "Scope",
+				CommitGroupBy:     "Type",
+				CommitGroupSortBy: "Title",
+				CommitGroupTitleMaps: map[string]string{
+					"feat": "Features",
+				},
+				HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"Scope",
+					"Subject",
 				},
 			},
-			CommitSortBy:      "Scope",
-			CommitGroupBy:     "Type",
-			CommitGroupSortBy: "Title",
-			CommitGroupTitleMaps: map[string]string{
-				"feat": "Features",
-			},
-			HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
-			HeaderPatternMaps: []string{
-				"Type",
-				"Scope",
-				"Subject",
-			},
-		},
-	})
+		})
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")

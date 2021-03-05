@@ -70,15 +70,15 @@ type JiraOptions struct {
 // Options ...
 type Options struct {
 	TagFilterPattern string             `yaml:"tag_filter_pattern"`
-	Commits      CommitOptions      `yaml:"commits"`
-	CommitGroups CommitGroupOptions `yaml:"commit_groups"`
-	Header       PatternOptions     `yaml:"header"`
-	Issues       IssueOptions       `yaml:"issues"`
-	Refs         RefOptions         `yaml:"refs"`
-	Merges       PatternOptions     `yaml:"merges"`
-	Reverts      PatternOptions     `yaml:"reverts"`
-	Notes        NoteOptions        `yaml:"notes"`
-	Jira         JiraOptions        `yaml:"jira"`
+	Commits          CommitOptions      `yaml:"commits"`
+	CommitGroups     CommitGroupOptions `yaml:"commit_groups"`
+	Header           PatternOptions     `yaml:"header"`
+	Issues           IssueOptions       `yaml:"issues"`
+	Refs             RefOptions         `yaml:"refs"`
+	Merges           PatternOptions     `yaml:"merges"`
+	Reverts          PatternOptions     `yaml:"reverts"`
+	Notes            NoteOptions        `yaml:"notes"`
+	Jira             JiraOptions        `yaml:"jira"`
 }
 
 // Config ...
@@ -264,7 +264,7 @@ func (config *Config) normalizeStyleOfBitbucket() {
 	config.Options = opts
 }
 
-func or_value(str1 string, str2 string) string {
+func orValue(str1 string, str2 string) string {
 	if str1 != "" {
 		return str1
 	}
@@ -283,15 +283,15 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 	return &chglog.Config{
 		Bin:        config.Bin,
 		WorkingDir: ctx.WorkingDir,
-		Template:   or_value(ctx.Template, config.Template),
+		Template:   orValue(ctx.Template, config.Template),
 		Info: &chglog.Info{
 			Title:         info.Title,
-			RepositoryURL: or_value(ctx.RepositoryUrl, info.RepositoryURL),
+			RepositoryURL: orValue(ctx.RepositoryUrl, info.RepositoryURL),
 		},
 		Options: &chglog.Options{
 			NextTag:                     ctx.NextTag,
 			TagFilterPattern:            ctx.TagFilterPattern,
-			NoCaseSensitive:       ctx.NoCaseSensitive,
+			NoCaseSensitive:             ctx.NoCaseSensitive,
 			CommitFilters:               opts.Commits.Filters,
 			CommitSortBy:                opts.Commits.SortBy,
 			CommitGroupBy:               opts.CommitGroups.GroupBy,
@@ -306,9 +306,9 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 			RevertPattern:               opts.Reverts.Pattern,
 			RevertPatternMaps:           opts.Reverts.PatternMaps,
 			NoteKeywords:                opts.Notes.Keywords,
-			JiraUsername:                or_value(ctx.JiraUsername, opts.Jira.ClintInfo.Username),
-			JiraToken:                   or_value(ctx.JiraToken, opts.Jira.ClintInfo.Token),
-			JiraUrl:                     or_value(ctx.JiraUrl, opts.Jira.ClintInfo.URL),
+			JiraUsername:                orValue(ctx.JiraUsername, opts.Jira.ClintInfo.Username),
+			JiraToken:                   orValue(ctx.JiraToken, opts.Jira.ClintInfo.Token),
+			JiraUrl:                     orValue(ctx.JiraUrl, opts.Jira.ClintInfo.URL),
 			JiraTypeMaps:                opts.Jira.Issue.TypeMaps,
 			JiraIssueDescriptionPattern: opts.Jira.Issue.DescriptionPattern,
 		},

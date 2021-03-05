@@ -4,12 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
 	agjira "github.com/andygrunwald/go-jira"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCommitParserParse(t *testing.T) {
@@ -28,51 +29,52 @@ func TestCommitParserParse(t *testing.T) {
 		},
 	}
 
-	parser := newCommitParser(mock, nil, &Config{
-		Options: &Options{
-			CommitFilters: map[string][]string{
-				"Type": []string{
-					"feat",
+	parser := newCommitParser(NewLogger(os.Stdout, os.Stderr, false, true),
+		mock, nil, &Config{
+			Options: &Options{
+				CommitFilters: map[string][]string{
+					"Type": []string{
+						"feat",
+						"fix",
+						"perf",
+						"refactor",
+					},
+				},
+				HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"Scope",
+					"Subject",
+				},
+				IssuePrefix: []string{
+					"#",
+					"gh-",
+				},
+				RefActions: []string{
+					"close",
+					"closes",
+					"closed",
 					"fix",
-					"perf",
-					"refactor",
+					"fixes",
+					"fixed",
+					"resolve",
+					"resolves",
+					"resolved",
+				},
+				MergePattern: "^Merge pull request #(\\d+) from (.*)$",
+				MergePatternMaps: []string{
+					"Ref",
+					"Source",
+				},
+				RevertPattern: "^Revert \"([\\s\\S]*)\"$",
+				RevertPatternMaps: []string{
+					"Header",
+				},
+				NoteKeywords: []string{
+					"BREAKING CHANGE",
 				},
 			},
-			HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
-			HeaderPatternMaps: []string{
-				"Type",
-				"Scope",
-				"Subject",
-			},
-			IssuePrefix: []string{
-				"#",
-				"gh-",
-			},
-			RefActions: []string{
-				"close",
-				"closes",
-				"closed",
-				"fix",
-				"fixes",
-				"fixed",
-				"resolve",
-				"resolves",
-				"resolved",
-			},
-			MergePattern: "^Merge pull request #(\\d+) from (.*)$",
-			MergePatternMaps: []string{
-				"Ref",
-				"Source",
-			},
-			RevertPattern: "^Revert \"([\\s\\S]*)\"$",
-			RevertPatternMaps: []string{
-				"Header",
-			},
-			NoteKeywords: []string{
-				"BREAKING CHANGE",
-			},
-		},
-	})
+		})
 
 	commits, err := parser.Parse("HEAD")
 	assert.Nil(err)
@@ -310,12 +312,11 @@ Closes username/repository#456`, "```", "```"),
 	}, commits)
 }
 
-
 type mockJiraClient struct {
 }
 
 func (jira mockJiraClient) GetJiraIssue(id string) (*agjira.Issue, error) {
-	return &agjira.Issue {
+	return &agjira.Issue{
 		ID: id,
 		Fields: &agjira.IssueFields{
 			Expand:                        "",
@@ -376,27 +377,28 @@ func TestCommitParserParseWithJira(t *testing.T) {
 		},
 	}
 
-	parser := newCommitParser(mock, mockJiraClient{}, &Config{
-		Options: &Options{
-			CommitFilters: map[string][]string{
-				"Type": []string{
-					"feat",
-					"fix",
-					"perf",
-					"refactor",
+	parser := newCommitParser(NewLogger(os.Stdout, os.Stderr, false, true),
+		mock, mockJiraClient{}, &Config{
+			Options: &Options{
+				CommitFilters: map[string][]string{
+					"Type": []string{
+						"feat",
+						"fix",
+						"perf",
+						"refactor",
+					},
+				},
+				HeaderPattern: "^(?:(\\w*)|(?:\\[(.*)\\])?)\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"JiraIssueId",
+					"Subject",
+				},
+				JiraTypeMaps: map[string]string{
+					"Story": "feat",
 				},
 			},
-			HeaderPattern: "^(?:(\\w*)|(?:\\[(.*)\\])?)\\:\\s(.*)$",
-			HeaderPatternMaps: []string{
-				"Type",
-				"JiraIssueId",
-				"Subject",
-			},
-			JiraTypeMaps: map[string]string {
-				"Story": "feat",
-			},
-		},
-	})
+		})
 
 	commits, err := parser.Parse("HEAD")
 	assert.Nil(err)

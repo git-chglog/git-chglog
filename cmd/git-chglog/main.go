@@ -84,14 +84,14 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 		},
 
 		// template
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "template, t",
 			Usage: "specifies a template file to pick up. If not specified, use the one in config",
 		},
 
 		// repository url
-		cli.StringFlag{
-			Name: "repository-url",
+		&cli.StringFlag{
+			Name:  "repository-url",
 			Usage: "specifies git repo URL. If not specified, use 'repository_url' in config",
 		},
 
@@ -114,15 +114,15 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 
 		// no-color
 		&cli.BoolFlag{
-			Name:   "no-color",
-			Usage:  "disable color output",
+			Name:    "no-color",
+			Usage:   "disable color output",
 			EnvVars: []string{"NO_COLOR"},
 		},
 
 		// no-emoji
 		&cli.BoolFlag{
-			Name:   "no-emoji",
-			Usage:  "disable emoji output",
+			Name:    "no-emoji",
+			Usage:   "disable emoji output",
 			EnvVars: []string{"NO_EMOJI"},
 		},
 
@@ -134,26 +134,29 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 
 		// tag-filter-pattern
 		&cli.StringFlag{
-			Name:  "tag-filter-pattern, p",
+			Name:  "tag-filter-pattern",
 			Usage: "Regular expression of tag filter. Is specified, only matched tags will be picked",
 		},
 
-		cli.StringFlag{
-			Name:   "jira-url",
-			Usage:  "Jira URL",
-			EnvVar: "JIRA_URL",
+		// jira-url
+		&cli.StringFlag{
+			Name:    "jira-url",
+			Usage:   "Jira URL",
+			EnvVars: []string{"JIRA_URL"},
 		},
 
-		cli.StringFlag{
-			Name:   "jira-username",
-			Usage:  "Jira username",
-			EnvVar: "JIRA_USERNAME",
+		// jira-username
+		&cli.StringFlag{
+			Name:    "jira-username",
+			Usage:   "Jira username",
+			EnvVars: []string{"JIRA_USERNAME"},
 		},
 
-		cli.StringFlag{
-			Name:   "jira-token",
-			Usage:  "Jira token",
-			EnvVar: "JIRA_TOKEN",
+		// jira-token
+		&cli.StringFlag{
+			Name:    "jira-token",
+			Usage:   "Jira token",
+			EnvVars: []string{"JIRA_TOKEN"},
 		},
 
 		// help & version

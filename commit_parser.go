@@ -2,7 +2,6 @@ package chglog
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -49,6 +48,7 @@ func joinAndQuoteMeta(list []string, sep string) string {
 }
 
 type commitParser struct {
+	logger                 *Logger
 	client                 gitcmd.Client
 	jiraClient             JiraClient
 	config                 *Config
@@ -62,7 +62,7 @@ type commitParser struct {
 	reJiraIssueDescription *regexp.Regexp
 }
 
-func newCommitParser(client gitcmd.Client, jiraClient JiraClient, config *Config) *commitParser {
+func newCommitParser(logger *Logger, client gitcmd.Client, jiraClient JiraClient, config *Config) *commitParser {
 	opts := config.Options
 
 	joinedRefActions := joinAndQuoteMeta(opts.RefActions, "|")
@@ -70,8 +70,9 @@ func newCommitParser(client gitcmd.Client, jiraClient JiraClient, config *Config
 	joinedNoteKeywords := joinAndQuoteMeta(opts.NoteKeywords, "|")
 
 	return &commitParser{
+		logger:                 logger,
 		client:                 client,
-		jiraClient: jiraClient,
+		jiraClient:             jiraClient,
 		config:                 config,
 		reHeader:               regexp.MustCompile(opts.HeaderPattern),
 		reMerge:                regexp.MustCompile(opts.MergePattern),
@@ -358,7 +359,7 @@ func (p *commitParser) uniqMentions(mentions []string) []string {
 func (p *commitParser) processJiraIssue(commit *Commit, issueId string) {
 	issue, err := p.jiraClient.GetJiraIssue(commit.JiraIssueId)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to parse Jira story %s: %s\n", issueId, err)
+		p.logger.Error(fmt.Sprintf("Failed to parse Jira story %s: %s\n", issueId, err))
 		return
 	}
 	commit.Type = p.config.Options.JiraTypeMaps[issue.Fields.Type.Name]
