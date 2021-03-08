@@ -44,6 +44,7 @@
       - [`options.notes`](#optionsnotes)
   - [Templates](#templates)
   - [Supported Styles](#supported-styles)
+  - [Jira Integration](#jira-integration)
   - [FAQ](#faq)
   - [TODO](#todo)
   - [Thanks](#thanks)
