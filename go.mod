@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.2.8
-	github.com/andygrunwald/go-jira v1.13.0 // indirect
+	github.com/andygrunwald/go-jira v1.13.0
 	github.com/fatih/color v1.10.0
 	github.com/imdario/mergo v0.3.11
 	github.com/kyokomi/emoji/v2 v2.2.8
