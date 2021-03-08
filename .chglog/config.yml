@@ -18,7 +18,7 @@ options:
       perf: Performance Improvements
       refactor: Code Refactoring
   header:
-    pattern: "^(\\w*)[\\[(\\w*)\\]]\\:\\s(.*)$"
+    pattern: "^(?:(\\w*)|(?:\\[(.*)\\])?)\\:\\s(.*)$"
     pattern_maps:
       - Type
       - JiraIssueId
@@ -27,10 +27,10 @@ options:
     keywords:
       - BREAKING CHANGE
   jira:
-    info:
-      username: u
-      token: p
-      url: https://jira.com
+    #info:
+      #username: <jira-username>
+      #token: <jira-password>
+      #url: <https://jira.com>
     issue:
       type_maps:
         Task: fix
