@@ -81,8 +81,11 @@ func (q *questionerImpl) ask() (*Answer, error) {
 	tpls := q.getPreviewableList(templates)
 
 	var previewableTransform = func(ans interface{}) (newAns interface{}) {
-		if s, ok := ans.(string); ok {
-			newAns = q.parsePreviewableList(s)
+		if s, ok := ans.(survey.OptionAnswer); ok {
+			newAns = survey.OptionAnswer{
+				Value: q.parsePreviewableList(s.Value),
+				Index: s.Index,
+			}
 		}
 		return
 	}
