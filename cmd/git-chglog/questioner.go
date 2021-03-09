@@ -87,7 +87,6 @@ func (q *questionerImpl) ask() (*Answer, error) {
 				Index: s.Index,
 			}
 		}
-
 		return
 	}
 

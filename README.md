@@ -506,7 +506,7 @@ The following is a sample pattern:
 
   ```yaml
   header:
-    pattern: "^(\\w*)[\\[(\\w*)\\]]\\:\\s(.*)$"
+    pattern: "^(?:(\\w*)|(?:\\[(.*)\\])?)\\:\\s(.*)$"
     pattern_maps:
       - Type
       - JiraIssueId

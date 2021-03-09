@@ -18,21 +18,10 @@ options:
       perf: Performance Improvements
       refactor: Code Refactoring
   header:
-    pattern: "^(?:(\\w*)|(?:\\[(.*)\\])?)\\:\\s(.*)$"
+    pattern: "^(\\w*)\\:\\s(.*)$"
     pattern_maps:
       - Type
-      - JiraIssueId
       - Subject
   notes:
     keywords:
       - BREAKING CHANGE
-  jira:
-    #info:
-      #username: <jira-username>
-      #token: <jira-password>
-      #url: <https://jira.com>
-    issue:
-      type_maps:
-        Task: fix
-        Story: feat
-      description_pattern: "<changelog>(.*)</changelog>"
