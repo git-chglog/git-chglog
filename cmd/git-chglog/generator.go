@@ -8,7 +8,7 @@ import (
 
 // Generator ...
 type Generator interface {
-	Generate(io.Writer, string, *chglog.Config) error
+	Generate(*chglog.Logger, io.Writer, string, *chglog.Config) error
 }
 
 type generatorImpl struct{}
@@ -19,6 +19,6 @@ func NewGenerator() Generator {
 }
 
 // Generate ...
-func (*generatorImpl) Generate(w io.Writer, query string, config *chglog.Config) error {
-	return chglog.NewGenerator(config).Generate(w, query)
+func (*generatorImpl) Generate(logger *chglog.Logger, w io.Writer, query string, config *chglog.Config) error {
+	return chglog.NewGenerator(logger, config).Generate(w, query)
 }

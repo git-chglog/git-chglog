@@ -1,0 +1,1 @@
+@@__CHGLOG__@@HASH:65cf1add9735dcc4810dda3312b0792236c97c4e	65cf1add@@__CHGLOG_DELIMITER__@@AUTHOR:tsuyoshi wada	mail@example.com	1514808000@@__CHGLOG_DELIMITER__@@COMMITTER:tsuyoshi wada	mail@example.com	1514808000@@__CHGLOG_DELIMITER__@@SUBJECT:[JIRA-1111]: Add new feature #123@@__CHGLOG_DELIMITER__@@BODY: This is body message.

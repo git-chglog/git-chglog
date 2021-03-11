@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/git-chglog/git-chglog"
 	"path/filepath"
 
 	"github.com/fatih/color"
@@ -13,7 +14,7 @@ type Initializer struct {
 	ctx                    *InitContext
 	client                 gitcmd.Client
 	fs                     FileSystem
-	logger                 *Logger
+	logger                 *chglog.Logger
 	questioner             Questioner
 	configBuilder          ConfigBuilder
 	templateBuilderFactory TemplateBuilderFactory
@@ -29,7 +30,7 @@ func NewInitializer(
 	return &Initializer{
 		ctx:                    ctx,
 		fs:                     fs,
-		logger:                 NewLogger(ctx.Stdout, ctx.Stderr, false, false),
+		logger:                 chglog.NewLogger(ctx.Stdout, ctx.Stderr, false, false),
 		questioner:             questioner,
 		configBuilder:          configBuilder,
 		templateBuilderFactory: tplBuilderFactory,

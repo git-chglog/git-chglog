@@ -1,12 +1,13 @@
 package chglog
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
-	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
+	"github.com/tsuyoshiwada/go-gitcmd"
 )
 
 var (
@@ -47,18 +48,21 @@ func joinAndQuoteMeta(list []string, sep string) string {
 }
 
 type commitParser struct {
-	client    gitcmd.Client
-	config    *Config
-	reHeader  *regexp.Regexp
-	reMerge   *regexp.Regexp
-	reRevert  *regexp.Regexp
-	reRef     *regexp.Regexp
-	reIssue   *regexp.Regexp
-	reNotes   *regexp.Regexp
-	reMention *regexp.Regexp
+	logger                 *Logger
+	client                 gitcmd.Client
+	jiraClient             JiraClient
+	config                 *Config
+	reHeader               *regexp.Regexp
+	reMerge                *regexp.Regexp
+	reRevert               *regexp.Regexp
+	reRef                  *regexp.Regexp
+	reIssue                *regexp.Regexp
+	reNotes                *regexp.Regexp
+	reMention              *regexp.Regexp
+	reJiraIssueDescription *regexp.Regexp
 }
 
-func newCommitParser(client gitcmd.Client, config *Config) *commitParser {
+func newCommitParser(logger *Logger, client gitcmd.Client, jiraClient JiraClient, config *Config) *commitParser {
 	opts := config.Options
 
 	joinedRefActions := joinAndQuoteMeta(opts.RefActions, "|")
@@ -66,15 +70,18 @@ func newCommitParser(client gitcmd.Client, config *Config) *commitParser {
 	joinedNoteKeywords := joinAndQuoteMeta(opts.NoteKeywords, "|")
 
 	return &commitParser{
-		client:    client,
-		config:    config,
-		reHeader:  regexp.MustCompile(opts.HeaderPattern),
-		reMerge:   regexp.MustCompile(opts.MergePattern),
-		reRevert:  regexp.MustCompile(opts.RevertPattern),
-		reRef:     regexp.MustCompile("(?i)(" + joinedRefActions + ")\\s?([\\w/\\.\\-]+)?(?:" + joinedIssuePrefix + ")(\\d+)"),
-		reIssue:   regexp.MustCompile("(?:" + joinedIssuePrefix + ")(\\d+)"),
-		reNotes:   regexp.MustCompile("^(?i)\\s*(" + joinedNoteKeywords + ")[:\\s]+(.*)"),
-		reMention: regexp.MustCompile("@([\\w-]+)"),
+		logger:                 logger,
+		client:                 client,
+		jiraClient:             jiraClient,
+		config:                 config,
+		reHeader:               regexp.MustCompile(opts.HeaderPattern),
+		reMerge:                regexp.MustCompile(opts.MergePattern),
+		reRevert:               regexp.MustCompile(opts.RevertPattern),
+		reRef:                  regexp.MustCompile("(?i)(" + joinedRefActions + ")\\s?([\\w/\\.\\-]+)?(?:" + joinedIssuePrefix + ")(\\d+)"),
+		reIssue:                regexp.MustCompile("(?:" + joinedIssuePrefix + ")(\\d+)"),
+		reNotes:                regexp.MustCompile("^(?i)\\s*(" + joinedNoteKeywords + ")[:\\s]+(.*)"),
+		reMention:              regexp.MustCompile("@([\\w-]+)"),
+		reJiraIssueDescription: regexp.MustCompile(opts.JiraIssueDescriptionPattern),
 	}
 }
 
@@ -206,6 +213,11 @@ func (p *commitParser) processHeader(commit *Commit, input string) {
 	// refs & mentions
 	commit.Refs = p.parseRefs(input)
 	commit.Mentions = p.parseMentions(input)
+
+	// Jira
+	if commit.JiraIssueId != "" {
+		p.processJiraIssue(commit, commit.JiraIssueId)
+	}
 }
 
 func (p *commitParser) processBody(commit *Commit, input string) {
@@ -342,6 +354,28 @@ func (p *commitParser) uniqMentions(mentions []string) []string {
 	}
 
 	return arr
+}
+
+func (p *commitParser) processJiraIssue(commit *Commit, issueId string) {
+	issue, err := p.jiraClient.GetJiraIssue(commit.JiraIssueId)
+	if err != nil {
+		p.logger.Error(fmt.Sprintf("Failed to parse Jira story %s: %s\n", issueId, err))
+		return
+	}
+	commit.Type = p.config.Options.JiraTypeMaps[issue.Fields.Type.Name]
+	commit.JiraIssue = &JiraIssue{
+		Type:        issue.Fields.Type.Name,
+		Summary:     issue.Fields.Summary,
+		Description: issue.Fields.Description,
+		Labels:      issue.Fields.Labels,
+	}
+
+	if p.config.Options.JiraIssueDescriptionPattern != "" {
+		res := p.reJiraIssueDescription.FindStringSubmatch(commit.JiraIssue.Description)
+		if len(res) > 1 {
+			commit.JiraIssue.Description = res[1]
+		}
+	}
 }
 
 var (
