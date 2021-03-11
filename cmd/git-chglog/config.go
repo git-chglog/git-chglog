@@ -49,6 +49,24 @@ type NoteOptions struct {
 	Keywords []string `yaml:"keywords"`
 }
 
+type JiraClientInfoOptions struct {
+	Username string `yaml:"username"`
+	Token    string `yaml:"token"`
+	URL      string `yaml:"url"`
+}
+
+// JiraIssueOptions ...
+type JiraIssueOptions struct {
+	TypeMaps           map[string]string `yaml:"type_maps"`
+	DescriptionPattern string            `yaml:"description_pattern"`
+}
+
+// JiraOptions ...
+type JiraOptions struct {
+	ClintInfo JiraClientInfoOptions `yaml:"info"`
+	Issue     JiraIssueOptions      `yaml:"issue"`
+}
+
 // Options ...
 type Options struct {
 	TagFilterPattern string             `yaml:"tag_filter_pattern"`
@@ -60,6 +78,7 @@ type Options struct {
 	Merges           PatternOptions     `yaml:"merges"`
 	Reverts          PatternOptions     `yaml:"reverts"`
 	Notes            NoteOptions        `yaml:"notes"`
+	Jira             JiraOptions        `yaml:"jira"`
 }
 
 // Config ...
@@ -245,6 +264,13 @@ func (config *Config) normalizeStyleOfBitbucket() {
 	config.Options = opts
 }
 
+func orValue(str1 string, str2 string) string {
+	if str1 != "" {
+		return str1
+	}
+	return str2
+}
+
 // Convert ...
 func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 	info := config.Info
@@ -257,30 +283,34 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 	return &chglog.Config{
 		Bin:        config.Bin,
 		WorkingDir: ctx.WorkingDir,
-		Template:   config.Template,
+		Template:   orValue(ctx.Template, config.Template),
 		Info: &chglog.Info{
 			Title:         info.Title,
-			RepositoryURL: info.RepositoryURL,
+			RepositoryURL: orValue(ctx.RepositoryUrl, info.RepositoryURL),
 		},
 		Options: &chglog.Options{
-			NextTag:               ctx.NextTag,
-			TagFilterPattern:      ctx.TagFilterPattern,
-			NoCaseSensitive:       ctx.NoCaseSensitive,
-			CommitFilters:         opts.Commits.Filters,
-			CommitSortBy:          opts.Commits.SortBy,
-			CommitGroupBy:         opts.CommitGroups.GroupBy,
-			CommitGroupSortBy:     opts.CommitGroups.SortBy,
-			CommitGroupTitleMaps:  opts.CommitGroups.TitleMaps,
-			CommitGroupTitleOrder: opts.CommitGroups.TitleOrder,
-			HeaderPattern:         opts.Header.Pattern,
-			HeaderPatternMaps:     opts.Header.PatternMaps,
-			IssuePrefix:           opts.Issues.Prefix,
-			RefActions:            opts.Refs.Actions,
-			MergePattern:          opts.Merges.Pattern,
-			MergePatternMaps:      opts.Merges.PatternMaps,
-			RevertPattern:         opts.Reverts.Pattern,
-			RevertPatternMaps:     opts.Reverts.PatternMaps,
-			NoteKeywords:          opts.Notes.Keywords,
+			NextTag:                     ctx.NextTag,
+			TagFilterPattern:            ctx.TagFilterPattern,
+			NoCaseSensitive:             ctx.NoCaseSensitive,
+			CommitFilters:               opts.Commits.Filters,
+			CommitSortBy:                opts.Commits.SortBy,
+			CommitGroupBy:               opts.CommitGroups.GroupBy,
+			CommitGroupSortBy:           opts.CommitGroups.SortBy,
+			CommitGroupTitleMaps:        opts.CommitGroups.TitleMaps,
+			HeaderPattern:               opts.Header.Pattern,
+			HeaderPatternMaps:           opts.Header.PatternMaps,
+			IssuePrefix:                 opts.Issues.Prefix,
+			RefActions:                  opts.Refs.Actions,
+			MergePattern:                opts.Merges.Pattern,
+			MergePatternMaps:            opts.Merges.PatternMaps,
+			RevertPattern:               opts.Reverts.Pattern,
+			RevertPatternMaps:           opts.Reverts.PatternMaps,
+			NoteKeywords:                opts.Notes.Keywords,
+			JiraUsername:                orValue(ctx.JiraUsername, opts.Jira.ClintInfo.Username),
+			JiraToken:                   orValue(ctx.JiraToken, opts.Jira.ClintInfo.Token),
+			JiraUrl:                     orValue(ctx.JiraUrl, opts.Jira.ClintInfo.URL),
+			JiraTypeMaps:                opts.Jira.Issue.TypeMaps,
+			JiraIssueDescriptionPattern: opts.Jira.Issue.DescriptionPattern,
 		},
 	}
 }

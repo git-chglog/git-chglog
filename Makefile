@@ -7,7 +7,7 @@ clean:
 
 .PHONY: build
 build:
-	go build -i -o git-chglog ./cmd/git-chglog
+	go build -o git-chglog ./cmd/git-chglog
 
 .PHONY: test
 test:

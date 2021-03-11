@@ -16,25 +16,30 @@ import (
 
 // Options is an option used to process commits
 type Options struct {
-	Processor             Processor
-	NextTag               string              // Treat unreleased commits as specified tags (EXPERIMENTAL)
-	TagFilterPattern      string              // Filter tag by regexp
-	NoCaseSensitive       bool                // Filter commits in a case insensitive way
-	CommitFilters         map[string][]string // Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value
-	CommitSortBy          string              // Property name to use for sorting `Commit` (e.g. `Scope`)
-	CommitGroupBy         string              // Property name of `Commit` to be grouped into `CommitGroup` (e.g. `Type`)
-	CommitGroupSortBy     string              // Property name to use for sorting `CommitGroup` (e.g. `Title`)
-	CommitGroupTitleOrder []string            // Predefined sorted list of titles to use for sorting `CommitGroup`. Only if `CommitGroupSortBy` is `Custom`
-	CommitGroupTitleMaps  map[string]string   // Map for `CommitGroup` title conversion
-	HeaderPattern         string              // A regular expression to use for parsing the commit header
-	HeaderPatternMaps     []string            // A rule for mapping the result of `HeaderPattern` to the property of `Commit`
-	IssuePrefix           []string            // Prefix used for issues (e.g. `#`, `gh-`)
-	RefActions            []string            // Word list of `Ref.Action`
-	MergePattern          string              // A regular expression to use for parsing the merge commit
-	MergePatternMaps      []string            // Similar to `HeaderPatternMaps`
-	RevertPattern         string              // A regular expression to use for parsing the revert commit
-	RevertPatternMaps     []string            // Similar to `HeaderPatternMaps`
-	NoteKeywords          []string            // Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`)
+	Processor                   Processor
+	NextTag                     string              // Treat unreleased commits as specified tags (EXPERIMENTAL)
+	TagFilterPattern            string              // Filter tag by regexp
+	NoCaseSensitive             bool                // Filter commits in a case insensitive way
+	CommitFilters               map[string][]string // Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value
+	CommitSortBy                string              // Property name to use for sorting `Commit` (e.g. `Scope`)
+	CommitGroupBy               string              // Property name of `Commit` to be grouped into `CommitGroup` (e.g. `Type`)
+	CommitGroupSortBy           string              // Property name to use for sorting `CommitGroup` (e.g. `Title`)
+	CommitGroupTitleOrder       []string            // Predefined sorted list of titles to use for sorting `CommitGroup`. Only if `CommitGroupSortBy` is `Custom`
+	CommitGroupTitleMaps        map[string]string   // Map for `CommitGroup` title conversion
+	HeaderPattern               string              // A regular expression to use for parsing the commit header
+	HeaderPatternMaps           []string            // A rule for mapping the result of `HeaderPattern` to the property of `Commit`
+	IssuePrefix                 []string            // Prefix used for issues (e.g. `#`, `gh-`)
+	RefActions                  []string            // Word list of `Ref.Action`
+	MergePattern                string              // A regular expression to use for parsing the merge commit
+	MergePatternMaps            []string            // Similar to `HeaderPatternMaps`
+	RevertPattern               string              // A regular expression to use for parsing the revert commit
+	RevertPatternMaps           []string            // Similar to `HeaderPatternMaps`
+	NoteKeywords                []string            // Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`)
+	JiraUsername                string
+	JiraToken                   string
+	JiraUrl                     string
+	JiraTypeMaps                map[string]string
+	JiraIssueDescriptionPattern string
 }
 
 // Info is metadata related to CHANGELOG
@@ -97,10 +102,12 @@ type Generator struct {
 }
 
 // NewGenerator receives `Config` and create an new `Generator`
-func NewGenerator(config *Config) *Generator {
+func NewGenerator(logger *Logger, config *Config) *Generator {
 	client := gitcmd.New(&gitcmd.Config{
 		Bin: config.Bin,
 	})
+
+	jiraClient := NewJiraClient(config)
 
 	if config.Options.Processor != nil {
 		config.Options.Processor.Bootstrap(config)
@@ -113,7 +120,7 @@ func NewGenerator(config *Config) *Generator {
 		config:          config,
 		tagReader:       newTagReader(client, config.Options.TagFilterPattern),
 		tagSelector:     newTagSelector(),
-		commitParser:    newCommitParser(client, config),
+		commitParser:    newCommitParser(logger, client, jiraClient, config),
 		commitExtractor: newCommitExtractor(config.Options),
 	}
 }

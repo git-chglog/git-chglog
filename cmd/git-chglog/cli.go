@@ -14,7 +14,7 @@ import (
 type CLI struct {
 	ctx              *CLIContext
 	fs               FileSystem
-	logger           *Logger
+	logger           *chglog.Logger
 	configLoader     ConfigLoader
 	generator        Generator
 	processorFactory *ProcessorFactory
@@ -34,7 +34,7 @@ func NewCLI(
 	return &CLI{
 		ctx:              ctx,
 		fs:               fs,
-		logger:           NewLogger(ctx.Stdout, ctx.Stderr, silent, ctx.NoEmoji),
+		logger:           chglog.NewLogger(ctx.Stdout, ctx.Stderr, silent, ctx.NoEmoji),
 		configLoader:     configLoader,
 		generator:        generator,
 		processorFactory: NewProcessorFactory(),
@@ -69,7 +69,7 @@ func (c *CLI) Run() int {
 		return ExitCodeError
 	}
 
-	err = c.generator.Generate(w, c.ctx.Query, changelogConfig)
+	err = c.generator.Generate(c.logger, w, c.ctx.Query, changelogConfig)
 	if err != nil {
 		c.logger.Error(err.Error())
 		return ExitCodeError

@@ -10,6 +10,8 @@ type CLIContext struct {
 	Stdout           io.Writer
 	Stderr           io.Writer
 	ConfigPath       string
+	Template         string
+	RepositoryUrl    string
 	OutputPath       string
 	Silent           bool
 	NoColor          bool
@@ -18,6 +20,9 @@ type CLIContext struct {
 	Query            string
 	NextTag          string
 	TagFilterPattern string
+	JiraUsername     string
+	JiraToken        string
+	JiraUrl          string
 }
 
 // InitContext ...
