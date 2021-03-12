@@ -23,6 +23,7 @@ type CLIContext struct {
 	JiraUsername     string
 	JiraToken        string
 	JiraUrl          string
+	Paths            []string
 }
 
 // InitContext ...
