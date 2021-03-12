@@ -25,6 +25,79 @@ func newTagReader(client gitcmd.Client, filterPattern string) *tagReader {
 	}
 }
 
+func (r *tagReader) ReadRange(query string) ([]*Tag, error) {
+	// First get all of the tags and fetch the author / date
+	out, err := r.client.Exec(
+		"for-each-ref",
+		"--format",
+		"%(refname)"+r.separator+"%(subject)"+r.separator+"%(taggerdate)"+r.separator+"%(authordate)",
+		"refs/tags",
+	)
+
+	allTags := make(map[string]Tag)
+	desiredTags := []*Tag{}
+
+	if err != nil {
+		return desiredTags, fmt.Errorf("failed to get git-tag: %s", err.Error())
+	}
+
+	lines := strings.Split(out, "\n")
+
+	for _, line := range lines {
+		tokens := strings.Split(line, r.separator)
+
+		if len(tokens) != 4 {
+			continue
+		}
+
+		name := r.parseRefname(tokens[0])
+		subject := r.parseSubject(tokens[1])
+		date, err := r.parseDate(tokens[2])
+		if err != nil {
+			t, err2 := r.parseDate(tokens[3])
+			if err2 != nil {
+				return nil, err2
+			}
+			date = t
+		}
+
+		allTags[name] = Tag{
+			Name:    name,
+			Subject: subject,
+			Date:    date,
+		}
+	}
+
+	// after fetching all of the tags in the repo, walk the tree specified by the query
+	// i.e. `git log --pretty=%D --simplify-by-decoration RefA..RefB`
+
+	walkRefs, err := r.client.Exec(
+		"log",
+		"--pretty=%D",
+		"--simplify-by-decoration",
+		query)
+
+	lines2 := strings.Split(walkRefs, "\n")
+	for _, line2 := range lines2 {
+		tokens := strings.Split(line2, ",")
+
+		for _, observedRef := range tokens {
+			refTokens := strings.Split(observedRef, " ")
+			if refTokens[0] == "tag:" {
+				desiredTags = append(desiredTags, &Tag{
+					Date:    allTags[refTokens[1]].Date,
+					Name:    refTokens[1],
+					Subject: allTags[refTokens[1]].Subject,
+				})
+			}
+		}
+
+	}
+	r.assignPreviousAndNextTag(desiredTags)
+	return desiredTags, nil
+
+}
+
 func (r *tagReader) ReadAll() ([]*Tag, error) {
 	out, err := r.client.Exec(
 		"for-each-ref",
