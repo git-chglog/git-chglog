@@ -89,13 +89,15 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 		// config
 		&cli.StringFlag{
 			Name:  "config, c",
+			Aliases: []string{"c"},
 			Usage: "specifies a different configuration file to pick up",
 			Value: ".chglog/config.yml",
 		},
 
 		// template
 		&cli.StringFlag{
-			Name:  "template, t",
+			Name:  "template",
+			Aliases: []string{"t"},
 			Usage: "specifies a template file to pick up. If not specified, use the one in config",
 		},
 
@@ -107,7 +109,8 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 
 		// output
 		&cli.StringFlag{
-			Name:  "output, o",
+			Name:  "output",
+			Aliases: []string{"o"},
 			Usage: "output path and filename for the changelogs. If not specified, output to stdout",
 		},
 
