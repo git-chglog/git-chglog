@@ -182,6 +182,7 @@ USAGE:
 
 OPTIONS:
   --init                                generate the git-chglog configuration file in interactive
+  --path value                          Filter commits by path(s). Can use multiple times.
   --config value, -c value              specifies a different configuration file to pick up (default: ".chglog/config.yml")
   --output value, -o value              output path and filename for the changelogs. If not specified, output to stdout
   --next-tag value                      treat unreleased commits as specified tags (EXPERIMENTAL)
