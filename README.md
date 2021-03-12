@@ -181,18 +181,23 @@ USAGE:
     4. <name>       - Commit contained in <name>.
 
 OPTIONS:
-  --init                                generate the git-chglog configuration file in interactive
-  --path value                          Filter commits by path(s). Can use multiple times.
-  --config value, -c value              specifies a different configuration file to pick up (default: ".chglog/config.yml")
-  --output value, -o value              output path and filename for the changelogs. If not specified, output to stdout
-  --next-tag value                      treat unreleased commits as specified tags (EXPERIMENTAL)
-  --silent                              disable stdout output
-  --no-color                            disable color output [$NO_COLOR]
-  --no-emoji                            disable emoji output [$NO_EMOJI]
-  --no-case                             disable case sensitive filters
-  --tag-filter-pattern value, -p value  regular expression of tag filter. Is specified, only matched tags will be picked
-  --help, -h                            show help
-  --version, -v                         print the version
+  --init                      generate the git-chglog configuration file in interactive (default: false)
+  --path value                Filter commits by path(s). Can use multiple times.
+  --config value, -c value    specifies a different configuration file to pick up (default: ".chglog/config.yml")
+  --template value, -t value  specifies a template file to pick up. If not specified, use the one in config
+  --repository-url value      specifies git repo URL. If not specified, use 'repository_url' in config
+  --output value, -o value    output path and filename for the changelogs. If not specified, output to stdout
+  --next-tag value            treat unreleased commits as specified tags (EXPERIMENTAL)
+  --silent                    disable stdout output (default: false)
+  --no-color                  disable color output (default: false) [$NO_COLOR]
+  --no-emoji                  disable emoji output (default: false) [$NO_EMOJI]
+  --no-case                   disable case sensitive filters (default: false)
+  --tag-filter-pattern value  Regular expression of tag filter. Is specified, only matched tags will be picked
+  --jira-url value            Jira URL [$JIRA_URL]
+  --jira-username value       Jira username [$JIRA_USERNAME]
+  --jira-token value          Jira token [$JIRA_TOKEN]
+  --help, -h                  show help (default: false)
+  --version, -v               print the version (default: false)
 
 EXAMPLE:
 
@@ -220,6 +225,10 @@ EXAMPLE:
   $ git-chglog --config custom/dir/config.yml
 
     The above is a command that uses a configuration file placed other than ".chglog/config.yml".
+
+  $ git-chglog --path path/to/my/component --output CHANGELOG.component.md
+
+    Filter commits by specific paths or files in git and output to a component specific changelog.
 ```
 
 ### `tag query`
