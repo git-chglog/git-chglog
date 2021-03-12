@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v0.11.1"></a>
+## [v0.11.1] - 2021-03-12
+
+### Bug Fixes
+- **short flags**: correctly define cli flags with shorthands ([#117](https://github.com/git-chglog/git-chglog/issues/117))
+
 <a name="v0.11.0"></a>
 ## [v0.11.0] - 2021-03-12
 ### Features
@@ -171,7 +177,8 @@ https://github.com/git-chglog/git-chglog/releases/download/v<VERSION>/git-chglog
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.11.1...HEAD
+[v0.11.1]: https://github.com/git-chglog/git-chglog/compare/v0.11.0...v0.11.1
 [v0.11.0]: https://github.com/git-chglog/git-chglog/compare/v0.10.0...v0.11.0
 [v0.10.0]: https://github.com/git-chglog/git-chglog/compare/0.9.1...v0.10.0
 [0.9.1]: https://github.com/git-chglog/git-chglog/compare/0.9.0...0.9.1
