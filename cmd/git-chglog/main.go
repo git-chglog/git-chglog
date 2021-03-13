@@ -88,17 +88,17 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 
 		// config
 		&cli.StringFlag{
-			Name:  "config, c",
+			Name:    "config, c",
 			Aliases: []string{"c"},
-			Usage: "specifies a different configuration file to pick up",
-			Value: ".chglog/config.yml",
+			Usage:   "specifies a different configuration file to pick up",
+			Value:   ".chglog/config.yml",
 		},
 
 		// template
 		&cli.StringFlag{
-			Name:  "template",
+			Name:    "template",
 			Aliases: []string{"t"},
-			Usage: "specifies a template file to pick up. If not specified, use the one in config",
+			Usage:   "specifies a template file to pick up. If not specified, use the one in config",
 		},
 
 		// repository url
@@ -109,9 +109,9 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 
 		// output
 		&cli.StringFlag{
-			Name:  "output",
+			Name:    "output",
 			Aliases: []string{"o"},
-			Usage: "output path and filename for the changelogs. If not specified, output to stdout",
+			Usage:   "output path and filename for the changelogs. If not specified, output to stdout",
 		},
 
 		&cli.StringFlag{
@@ -218,6 +218,8 @@ func AppAction(c *cli.Context) error {
 			Stdout:           colorable.NewColorableStdout(),
 			Stderr:           colorable.NewColorableStderr(),
 			ConfigPath:       c.String("config"),
+			Template:         c.String("template"),
+			RepositoryUrl:    c.String("repository-url"),
 			OutputPath:       c.String("output"),
 			Silent:           c.Bool("silent"),
 			NoColor:          c.Bool("no-color"),
