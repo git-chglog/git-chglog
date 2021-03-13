@@ -16,11 +16,10 @@ builds:
       - windows
       - darwin
     goarch:
+      - 386
       - amd64
       - arm
       - arm64
-    goarm:
-      - 6
 
 archives:
   - format_overrides:
