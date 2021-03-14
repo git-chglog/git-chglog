@@ -45,6 +45,9 @@
   - [Templates](#templates)
   - [Supported Styles](#supported-styles)
   - [Jira Integration](#jira-integration)
+      - [1. Change the header parse pattern to recognize Jira issue id in the configure file.](#1-change-the-header-parse-pattern-to-recognize-jira-issue-id-in-the-configure-file)
+      - [2. Add Jira configuration to the configure file.](#2-add-jira-configuration-to-the-configure-file)
+      - [3. Update the template to show Jira data.](#3-update-the-template-to-show-jira-data)
   - [FAQ](#faq)
   - [TODO](#todo)
   - [Thanks](#thanks)
@@ -639,6 +642,7 @@ We alway welcome your contributions :clap:
 
 ### Development
 
+1. Use Golang version `>= 1.16`
 1. Fork (https://github.com/git-chglog/git-chglog) :tada:
 1. Create a feature branch :coffee:
 1. Run test suite with the `$ make test` command and confirm that it passes :zap:
