@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
 
 	"github.com/fatih/color"
@@ -245,5 +246,8 @@ func AppAction(c *cli.Context) error {
 
 func main() {
 	app := CreateApp(AppAction)
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

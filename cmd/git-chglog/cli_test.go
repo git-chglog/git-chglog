@@ -36,7 +36,7 @@ func TestCLIForStdout(t *testing.T) {
 			if config.Bin != "/custom/bin/git" {
 				return errors.New("")
 			}
-			w.Write([]byte("success!!"))
+			_, _ = w.Write([]byte("success!!"))
 			return nil
 		},
 	}
@@ -104,7 +104,7 @@ func TestCLIForFile(t *testing.T) {
 			if filepath.ToSlash(config.Bin) != "/custom/bin/git" {
 				return errors.New("")
 			}
-			w.Write([]byte("success!!"))
+			_, _ = w.Write([]byte("success!!"))
 			return nil
 		},
 	}

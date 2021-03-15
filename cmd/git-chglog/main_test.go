@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/urfave/cli/v2"
+	"log"
 	"testing"
 )
 
@@ -36,5 +37,8 @@ func TestCreateApp(t *testing.T) {
 		"--next-tag", "v5",
 		"--tag-filter-pattern", "^v",
 	}
-	app.Run(args)
+	err := app.Run(args)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

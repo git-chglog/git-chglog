@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -138,7 +139,12 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 	if err != nil {
 		return err
 	}
-	defer back()
+	defer func() {
+		err := back()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	tags, first, err := gen.getTags(query)
 	if err != nil {
