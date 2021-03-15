@@ -104,8 +104,8 @@ func TestTagReader(t *testing.T) {
 		actual,
 	)
 
-	actual_filtered, err_filtered := newTagReader(client, "^v").ReadAll()
-	assert.Nil(err_filtered)
+	actualFiltered, errFiltered := newTagReader(client, "^v").ReadAll()
+	assert.Nil(errFiltered)
 	assert.Equal(
 		[]*Tag{
 			&Tag{
@@ -116,6 +116,6 @@ func TestTagReader(t *testing.T) {
 				Previous: nil,
 			},
 		},
-		actual_filtered,
+		actualFiltered,
 	)
 }

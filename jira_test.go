@@ -29,7 +29,7 @@ func TestJira(t *testing.T) {
 			NoteKeywords:                nil,
 			JiraUsername:                "uuu",
 			JiraToken:                   "ppp",
-			JiraUrl:                     "http://jira.com",
+			JiraURL:                     "http://jira.com",
 			JiraTypeMaps:                nil,
 			JiraIssueDescriptionPattern: "",
 		},

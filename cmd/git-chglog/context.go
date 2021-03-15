@@ -11,7 +11,7 @@ type CLIContext struct {
 	Stderr           io.Writer
 	ConfigPath       string
 	Template         string
-	RepositoryUrl    string
+	RepositoryURL    string
 	OutputPath       string
 	Silent           bool
 	NoColor          bool
@@ -22,7 +22,7 @@ type CLIContext struct {
 	TagFilterPattern string
 	JiraUsername     string
 	JiraToken        string
-	JiraUrl          string
+	JiraURL          string
 	Paths            []string
 }
 

@@ -391,7 +391,7 @@ func TestCommitParserParseWithJira(t *testing.T) {
 				HeaderPattern: "^(?:(\\w*)|(?:\\[(.*)\\])?)\\:\\s(.*)$",
 				HeaderPatternMaps: []string{
 					"Type",
-					"JiraIssueId",
+					"JiraIssueID",
 					"Subject",
 				},
 				JiraTypeMaps: map[string]string{
@@ -403,7 +403,7 @@ func TestCommitParserParseWithJira(t *testing.T) {
 	commits, err := parser.Parse("HEAD")
 	assert.Nil(err)
 	commit := commits[0]
-	assert.Equal(commit.JiraIssueId, "JIRA-1111")
+	assert.Equal(commit.JiraIssueID, "JIRA-1111")
 	assert.Equal(commit.JiraIssue.Type, "Story")
 	assert.Equal(commit.JiraIssue.Summary, "summary of JIRA-1111")
 	assert.Equal(commit.JiraIssue.Description, "description of JIRA-1111")

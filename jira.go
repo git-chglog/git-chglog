@@ -18,7 +18,7 @@ func NewJiraClient(config *Config) JiraClient {
 	return jiraClient{
 		username: config.Options.JiraUsername,
 		token: config.Options.JiraToken,
-		url: config.Options.JiraUrl,
+		url: config.Options.JiraURL,
 	}
 }
 

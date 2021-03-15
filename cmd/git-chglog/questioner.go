@@ -60,7 +60,7 @@ func (q *questionerImpl) Ask() (*Answer, error) {
 	case t:
 			msg = fmt.Sprintf("\"%s\" already exists. Do you want to overwrite?", tpl)
 	}
-	
+
 	if msg != "" {
 		overwrite := false
 		err = survey.AskOne(&survey.Confirm{

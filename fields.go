@@ -75,7 +75,7 @@ type Commit struct {
 	Type        string   // (e.g. `feat`)
 	Scope       string   // (e.g. `core`)
 	Subject     string   // (e.g. `Add new feature`)
-	JiraIssueId string   // (e.g. `RNWY-310`)
+	JiraIssueID string   // (e.g. `RNWY-310`)
 	Body        string
 }
 

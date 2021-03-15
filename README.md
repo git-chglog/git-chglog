@@ -522,7 +522,7 @@ The following is a sample pattern:
     pattern: "^(?:(\\w*)|(?:\\[(.*)\\])?)\\:\\s(.*)$"
     pattern_maps:
       - Type
-      - JiraIssueId
+      - JiraIssueID
       - Subject
   ```
 
