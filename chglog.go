@@ -325,29 +325,17 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 			return input.Format(layout)
 		},
 		// check whether substr is within s
-		"contains": func(s, substr string) bool {
-			return strings.Contains(s, substr)
-		},
+		"contains": strings.Contains,
 		// check whether s begins with prefix
-		"hasPrefix": func(s, prefix string) bool {
-			return strings.HasPrefix(s, prefix)
-		},
+		"hasPrefix": strings.HasPrefix,
 		// check whether s ends with suffix
-		"hasSuffix": func(s, suffix string) bool {
-			return strings.HasSuffix(s, suffix)
-		},
+		"hasSuffix": strings.HasSuffix,
 		// replace the first n instances of old with new
-		"replace": func(s, old, new string, n int) string {
-			return strings.Replace(s, old, new, n)
-		},
+		"replace": strings.Replace,
 		// lower case a string
-		"lower": func(s string) string {
-			return strings.ToLower(s)
-		},
+		"lower": strings.ToLower,
 		// upper case a string
-		"upper": func(s string) string {
-			return strings.ToUpper(s)
-		},
+		"upper": strings.ToUpper,
 		// upper case the first character of a string
 		"upperFirst": func(s string) string {
 			if len(s) > 0 {

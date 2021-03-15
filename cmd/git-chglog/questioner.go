@@ -52,14 +52,15 @@ func (q *questionerImpl) Ask() (*Answer, error) {
 	t := q.fs.Exists(tpl)
 	msg := ""
 
-	if c && t {
-		msg = fmt.Sprintf("\"%s\" and \"%s\" already exists. Do you want to overwrite?", config, tpl)
-	} else if c {
-		msg = fmt.Sprintf("\"%s\" already exists. Do you want to overwrite?", config)
-	} else if t {
-		msg = fmt.Sprintf("\"%s\" already exists. Do you want to overwrite?", tpl)
+	switch {
+	case c && t:
+			msg = fmt.Sprintf("\"%s\" and \"%s\" already exists. Do you want to overwrite?", config, tpl)
+	case c:
+			msg = fmt.Sprintf("\"%s\" already exists. Do you want to overwrite?", config)
+	case t:
+			msg = fmt.Sprintf("\"%s\" already exists. Do you want to overwrite?", tpl)
 	}
-
+	
 	if msg != "" {
 		overwrite := false
 		err = survey.AskOne(&survey.Confirm{

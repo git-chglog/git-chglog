@@ -256,7 +256,7 @@ change message.`)
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
-	output := strings.Replace(strings.TrimSpace(buf.String()), "\r\n", "\n", -1)
+	output := strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -352,7 +352,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
-	output := strings.Replace(strings.TrimSpace(buf.String()), "\r\n", "\n", -1)
+	output := strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -383,7 +383,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 	buf = &bytes.Buffer{}
 	err = gen.Generate(buf, "3.0.0")
-	output = strings.Replace(strings.TrimSpace(buf.String()), "\r\n", "\n", -1)
+	output = strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>

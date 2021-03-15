@@ -19,14 +19,16 @@ func (s *tagSelector) Select(tags []*Tag, query string) ([]*Tag, string, error) 
 	case 2:
 		old := tokens[0]
 		new := tokens[1]
-		if old == "" && new == "" {
-			return nil, "", nil
-		} else if old == "" {
-			return s.selectBeforeTags(tags, new)
-		} else if new == "" {
-			return s.selectAfterTags(tags, old)
+		switch {
+		case old == "" && new == "":
+				return nil, "", nil
+		case old == "":
+				return s.selectBeforeTags(tags, new)
+		case new == "":
+				return s.selectAfterTags(tags, old)
+		default:
+			return s.selectRangeTags(tags, tokens[0], tokens[1])
 		}
-		return s.selectRangeTags(tags, tokens[0], tokens[1])
 	}
 
 	return nil, "", errFailedQueryParse
