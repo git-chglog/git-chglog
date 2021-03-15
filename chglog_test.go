@@ -463,3 +463,82 @@ func TestGeneratorWithTagFiler(t *testing.T) {
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/v1.0.0...HEAD`, strings.TrimSpace(buf.String()))
 
 }
+
+func TestGeneratorWithTimmedBody(t *testing.T) {
+	assert := assert.New(t)
+	testName := "trimmed_body"
+
+	setup(testName, func(commit commitFunc, tag tagFunc, _ gitcmd.Client) {
+		commit("2018-01-01 00:00:00", "feat: single line commit", "")
+		commit("2018-01-01 00:01:00", "feat: multi-line commit", `
+More details about the change and why it went in.
+
+BREAKING CHANGE:
+
+When using .TrimmedBody Notes are not included and can only appear in the Notes section.
+
+Signed-off-by: First Last <first.last@mail.com>
+
+Co-authored-by: dependabot-preview[bot] <27856297+dependabot-preview[bot]@users.noreply.github.com>`)
+
+		commit("2018-01-01 00:00:00", "feat: another single line commit", "")
+		tag("1.0.0")
+	})
+
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				Title:         "CHANGELOG Example",
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			},
+			Options: &Options{
+				CommitFilters: map[string][]string{
+					"Type": {
+						"feat",
+					},
+				},
+				CommitSortBy:      "Scope",
+				CommitGroupBy:     "Type",
+				CommitGroupSortBy: "Title",
+				CommitGroupTitleMaps: map[string]string{
+					"feat": "Features",
+				},
+				HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"Scope",
+					"Subject",
+				},
+				NoteKeywords: []string{
+					"BREAKING CHANGE",
+				},
+			},
+		})
+
+	buf := &bytes.Buffer{}
+	err := gen.Generate(buf, "")
+	output := strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
+
+	assert.Nil(err)
+	assert.Equal(`<a name="unreleased"></a>
+## [Unreleased]
+
+
+<a name="1.0.0"></a>
+## 1.0.0 - 2018-01-01
+### Features
+- another single line commit
+- multi-line commit
+  More details about the change and why it went in.
+- single line commit
+
+### BREAKING CHANGE
+
+When using .TrimmedBody Notes are not included and can only appear in the Notes section.
+
+
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/1.0.0...HEAD`, output)
+}

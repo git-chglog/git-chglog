@@ -103,13 +103,14 @@ func TestCommitParserParse(t *testing.T) {
 					Source: "",
 				},
 			},
-			Notes:    []*Note{},
-			Mentions: []string{},
-			Header:   "feat(*): Add new feature #123",
-			Type:     "feat",
-			Scope:    "*",
-			Subject:  "Add new feature #123",
-			Body:     "",
+			Notes:       []*Note{},
+			Mentions:    []string{},
+			Header:      "feat(*): Add new feature #123",
+			Type:        "feat",
+			Scope:       "*",
+			Subject:     "Add new feature #123",
+			Body:        "",
+			TrimmedBody: "",
 		},
 		{
 			Hash: &Hash{
@@ -166,6 +167,7 @@ Fixes #3
 Closes #1
 
 BREAKING CHANGE: This is breaking point message.`,
+			TrimmedBody: `This is body message.`,
 		},
 		{
 			Hash: &Hash{
@@ -200,6 +202,7 @@ BREAKING CHANGE: This is breaking point message.`,
 @tsuyoshiwada
 @hogefuga
 @FooBarBaz`,
+			TrimmedBody: `Has mention body`,
 		},
 		{
 			Hash: &Hash{
@@ -280,6 +283,7 @@ class MyController extends Controller {
 
 Fixes #123
 Closes username/repository#456`, "```", "```"),
+			TrimmedBody: `This mixed body message.`,
 		},
 		{
 			Hash: &Hash{
@@ -300,14 +304,15 @@ Closes username/repository#456`, "```", "```"),
 			Revert: &Revert{
 				Header: "fix(core): commit message",
 			},
-			Refs:     []*Ref{},
-			Notes:    []*Note{},
-			Mentions: []string{},
-			Header:   "Revert \"fix(core): commit message\"",
-			Type:     "",
-			Scope:    "",
-			Subject:  "",
-			Body:     "This reverts commit f755db78dcdf461dc42e709b3ab728ceba353d1d.",
+			Refs:        []*Ref{},
+			Notes:       []*Note{},
+			Mentions:    []string{},
+			Header:      "Revert \"fix(core): commit message\"",
+			Type:        "",
+			Scope:       "",
+			Subject:     "",
+			Body:        "This reverts commit f755db78dcdf461dc42e709b3ab728ceba353d1d.",
+			TrimmedBody: "This reverts commit f755db78dcdf461dc42e709b3ab728ceba353d1d.",
 		},
 	}, commits)
 }

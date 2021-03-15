@@ -8,6 +8,12 @@ type Hash struct {
 	Short string
 }
 
+// Contact of co-authors and signers
+type Contact struct {
+	Name  string
+	Email string
+}
+
 // Author of commit
 type Author struct {
 	Name  string
@@ -70,6 +76,8 @@ type Commit struct {
 	Refs        []*Ref
 	Notes       []*Note
 	Mentions    []string   // Name of the user included in the commit header or body
+	CoAuthors   []Contact  // (e.g. `Co-authored-by: user <user@email>`)
+	Signers     []Contact  // (e.g. `Signed-off-by: user <user@email>`)
 	JiraIssue   *JiraIssue // If no issue id found in header, `nil` is assigned
 	Header      string     // (e.g. `feat(core)[RNWY-310]: Add new feature`)
 	Type        string     // (e.g. `feat`)
@@ -77,6 +85,7 @@ type Commit struct {
 	Subject     string     // (e.g. `Add new feature`)
 	JiraIssueID string     // (e.g. `RNWY-310`)
 	Body        string
+	TrimmedBody string // Body without any Notes/Refs/Mentions/CoAuthors/Signers
 }
 
 // CommitGroup is a collection of commits grouped according to the `CommitGroupBy` option
