@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/urfave/cli/v2"
 	"log"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/urfave/cli/v2"
 )
 
 var gAssert *assert.Assertions

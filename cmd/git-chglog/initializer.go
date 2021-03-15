@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/git-chglog/git-chglog"
 	"path/filepath"
 
 	"github.com/fatih/color"
+
+	chglog "github.com/git-chglog/git-chglog"
 )
 
 // Initializer ...

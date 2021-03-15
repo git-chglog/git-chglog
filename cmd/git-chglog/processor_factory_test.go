@@ -3,8 +3,9 @@ package main
 import (
 	"testing"
 
-	chglog "github.com/git-chglog/git-chglog"
 	"github.com/stretchr/testify/assert"
+
+	chglog "github.com/git-chglog/git-chglog"
 )
 
 func TestProcessorFactory(t *testing.T) {
