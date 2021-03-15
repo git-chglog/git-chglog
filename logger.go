@@ -26,7 +26,7 @@ func NewLogger(stdout, stderr io.Writer, silent, noEmoji bool) *Logger {
 		stderr:  stderr,
 		silent:  silent,
 		noEmoji: noEmoji,
-		reEmoji: regexp.MustCompile(":[\\w\\+_\\-]+:\\s?"),
+		reEmoji: regexp.MustCompile(`:[\w\+_\-]+:\s?`),
 	}
 }
 

@@ -40,7 +40,7 @@ func TestLoggerLogNoEmoji(t *testing.T) {
 	stderr := &bytes.Buffer{}
 	logger := NewLogger(stdout, stderr, false, true)
 	logger.Log(":+1:Hello, World! :)")
-	assert.Equal(fmt.Sprint("Hello, World! :)\n"), stdout.String())
+	assert.Equal(fmt.Sprint("Hello, World! :)\n"), stdout.String()) //nolint:gosimple
 }
 
 func TestLoggerError(t *testing.T) {

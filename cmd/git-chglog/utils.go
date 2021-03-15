@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var reSSH = regexp.MustCompile("^\\w+@([\\w\\.\\-]+):([\\w\\.\\-]+)\\/([\\w\\.\\-]+)$")
+var reSSH = regexp.MustCompile(`^\w+@([\w\.\-]+):([\w\.\-]+)\/([\w\.\-]+)$`)
 
 func remoteOriginURLToHTTP(rawurl string) string {
 	if rawurl == "" {

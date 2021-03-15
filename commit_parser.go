@@ -80,7 +80,7 @@ func newCommitParser(logger *Logger, client gitcmd.Client, jiraClient JiraClient
 		reRef:                  regexp.MustCompile("(?i)(" + joinedRefActions + ")\\s?([\\w/\\.\\-]+)?(?:" + joinedIssuePrefix + ")(\\d+)"),
 		reIssue:                regexp.MustCompile("(?:" + joinedIssuePrefix + ")(\\d+)"),
 		reNotes:                regexp.MustCompile("^(?i)\\s*(" + joinedNoteKeywords + ")[:\\s]+(.*)"),
-		reMention:              regexp.MustCompile("@([\\w-]+)"),
+		reMention:              regexp.MustCompile(`@([\w-]+)`),
 		reJiraIssueDescription: regexp.MustCompile(opts.JiraIssueDescriptionPattern),
 	}
 }
