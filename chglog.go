@@ -324,7 +324,7 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 		"datetime": func(layout string, input time.Time) string {
 			return input.Format(layout)
 		},
-		// check whether substs is withing s
+		// check whether substr is within s
 		"contains": func(s, substr string) bool {
 			return strings.Contains(s, substr)
 		},

@@ -193,7 +193,7 @@ func TestGeneratorWithTypeScopeSubject(t *testing.T) {
 		tag("1.1.0")
 
 		commit("2018-01-03 00:00:00", "feat(context): Online breaking change", "BREAKING CHANGE: Online breaking change message.")
-		commit("2018-01-03 00:01:00", "feat(router): Muliple breaking change", `This is body,
+		commit("2018-01-03 00:01:00", "feat(router): Multiple breaking change", `This is body,
 
 BREAKING CHANGE:
 Multiple
@@ -270,7 +270,7 @@ change message.`)
 ## [2.0.0-beta.0] - 2018-01-03
 ### Features
 - **context:** Online breaking change
-- **router:** Muliple breaking change
+- **router:** Multiple breaking change
 
 ### BREAKING CHANGE
 
