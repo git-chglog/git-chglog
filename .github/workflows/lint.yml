@@ -1,0 +1,25 @@
+name: lint
+
+on:
+  pull_request:
+    types: ['opened', 'synchronize']
+  push:
+    branches:
+      - master
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install golangci-lint
+        run: |
+          go get github.com/golangci/golangci-lint/cmd/golangci-lint
+      - name: Run linters
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
+          make lint

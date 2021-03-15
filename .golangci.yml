@@ -1,0 +1,17 @@
+# https://golangci-lint.run/usage/configuration/
+run:
+  timeout: 2m
+
+output:
+  format: tab
+
+linters:
+  enable:
+    - dupl
+    - depguard
+    - gocritic
+    - gocyclo
+    - gofmt
+    - golint
+    - misspell
+    - unconvert

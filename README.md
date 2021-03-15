@@ -646,6 +646,8 @@ We alway welcome your contributions :clap:
 1. Fork (https://github.com/git-chglog/git-chglog) :tada:
 1. Create a feature branch :coffee:
 1. Run test suite with the `$ make test` command and confirm that it passes :zap:
+1. Run linters with the `$ make lint` command and confirm it passes :broom:
+   - The project uses [golangci-lint](https://golangci-lint.run/usage/install/#local-installation)
 1. Commit your changes :memo:
 1. Rebase your local changes against the `master` branch :bulb:
 1. Create new Pull Request :love_letter:
