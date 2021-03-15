@@ -74,7 +74,7 @@ func (f *CommitMessageFormat) PatternMapString() string {
 	return fmt.Sprintf("\n%s", strings.Join(arr, "\n"))
 }
 
-// FilterTypeString ...
+// FilterTypesString ...
 func (f *CommitMessageFormat) FilterTypesString() string {
 	if len(f.typeSamples) == 0 {
 		return " []"

@@ -50,6 +50,7 @@ type NoteOptions struct {
 	Keywords []string `yaml:"keywords"`
 }
 
+// JiraClientInfoOptions ...
 type JiraClientInfoOptions struct {
 	Username string `yaml:"username"`
 	Token    string `yaml:"token"`

@@ -52,7 +52,7 @@ type NoteGroup struct {
 	Notes []*Note
 }
 
-// JiraIssue
+// JiraIssue is information about a jira ticket (type, summary, description, and labels)
 type JiraIssue struct {
 	Type        string
 	Summary     string

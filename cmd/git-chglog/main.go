@@ -12,6 +12,8 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// CreateApp creates and initializes CLI application
+// with description, flags, version, etc.
 func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 	ttl := color.New(color.FgYellow).SprintFunc()
 
@@ -183,6 +185,8 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 	return app
 }
 
+// AppAction is a callback function to create initializer
+// and CLIContext and ultimately run the application.
 func AppAction(c *cli.Context) error {
 	wd, err := os.Getwd()
 	if err != nil {
