@@ -216,7 +216,7 @@ change message.`)
 			},
 			Options: &Options{
 				CommitFilters: map[string][]string{
-					"Type": []string{
+					"Type": {
 						"feat",
 						"fix",
 					},
@@ -331,7 +331,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 			Options: &Options{
 				NextTag: "3.0.0",
 				CommitFilters: map[string][]string{
-					"Type": []string{
+					"Type": {
 						"feat",
 					},
 				},
@@ -424,7 +424,7 @@ func TestGeneratorWithTagFiler(t *testing.T) {
 			Options: &Options{
 				TagFilterPattern: "^v",
 				CommitFilters: map[string][]string{
-					"Type": []string{
+					"Type": {
 						"feat",
 					},
 				},

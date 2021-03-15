@@ -20,14 +20,14 @@ func TestCommitExtractor(t *testing.T) {
 
 	fixtures := []*Commit{
 		// [0]
-		&Commit{
+		{
 			Type:   "foo",
 			Scope:  "c",
 			Header: "1",
 			Notes:  []*Note{},
 		},
 		// [1]
-		&Commit{
+		{
 			Type:   "foo",
 			Scope:  "b",
 			Header: "2",
@@ -37,7 +37,7 @@ func TestCommitExtractor(t *testing.T) {
 			},
 		},
 		// [2]
-		&Commit{
+		{
 			Type:   "bar",
 			Scope:  "d",
 			Header: "3",
@@ -47,7 +47,7 @@ func TestCommitExtractor(t *testing.T) {
 			},
 		},
 		// [3]
-		&Commit{
+		{
 			Type:   "foo",
 			Scope:  "a",
 			Header: "4",
@@ -56,7 +56,7 @@ func TestCommitExtractor(t *testing.T) {
 			},
 		},
 		// [4]
-		&Commit{
+		{
 			Type:   "",
 			Scope:  "",
 			Header: "Merge1",
@@ -67,7 +67,7 @@ func TestCommitExtractor(t *testing.T) {
 			},
 		},
 		// [5]
-		&Commit{
+		{
 			Type:   "",
 			Scope:  "",
 			Header: "Revert1",
@@ -81,14 +81,14 @@ func TestCommitExtractor(t *testing.T) {
 	commitGroups, mergeCommits, revertCommits, noteGroups := extractor.Extract(fixtures)
 
 	assert.Equal([]*CommitGroup{
-		&CommitGroup{
+		{
 			RawTitle: "bar",
 			Title:    "BAR",
 			Commits: []*Commit{
 				fixtures[2],
 			},
 		},
-		&CommitGroup{
+		{
 			RawTitle: "foo",
 			Title:    "Foo",
 			Commits: []*Commit{
@@ -108,26 +108,26 @@ func TestCommitExtractor(t *testing.T) {
 	}, revertCommits)
 
 	assert.Equal([]*NoteGroup{
-		&NoteGroup{
+		{
 			Title: "note1-title",
 			Notes: []*Note{
 				fixtures[1].Notes[0],
 				fixtures[2].Notes[0],
 			},
 		},
-		&NoteGroup{
+		{
 			Title: "note2-title",
 			Notes: []*Note{
 				fixtures[1].Notes[1],
 			},
 		},
-		&NoteGroup{
+		{
 			Title: "note3-title",
 			Notes: []*Note{
 				fixtures[2].Notes[1],
 			},
 		},
-		&NoteGroup{
+		{
 			Title: "note4-title",
 			Notes: []*Note{
 				fixtures[3].Notes[0],

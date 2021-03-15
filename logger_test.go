@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/fatih/color"
-	"github.com/stretchr/testify/assert"
 	emoji "github.com/kyokomi/emoji/v2"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLoggerLogSilent(t *testing.T) {

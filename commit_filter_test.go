@@ -18,27 +18,27 @@ func TestCommitFilter(t *testing.T) {
 	}
 
 	fixtures := []*Commit{
-		&Commit{
+		{
 			Type:    "foo",
 			Scope:   "hoge",
 			Subject: "1",
 		},
-		&Commit{
+		{
 			Type:    "foo",
 			Scope:   "fuga",
 			Subject: "2",
 		},
-		&Commit{
+		{
 			Type:    "bar",
 			Scope:   "hoge",
 			Subject: "3",
 		},
-		&Commit{
+		{
 			Type:    "bar",
 			Scope:   "fuga",
 			Subject: "4",
 		},
-		&Commit{
+		{
 			Type:    "Bar",
 			Scope:   "hogera",
 			Subject: "5",

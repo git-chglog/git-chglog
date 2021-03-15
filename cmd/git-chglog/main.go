@@ -8,7 +8,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/mattn/go-colorable"
-	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
+	"github.com/tsuyoshiwada/go-gitcmd"
 	"github.com/urfave/cli/v2"
 )
 

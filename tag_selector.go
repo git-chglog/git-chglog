@@ -21,11 +21,11 @@ func (s *tagSelector) Select(tags []*Tag, query string) ([]*Tag, string, error) 
 		new := tokens[1]
 		switch {
 		case old == "" && new == "":
-				return nil, "", nil
+			return nil, "", nil
 		case old == "":
-				return s.selectBeforeTags(tags, new)
+			return s.selectBeforeTags(tags, new)
 		case new == "":
-				return s.selectAfterTags(tags, old)
+			return s.selectAfterTags(tags, old)
 		default:
 			return s.selectRangeTags(tags, tokens[0], tokens[1])
 		}

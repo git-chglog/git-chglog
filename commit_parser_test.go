@@ -33,7 +33,7 @@ func TestCommitParserParse(t *testing.T) {
 		mock, nil, &Config{
 			Options: &Options{
 				CommitFilters: map[string][]string{
-					"Type": []string{
+					"Type": {
 						"feat",
 						"fix",
 						"perf",
@@ -79,7 +79,7 @@ func TestCommitParserParse(t *testing.T) {
 	commits, err := parser.Parse("HEAD")
 	assert.Nil(err)
 	assert.Equal([]*Commit{
-		&Commit{
+		{
 			Hash: &Hash{
 				Long:  "65cf1add9735dcc4810dda3312b0792236c97c4e",
 				Short: "65cf1add",
@@ -97,7 +97,7 @@ func TestCommitParserParse(t *testing.T) {
 			Merge:  nil,
 			Revert: nil,
 			Refs: []*Ref{
-				&Ref{
+				{
 					Action: "",
 					Ref:    "123",
 					Source: "",
@@ -111,7 +111,7 @@ func TestCommitParserParse(t *testing.T) {
 			Subject:  "Add new feature #123",
 			Body:     "",
 		},
-		&Commit{
+		{
 			Hash: &Hash{
 				Long:  "14ef0b6d386c5432af9292eab3c8314fa3001bc7",
 				Short: "14ef0b6d",
@@ -132,24 +132,24 @@ func TestCommitParserParse(t *testing.T) {
 			},
 			Revert: nil,
 			Refs: []*Ref{
-				&Ref{
+				{
 					Action: "",
 					Ref:    "3",
 					Source: "",
 				},
-				&Ref{
+				{
 					Action: "Fixes",
 					Ref:    "3",
 					Source: "",
 				},
-				&Ref{
+				{
 					Action: "Closes",
 					Ref:    "1",
 					Source: "",
 				},
 			},
 			Notes: []*Note{
-				&Note{
+				{
 					Title: "BREAKING CHANGE",
 					Body:  "This is breaking point message.",
 				},
@@ -167,7 +167,7 @@ Closes #1
 
 BREAKING CHANGE: This is breaking point message.`,
 		},
-		&Commit{
+		{
 			Hash: &Hash{
 				Long:  "809a8280ffd0dadb0f4e7ba9fc835e63c37d6af6",
 				Short: "809a8280",
@@ -201,7 +201,7 @@ BREAKING CHANGE: This is breaking point message.`,
 @hogefuga
 @FooBarBaz`,
 		},
-		&Commit{
+		{
 			Hash: &Hash{
 				Long:  "74824d6bd1470b901ec7123d13a76a1b8938d8d0",
 				Short: "74824d6b",
@@ -219,19 +219,19 @@ BREAKING CHANGE: This is breaking point message.`,
 			Merge:  nil,
 			Revert: nil,
 			Refs: []*Ref{
-				&Ref{
+				{
 					Action: "Fixes",
 					Ref:    "123",
 					Source: "",
 				},
-				&Ref{
+				{
 					Action: "Closes",
 					Ref:    "456",
 					Source: "username/repository",
 				},
 			},
 			Notes: []*Note{
-				&Note{
+				{
 					Title: "BREAKING CHANGE",
 					Body: fmt.Sprintf(`This is multiline breaking change note.
 It is treated as the body of the Note until a mention or reference appears.
@@ -281,7 +281,7 @@ class MyController extends Controller {
 Fixes #123
 Closes username/repository#456`, "```", "```"),
 		},
-		&Commit{
+		{
 			Hash: &Hash{
 				Long:  "123456789735dcc4810dda3312b0792236c97c4e",
 				Short: "12345678",
@@ -381,7 +381,7 @@ func TestCommitParserParseWithJira(t *testing.T) {
 		mock, mockJiraClient{}, &Config{
 			Options: &Options{
 				CommitFilters: map[string][]string{
-					"Type": []string{
+					"Type": {
 						"feat",
 						"fix",
 						"perf",

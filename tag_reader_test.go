@@ -33,7 +33,7 @@ func TestTagReader(t *testing.T) {
 
 	assert.Equal(
 		[]*Tag{
-			&Tag{
+			{
 				Name:    "hoge_fuga",
 				Subject: "Invalid semver tag name",
 				Date:    time.Date(2018, 3, 12, 12, 30, 10, 0, time.UTC),
@@ -44,7 +44,7 @@ func TestTagReader(t *testing.T) {
 					Date:    time.Date(2018, 2, 3, 12, 30, 10, 0, time.UTC),
 				},
 			},
-			&Tag{
+			{
 				Name:    "5.0.0-rc.0",
 				Subject: "Release 5.0.0-rc.0",
 				Date:    time.Date(2018, 2, 3, 12, 30, 10, 0, time.UTC),
@@ -59,7 +59,7 @@ func TestTagReader(t *testing.T) {
 					Date:    time.Date(2018, 2, 2, 10, 0, 40, 0, time.UTC),
 				},
 			},
-			&Tag{
+			{
 				Name:    "4.4.4",
 				Subject: "Release 4.4.4",
 				Date:    time.Date(2018, 2, 2, 10, 0, 40, 0, time.UTC),
@@ -74,7 +74,7 @@ func TestTagReader(t *testing.T) {
 					Date:    time.Date(2018, 2, 2, 0, 0, 0, 0, time.UTC),
 				},
 			},
-			&Tag{
+			{
 				Name:    "4.4.3",
 				Subject: "This is tag subject",
 				Date:    time.Date(2018, 2, 2, 0, 0, 0, 0, time.UTC),
@@ -89,7 +89,7 @@ func TestTagReader(t *testing.T) {
 					Date:    time.Date(2018, 2, 1, 0, 0, 0, 0, time.UTC),
 				},
 			},
-			&Tag{
+			{
 				Name:    "v2.0.4-beta.1",
 				Subject: "Release v2.0.4-beta.1",
 				Date:    time.Date(2018, 2, 1, 0, 0, 0, 0, time.UTC),
@@ -108,7 +108,7 @@ func TestTagReader(t *testing.T) {
 	assert.Nil(errFiltered)
 	assert.Equal(
 		[]*Tag{
-			&Tag{
+			{
 				Name:     "v2.0.4-beta.1",
 				Subject:  "Release v2.0.4-beta.1",
 				Date:     time.Date(2018, 2, 1, 0, 0, 0, 0, time.UTC),

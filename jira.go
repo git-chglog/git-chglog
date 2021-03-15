@@ -17,8 +17,8 @@ type jiraClient struct {
 func NewJiraClient(config *Config) JiraClient {
 	return jiraClient{
 		username: config.Options.JiraUsername,
-		token: config.Options.JiraToken,
-		url: config.Options.JiraURL,
+		token:    config.Options.JiraToken,
+		url:      config.Options.JiraURL,
 	}
 }
 

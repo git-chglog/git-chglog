@@ -8,7 +8,7 @@ import (
 func TestJira(t *testing.T) {
 	assert := assert.New(t)
 
-	config := &Config {
+	config := &Config{
 		Options: &Options{
 			Processor:                   nil,
 			NextTag:                     "",

@@ -12,7 +12,7 @@ import (
 	"text/template"
 	"time"
 
-	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
+	"github.com/tsuyoshiwada/go-gitcmd"
 )
 
 // Options is an option used to process commits
@@ -275,7 +275,7 @@ func (gen *Generator) getTags(query string) ([]*Tag, string, error) {
 
 		// Assign the date with `readVersions()`
 		tags = append([]*Tag{
-			&Tag{
+			{
 				Name:     next,
 				Subject:  next,
 				Previous: previous,
