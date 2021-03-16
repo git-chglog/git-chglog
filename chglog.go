@@ -140,9 +140,8 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 		return err
 	}
 	defer func() {
-		scopeErr := back()
-		if scopeErr != nil {
-			log.Fatal(scopeErr)
+		if err = back(); err != nil {
+			log.Fatal(err)
 		}
 	}()
 
