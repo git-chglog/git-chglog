@@ -78,7 +78,8 @@ func (*tagSelector) selectBeforeTags(tags []*Tag, token string) ([]*Tag, string,
 }
 
 func (*tagSelector) selectAfterTags(tags []*Tag, token string) ([]*Tag, string, error) {
-	var (
+	// NOTE(clok): the res slice can range in size based on the token passed in.
+	var ( //nolint:prealloc
 		res  []*Tag
 		from string
 	)
