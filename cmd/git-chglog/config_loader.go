@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"path/filepath"
 
 	"gopkg.in/yaml.v2"
 )
@@ -20,7 +21,8 @@ func NewConfigLoader() ConfigLoader {
 }
 
 func (loader *configLoaderImpl) Load(path string) (*Config, error) {
-	bytes, err := ioutil.ReadFile(path)
+	fp := filepath.Clean(path)
+	bytes, err := ioutil.ReadFile(fp)
 	if err != nil {
 		return nil, err
 	}
