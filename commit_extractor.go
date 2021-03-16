@@ -165,6 +165,7 @@ func (e *commitExtractor) sortCommitGroups(groups []*CommitGroup) {
 
 	// commits
 	for _, group := range groups {
+		group := group // pin group to avoid potential bugs with passing group to lower functions
 		sort.Slice(group.Commits, func(i, j int) bool {
 			var (
 				a, b interface{}
@@ -198,6 +199,7 @@ func (e *commitExtractor) sortNoteGroups(groups []*NoteGroup) {
 
 	// notes
 	for _, group := range groups {
+		group := group // pin group to avoid potential bugs with passing group to lower functions
 		sort.Slice(group.Notes, func(i, j int) bool {
 			return strings.ToLower(group.Notes[i].Title) < strings.ToLower(group.Notes[j].Title)
 		})
