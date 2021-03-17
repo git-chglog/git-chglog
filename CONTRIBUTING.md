@@ -8,11 +8,13 @@ Please use issue/PR templates which are inserted automatically.
 
 ## Found a Bug?
 
-If you find a bug in the source code, you can help us by [submitting an issue](https://github.com/git-chglog/git-chglog/issues) to our [GitHub Repository](https://github.com/git-chglog/git-chglog). Even better, you can submit a Pull Request with a fix.
+If you find a bug in the source code, you can help us by [submitting an issue]
+to our [GitHub Repository]. Even better, you can submit a Pull Request with a
+fix.
 
 ## Commit Message Format
 
-A format influenced by [Angular commit message](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit-message-format).
+A format influenced by [Angular commit message].
 
 ```text
 <type>: <subject>
@@ -38,8 +40,15 @@ Must be one of the following:
 
 ### Footer
 
-The footer should contain a [closing reference to an issue](https://help.github.com/articles/closing-issues-via-commit-messages/) if any.
+The footer should contain a [closing reference to an issue] if any.
 
-The **footer** should contain any information about **Breaking Changes** and is also the place to reference GitHub issues that this commit **Closes**.
+The **footer** should contain any information about **Breaking Changes** and is
+also the place to reference GitHub issues that this commit **Closes**.
 
-**Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
+**Breaking Changes** should start with the word `BREAKING CHANGE:` with a space
+or two newlines. The rest of the commit message is then used for this.
+
+[submitting an issue]: https://github.com/git-chglog/git-chglog/issues
+[GitHub Repository]: https://github.com/git-chglog/git-chglog
+[Angular commit message]: https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit-message-format
+[closing reference to an issue]: https://help.github.com/articles/closing-issues-via-commit-messages/
