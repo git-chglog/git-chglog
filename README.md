@@ -11,7 +11,6 @@
 > CHANGELOG generator implemented in Go (Golang).  
 > _Anytime, anywhere, Write your CHANGELOG._
 
-
 ## Table of Contents
 
 - [git-chglog](#git-chglog)
@@ -45,9 +44,9 @@
   - [Templates](#templates)
   - [Supported Styles](#supported-styles)
   - [Jira Integration](#jira-integration)
-      - [1. Change the header parse pattern to recognize Jira issue id in the configure file.](#1-change-the-header-parse-pattern-to-recognize-jira-issue-id-in-the-configure-file)
-      - [2. Add Jira configuration to the configure file.](#2-add-jira-configuration-to-the-configure-file)
-      - [3. Update the template to show Jira data.](#3-update-the-template-to-show-jira-data)
+    - [1. Change the header parse pattern to recognize Jira issue id in the configure file](#1-change-the-header-parse-pattern-to-recognize-jira-issue-id-in-the-configure-file)
+    - [2. Add Jira configuration to the configure file](#2-add-jira-configuration-to-the-configure-file)
+    - [3. Update the template to show Jira data](#3-update-the-template-to-show-jira-data)
   - [FAQ](#faq)
   - [TODO](#todo)
   - [Thanks](#thanks)
@@ -58,20 +57,17 @@
   - [Related Projects](#related-projects)
   - [License](#license)
 
-
-
-
 ## Features
 
-* :recycle: High portability
-    - It works with single binary. Therefore, any project (environment) can be used.
-* :beginner: Simple usability
-    - The CLI usage is very simple and has low learning costs.
-    - For example, the simplest command is `$ git-chglog`.
-* :rocket: High flexibility
-    - Commit message format and ...
-    - CHANGELOG's style (Template) and ...
-    - etc ...
+- :recycle: High portability
+  - It works with single binary. Therefore, any project (environment) can be used.
+- :beginner: Simple usability
+  - The CLI usage is very simple and has low learning costs.
+  - For example, the simplest command is `$ git-chglog`.
+- :rocket: High flexibility
+  - Commit message format and ...
+  - CHANGELOG's style (Template) and ...
+  - etc ...
 
 ## How it works
 
@@ -93,33 +89,32 @@ Please install `git-chglog` in a way that matches your environment.
 #### [Homebrew](https://brew.sh) (for macOS users)
 
 ```bash
-$ brew tap git-chglog/git-chglog
-$ brew install git-chglog
+brew tap git-chglog/git-chglog
+brew install git-chglog
 ```
 
 #### [Scoop](https://scoop.sh) (for Windows users)
 
-```
-$ scoop install git-chglog
+```bash
+scoop install git-chglog
 ```
 
 #### [asdf](https://asdf-vm.com/)
 
 ```bash
-$ asdf plugin-add git-chglog https://github.com/GoodwayGroup/asdf-git-chglog.git
-$ asdf install git-chglog latest
+asdf plugin-add git-chglog https://github.com/GoodwayGroup/asdf-git-chglog.git
+asdf install git-chglog latest
 ```
 
 #### Go users
 
 ```bash
-$ go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
 ```
 
 ---
 
 If you are using another platform, you can download a binary from the [releases page](https://github.com/git-chglog/git-chglog/releases) and place it in a directory in your `$PATH`.
-
 
 ### Test Installation
 
@@ -130,7 +125,6 @@ $ git-chglog --version
 # outputs the git-chglog version
 ```
 
-
 ### Quick Start
 
 `git-chglog` requires configuration files and templates to generate a CHANGELOG.  
@@ -140,7 +134,7 @@ However, it is a waste of time to create configuration files and templates from 
 Therefore we recommend using the `--init` option which will create them interactively :+1:
 
 ```bash
-$ git-chglog --init
+git-chglog --init
 ```
 
 ![init option demo](./docs/assets/init.gif)
@@ -153,13 +147,13 @@ Let's immediately generate a CHANGELOG of your project.
 By doing the following simple command, Markdown for your CHANGELOG is displayed on stdout.
 
 ```bash
-$ git-chglog
+git-chglog
 ```
 
 Use `-o` (`--output`) option if you want to output to a file instead of stdout.
 
 ```bash
-$ git-chglog -o CHANGELOG.md
+git-chglog -o CHANGELOG.md
 ```
 
 ---
@@ -500,18 +494,16 @@ See the godoc [RenderData][doc-render-data] documentation for available variable
 
 > :memo: Even with styles that are not yet supported, it is possible to make ordinary CHANGELOG.
 
-
 ## Jira Integration
-
 
 Jira is a popular project management tool. When a project uses Jira to track feature development and bug fixes,
 it may also want to generate change log based information stored in Jira. With embedding a Jira story id in git
-commit header, the git-chglog tool may automatically fetch data of the story from Jira, those data then can be 
+commit header, the git-chglog tool may automatically fetch data of the story from Jira, those data then can be
 used to render the template.
 
 Take the following steps to add Jira integration:
 
-#### 1. Change the header parse pattern to recognize Jira issue id in the configure file.
+### 1. Change the header parse pattern to recognize Jira issue id in the configure file
 
 __Where Jira issue is identical Jira story.__
 
@@ -528,10 +520,10 @@ The following is a sample pattern:
 
 This sample pattern can match both forms of commit headers:
 
-* `feat: new feature of something`
-* `[JIRA-ID]: something`
+- `feat: new feature of something`
+- `[JIRA-ID]: something`
 
-#### 2. Add Jira configuration to the configure file.
+### 2. Add Jira configuration to the configure file
 
 The following is a sample:
 
@@ -559,7 +551,7 @@ As a Jira story's description could be very long, you might not want to include 
 description into change log. In that case, you may define `description_pattern` like above,
 so that only content embraced with `<changelog> ... </changelog>` will be included.
 
-#### 3. Update the template to show Jira data.
+### 3. Update the template to show Jira data
 
 In the template, if a commit contains a Jira issue id, then you may show Jira data. For example:
 
@@ -576,11 +568,10 @@ In the template, if a commit contains a Jira issue id, then you may show Jira da
 
 Within a `Commit`, the following Jira data can be used in template:
 
-* `.JiraIssue.Summary` - Summary of the Jira story
-* `.JiraIssue.Description` - Description of the Jira story
-* `.JiraIssue.Type` - Original type of the Jira story, and `.Type` will be mapped type.
-* `.JiraIssue.Labels` - A list of strings, each is a Jira label.
-
+- `.JiraIssue.Summary` - Summary of the Jira story
+- `.JiraIssue.Description` - Description of the Jira story
+- `.JiraIssue.Type` - Original type of the Jira story, and `.Type` will be mapped type.
+- `.JiraIssue.Labels` - A list of strings, each is a Jira label.
 
 ## FAQ
 
@@ -604,9 +595,9 @@ Within a `Commit`, the following Jira data can be used in template:
   You can create CHANGELOG containing `2.0.0` as follows.
 
   ```bash
-  $ git-chglog --next-tag 2.0.0 -o CHANGELOG.md
-  $ git commit -am "release 2.0.0"
-  $ git tag 2.0.0
+  git-chglog --next-tag 2.0.0 -o CHANGELOG.md
+  git commit -am "release 2.0.0"
+  git tag 2.0.0
   ```
 
   The point to notice is that before actually creating a tag with `git`, it is conveying the next version with `--next-tag` :+1:
@@ -620,17 +611,19 @@ Within a `Commit`, the following Jira data can be used in template:
   Yes, it can be solved by use the `--tag-filter-pattern` flag.
   
   For example, the following command will only include tags starting with "v":
+  
   ```bash
-  $ git-chglog --tag-filter-pattern '^v'
+  git-chglog --tag-filter-pattern '^v'
   ```
+
 </details>
 
 ## TODO
 
-* [x] Windows Support
-* [x] More styles (GitHub, GitLab, Bitbucket :tada:)
-* [ ] Snippetization of configuration files (improvement of reusability)
-* [ ] More test test test ... (and example)
+- [x] Windows Support
+- [x] More styles (GitHub, GitLab, Bitbucket :tada:)
+- [ ] Snippetization of configuration files (improvement of reusability)
+- [ ] More test test test ... (and example)
 
 ## Thanks
 
@@ -668,7 +661,7 @@ See [CHANGELOG.md](./CHANGELOG.md)
 
 ## Related Projects
 
-* [git-chglog/artwork](https://github.com/git-chglog/artwork) - Assets for `git-chglog`.
+- [git-chglog/artwork](https://github.com/git-chglog/artwork) - Assets for `git-chglog`.
 
 ## License
 
