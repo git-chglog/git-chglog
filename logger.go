@@ -7,7 +7,7 @@ import (
 	"regexp"
 
 	"github.com/fatih/color"
-	emoji "github.com/kyokomi/emoji/v2"
+	"github.com/kyokomi/emoji/v2"
 )
 
 // Logger ...
@@ -26,7 +26,7 @@ func NewLogger(stdout, stderr io.Writer, silent, noEmoji bool) *Logger {
 		stderr:  stderr,
 		silent:  silent,
 		noEmoji: noEmoji,
-		reEmoji: regexp.MustCompile(":[\\w\\+_\\-]+:\\s?"),
+		reEmoji: regexp.MustCompile(`:[\w\+_\-]+:\s?`),
 	}
 }
 

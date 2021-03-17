@@ -19,7 +19,7 @@ func Example() {
 			},
 			Options: &Options{
 				CommitFilters: map[string][]string{
-					"Type": []string{
+					"Type": {
 						"feat",
 						"fix",
 					},

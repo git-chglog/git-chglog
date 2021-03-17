@@ -52,7 +52,7 @@ type NoteGroup struct {
 	Notes []*Note
 }
 
-// JiraIssue
+// JiraIssue is information about a jira ticket (type, summary, description, and labels)
 type JiraIssue struct {
 	Type        string
 	Summary     string
@@ -69,13 +69,13 @@ type Commit struct {
 	Revert      *Revert // If it is not a revert commit, `nil` is assigned
 	Refs        []*Ref
 	Notes       []*Note
-	Mentions    []string // Name of the user included in the commit header or body
+	Mentions    []string   // Name of the user included in the commit header or body
 	JiraIssue   *JiraIssue // If no issue id found in header, `nil` is assigned
-	Header      string   // (e.g. `feat(core)[RNWY-310]: Add new feature`)
-	Type        string   // (e.g. `feat`)
-	Scope       string   // (e.g. `core`)
-	Subject     string   // (e.g. `Add new feature`)
-	JiraIssueId string   // (e.g. `RNWY-310`)
+	Header      string     // (e.g. `feat(core)[RNWY-310]: Add new feature`)
+	Type        string     // (e.g. `feat`)
+	Scope       string     // (e.g. `core`)
+	Subject     string     // (e.g. `Add new feature`)
+	JiraIssueID string     // (e.g. `RNWY-310`)
 	Body        string
 }
 

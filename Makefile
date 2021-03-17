@@ -20,3 +20,7 @@ install:
 .PHONY: changelog
 changelog:
 	@git-chglog --next-tag $(tag) $(tag)
+
+.PHONY: lint
+lint:
+	@golangci-lint run

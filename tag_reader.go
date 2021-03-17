@@ -12,7 +12,6 @@ import (
 
 type tagReader struct {
 	client    gitcmd.Client
-	format    string
 	separator string
 	reFilter  *regexp.Regexp
 }
@@ -36,7 +35,7 @@ func (r *tagReader) ReadAll() ([]*Tag, error) {
 	tags := []*Tag{}
 
 	if err != nil {
-		return tags, fmt.Errorf("failed to get git-tag: %s", err.Error())
+		return tags, fmt.Errorf("failed to get git-tag: %w", err)
 	}
 
 	lines := strings.Split(out, "\n")

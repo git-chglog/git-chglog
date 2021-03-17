@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/fatih/color"
-	"github.com/stretchr/testify/assert"
 	emoji "github.com/kyokomi/emoji/v2"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLoggerLogSilent(t *testing.T) {
@@ -40,7 +40,7 @@ func TestLoggerLogNoEmoji(t *testing.T) {
 	stderr := &bytes.Buffer{}
 	logger := NewLogger(stdout, stderr, false, true)
 	logger.Log(":+1:Hello, World! :)")
-	assert.Equal(fmt.Sprint("Hello, World! :)\n"), stdout.String())
+	assert.Equal(fmt.Sprint("Hello, World! :)\n"), stdout.String()) //nolint:gosimple
 }
 
 func TestLoggerError(t *testing.T) {

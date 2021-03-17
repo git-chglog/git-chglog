@@ -33,8 +33,8 @@ func (p *GitHubProcessor) Bootstrap(config *Config) {
 		p.Host = strings.TrimRight(p.Host, "/")
 	}
 
-	p.reMention = regexp.MustCompile("@(\\w+)")
-	p.reIssue = regexp.MustCompile("(?i)(#|gh-)(\\d+)")
+	p.reMention = regexp.MustCompile(`@(\w+)`)
+	p.reIssue = regexp.MustCompile(`(?i)(#|gh-)(\d+)`)
 }
 
 // ProcessCommit ...
@@ -88,8 +88,8 @@ func (p *GitLabProcessor) Bootstrap(config *Config) {
 		p.Host = strings.TrimRight(p.Host, "/")
 	}
 
-	p.reMention = regexp.MustCompile("@(\\w+)")
-	p.reIssue = regexp.MustCompile("(?i)#(\\d+)")
+	p.reMention = regexp.MustCompile(`@(\w+)`)
+	p.reIssue = regexp.MustCompile(`(?i)#(\d+)`)
 }
 
 // ProcessCommit ...
@@ -143,8 +143,8 @@ func (p *BitbucketProcessor) Bootstrap(config *Config) {
 		p.Host = strings.TrimRight(p.Host, "/")
 	}
 
-	p.reMention = regexp.MustCompile("@(\\w+)")
-	p.reIssue = regexp.MustCompile("(?i)#(\\d+)")
+	p.reMention = regexp.MustCompile(`@(\w+)`)
+	p.reIssue = regexp.MustCompile(`(?i)#(\d+)`)
 }
 
 // ProcessCommit ...

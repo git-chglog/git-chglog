@@ -127,7 +127,11 @@ func (e *commitExtractor) commitGroupTitle(commit *Commit) (string, string) {
 	return raw, ttl
 }
 
-func (e *commitExtractor) sortCommitGroups(groups []*CommitGroup) {
+func (e *commitExtractor) sortCommitGroups(groups []*CommitGroup) { //nolint:gocyclo
+	// NOTE(khos2ow): this function is over our cyclomatic complexity goal.
+	// Be wary when adding branches, and look for functionality that could
+	// be reasonably moved into an injected dependency.
+
 	order := make(map[string]int)
 	if e.opts.CommitGroupSortBy == "Custom" {
 		for i, t := range e.opts.CommitGroupTitleOrder {
@@ -136,6 +140,9 @@ func (e *commitExtractor) sortCommitGroups(groups []*CommitGroup) {
 	}
 
 	// groups
+	// TODO(khos2ow): move the inline sort function to
+	// conceret implementation of sort.Interface in order
+	// to reduce cyclomatic complaxity.
 	sort.Slice(groups, func(i, j int) bool {
 		if e.opts.CommitGroupSortBy == "Custom" {
 			return order[groups[i].RawTitle] < order[groups[j].RawTitle]
@@ -165,6 +172,11 @@ func (e *commitExtractor) sortCommitGroups(groups []*CommitGroup) {
 
 	// commits
 	for _, group := range groups {
+		group := group // pin group to avoid potential bugs with passing group to lower functions
+
+		// TODO(khos2ow): move the inline sort function to
+		// conceret implementation of sort.Interface in order
+		// to reduce cyclomatic complaxity.
 		sort.Slice(group.Commits, func(i, j int) bool {
 			var (
 				a, b interface{}
@@ -198,6 +210,7 @@ func (e *commitExtractor) sortNoteGroups(groups []*NoteGroup) {
 
 	// notes
 	for _, group := range groups {
+		group := group // pin group to avoid potential bugs with passing group to lower functions
 		sort.Slice(group.Notes, func(i, j int) bool {
 			return strings.ToLower(group.Notes[i].Title) < strings.ToLower(group.Notes[j].Title)
 		})
