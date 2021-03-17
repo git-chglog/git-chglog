@@ -80,7 +80,7 @@ func newCommitParser(logger *Logger, client gitcmd.Client, jiraClient JiraClient
 		reRef:                  regexp.MustCompile("(?i)(" + joinedRefActions + ")\\s?([\\w/\\.\\-]+)?(?:" + joinedIssuePrefix + ")(\\d+)"),
 		reIssue:                regexp.MustCompile("(?:" + joinedIssuePrefix + ")(\\d+)"),
 		reNotes:                regexp.MustCompile("^(?i)\\s*(" + joinedNoteKeywords + ")[:\\s]+(.*)"),
-		reMention:              regexp.MustCompile("@([\\w-]+)"),
+		reMention:              regexp.MustCompile(`@([\w-]+)`),
 		reJiraIssueDescription: regexp.MustCompile(opts.JiraIssueDescriptionPattern),
 	}
 }
@@ -223,8 +223,8 @@ func (p *commitParser) processHeader(commit *Commit, input string) {
 	commit.Mentions = p.parseMentions(input)
 
 	// Jira
-	if commit.JiraIssueId != "" {
-		p.processJiraIssue(commit, commit.JiraIssueId)
+	if commit.JiraIssueID != "" {
+		p.processJiraIssue(commit, commit.JiraIssueID)
 	}
 }
 
@@ -364,10 +364,10 @@ func (p *commitParser) uniqMentions(mentions []string) []string {
 	return arr
 }
 
-func (p *commitParser) processJiraIssue(commit *Commit, issueId string) {
-	issue, err := p.jiraClient.GetJiraIssue(commit.JiraIssueId)
+func (p *commitParser) processJiraIssue(commit *Commit, issueID string) {
+	issue, err := p.jiraClient.GetJiraIssue(commit.JiraIssueID)
 	if err != nil {
-		p.logger.Error(fmt.Sprintf("Failed to parse Jira story %s: %s\n", issueId, err))
+		p.logger.Error(fmt.Sprintf("Failed to parse Jira story %s: %s\n", issueID, err))
 		return
 	}
 	commit.Type = p.config.Options.JiraTypeMaps[issue.Fields.Type.Name]

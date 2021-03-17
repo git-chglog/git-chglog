@@ -32,17 +32,17 @@ func TestMain(m *testing.M) {
 func setup(dir string, setupRepo func(commitFunc, tagFunc, gitcmd.Client)) {
 	testDir := filepath.Join(cwd, testRepoRoot, dir)
 
-	os.RemoveAll(testDir)
-	os.MkdirAll(testDir, os.ModePerm)
-	os.Chdir(testDir)
+	_ = os.RemoveAll(testDir)
+	_ = os.MkdirAll(testDir, os.ModePerm)
+	_ = os.Chdir(testDir)
 
 	loc, _ := time.LoadLocation("UTC")
 	time.Local = loc
 
 	git := gitcmd.New(nil)
-	git.Exec("init")
-	git.Exec("config", "user.name", "test_user")
-	git.Exec("config", "user.email", "test@example.com")
+	_, _ = git.Exec("init")
+	_, _ = git.Exec("config", "user.name", "test_user")
+	_, _ = git.Exec("config", "user.email", "test@example.com")
 
 	var commit = func(date, subject, body string) {
 		msg := subject
@@ -51,21 +51,21 @@ func setup(dir string, setupRepo func(commitFunc, tagFunc, gitcmd.Client)) {
 		}
 		t, _ := time.Parse(internalTimeFormat, date)
 		d := t.Format("Mon Jan 2 15:04:05 2006 +0000")
-		git.Exec("commit", "--allow-empty", "--date", d, "-m", msg)
+		_, _ = git.Exec("commit", "--allow-empty", "--date", d, "-m", msg)
 	}
 
 	var tag = func(name string) {
-		git.Exec("tag", name)
+		_, _ = git.Exec("tag", name)
 	}
 
 	setupRepo(commit, tag, git)
 
-	os.Chdir(cwd)
+	_ = os.Chdir(cwd)
 }
 
 func cleanup() {
-	os.Chdir(cwd)
-	os.RemoveAll(filepath.Join(cwd, testRepoRoot))
+	_ = os.Chdir(cwd)
+	_ = os.RemoveAll(filepath.Join(cwd, testRepoRoot))
 }
 
 func TestGeneratorNotFoundTags(t *testing.T) {
@@ -193,7 +193,7 @@ func TestGeneratorWithTypeScopeSubject(t *testing.T) {
 		tag("1.1.0")
 
 		commit("2018-01-03 00:00:00", "feat(context): Online breaking change", "BREAKING CHANGE: Online breaking change message.")
-		commit("2018-01-03 00:01:00", "feat(router): Muliple breaking change", `This is body,
+		commit("2018-01-03 00:01:00", "feat(router): Multiple breaking change", `This is body,
 
 BREAKING CHANGE:
 Multiple
@@ -216,7 +216,7 @@ change message.`)
 			},
 			Options: &Options{
 				CommitFilters: map[string][]string{
-					"Type": []string{
+					"Type": {
 						"feat",
 						"fix",
 					},
@@ -256,7 +256,7 @@ change message.`)
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
-	output := strings.Replace(strings.TrimSpace(buf.String()), "\r\n", "\n", -1)
+	output := strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -270,7 +270,7 @@ change message.`)
 ## [2.0.0-beta.0] - 2018-01-03
 ### Features
 - **context:** Online breaking change
-- **router:** Muliple breaking change
+- **router:** Multiple breaking change
 
 ### BREAKING CHANGE
 
@@ -331,7 +331,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 			Options: &Options{
 				NextTag: "3.0.0",
 				CommitFilters: map[string][]string{
-					"Type": []string{
+					"Type": {
 						"feat",
 					},
 				},
@@ -352,7 +352,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
-	output := strings.Replace(strings.TrimSpace(buf.String()), "\r\n", "\n", -1)
+	output := strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -383,7 +383,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 	buf = &bytes.Buffer{}
 	err = gen.Generate(buf, "3.0.0")
-	output = strings.Replace(strings.TrimSpace(buf.String()), "\r\n", "\n", -1)
+	output = strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -424,7 +424,7 @@ func TestGeneratorWithTagFiler(t *testing.T) {
 			Options: &Options{
 				TagFilterPattern: "^v",
 				CommitFilters: map[string][]string{
-					"Type": []string{
+					"Type": {
 						"feat",
 					},
 				},

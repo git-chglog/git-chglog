@@ -4,8 +4,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	chglog "github.com/git-chglog/git-chglog"
 	"github.com/imdario/mergo"
+
+	chglog "github.com/git-chglog/git-chglog"
 )
 
 // Info ...
@@ -49,6 +50,7 @@ type NoteOptions struct {
 	Keywords []string `yaml:"keywords"`
 }
 
+// JiraClientInfoOptions ...
 type JiraClientInfoOptions struct {
 	Username string `yaml:"username"`
 	Token    string `yaml:"token"`
@@ -286,7 +288,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 		Template:   orValue(ctx.Template, config.Template),
 		Info: &chglog.Info{
 			Title:         info.Title,
-			RepositoryURL: orValue(ctx.RepositoryUrl, info.RepositoryURL),
+			RepositoryURL: orValue(ctx.RepositoryURL, info.RepositoryURL),
 		},
 		Options: &chglog.Options{
 			NextTag:                     ctx.NextTag,
@@ -309,7 +311,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 			NoteKeywords:                opts.Notes.Keywords,
 			JiraUsername:                orValue(ctx.JiraUsername, opts.Jira.ClintInfo.Username),
 			JiraToken:                   orValue(ctx.JiraToken, opts.Jira.ClintInfo.Token),
-			JiraUrl:                     orValue(ctx.JiraUrl, opts.Jira.ClintInfo.URL),
+			JiraURL:                     orValue(ctx.JiraURL, opts.Jira.ClintInfo.URL),
 			JiraTypeMaps:                opts.Jira.Issue.TypeMaps,
 			JiraIssueDescriptionPattern: opts.Jira.Issue.DescriptionPattern,
 		},

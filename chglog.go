@@ -5,13 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
 	"time"
 
-	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
+	"github.com/tsuyoshiwada/go-gitcmd"
 )
 
 // Options is an option used to process commits
@@ -37,7 +38,7 @@ type Options struct {
 	NoteKeywords                []string            // Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`)
 	JiraUsername                string
 	JiraToken                   string
-	JiraUrl                     string
+	JiraURL                     string
 	JiraTypeMaps                map[string]string
 	JiraIssueDescriptionPattern string
 	Paths                       []string // Path filter
@@ -138,7 +139,11 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 	if err != nil {
 		return err
 	}
-	defer back()
+	defer func() {
+		if err = back(); err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	tags, first, err := gen.getTags(query)
 	if err != nil {
@@ -269,7 +274,7 @@ func (gen *Generator) getTags(query string) ([]*Tag, string, error) {
 
 		// Assign the date with `readVersions()`
 		tags = append([]*Tag{
-			&Tag{
+			{
 				Name:     next,
 				Subject:  next,
 				Previous: previous,
@@ -318,30 +323,18 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 		"datetime": func(layout string, input time.Time) string {
 			return input.Format(layout)
 		},
-		// check whether substs is withing s
-		"contains": func(s, substr string) bool {
-			return strings.Contains(s, substr)
-		},
+		// check whether substr is within s
+		"contains": strings.Contains,
 		// check whether s begins with prefix
-		"hasPrefix": func(s, prefix string) bool {
-			return strings.HasPrefix(s, prefix)
-		},
+		"hasPrefix": strings.HasPrefix,
 		// check whether s ends with suffix
-		"hasSuffix": func(s, suffix string) bool {
-			return strings.HasSuffix(s, suffix)
-		},
+		"hasSuffix": strings.HasSuffix,
 		// replace the first n instances of old with new
-		"replace": func(s, old, new string, n int) string {
-			return strings.Replace(s, old, new, n)
-		},
+		"replace": strings.Replace,
 		// lower case a string
-		"lower": func(s string) string {
-			return strings.ToLower(s)
-		},
+		"lower": strings.ToLower,
 		// upper case a string
-		"upper": func(s string) string {
-			return strings.ToUpper(s)
-		},
+		"upper": strings.ToUpper,
 		// upper case the first character of a string
 		"upperFirst": func(s string) string {
 			if len(s) > 0 {

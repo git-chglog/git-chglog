@@ -1,14 +1,15 @@
 package chglog
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestJira(t *testing.T) {
 	assert := assert.New(t)
 
-	config := &Config {
+	config := &Config{
 		Options: &Options{
 			Processor:                   nil,
 			NextTag:                     "",
@@ -29,7 +30,7 @@ func TestJira(t *testing.T) {
 			NoteKeywords:                nil,
 			JiraUsername:                "uuu",
 			JiraToken:                   "ppp",
-			JiraUrl:                     "http://jira.com",
+			JiraURL:                     "http://jira.com",
 			JiraTypeMaps:                nil,
 			JiraIssueDescriptionPattern: "",
 		},

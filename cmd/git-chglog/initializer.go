@@ -2,17 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/git-chglog/git-chglog"
 	"path/filepath"
 
 	"github.com/fatih/color"
-	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
+
+	chglog "github.com/git-chglog/git-chglog"
 )
 
 // Initializer ...
 type Initializer struct {
 	ctx                    *InitContext
-	client                 gitcmd.Client
 	fs                     FileSystem
 	logger                 *chglog.Logger
 	questioner             Questioner

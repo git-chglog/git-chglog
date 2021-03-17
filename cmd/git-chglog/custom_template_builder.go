@@ -18,7 +18,7 @@ func (t *customTemplateBuilderImpl) Build(ans *Answer) (string, error) {
 	tpl += t.versionHeader(ans.Style, ans.Template)
 
 	// commits
-	tpl += t.commits(ans.Template, ans.CommitMessageFormat)
+	tpl += t.commits(ans.CommitMessageFormat)
 
 	// revert
 	if ans.IncludeReverts {
@@ -75,7 +75,7 @@ func (*customTemplateBuilderImpl) versionHeader(style, template string) string {
 	return tpl
 }
 
-func (*customTemplateBuilderImpl) commits(template, format string) string {
+func (*customTemplateBuilderImpl) commits(format string) string {
 	var (
 		header string
 		body   string

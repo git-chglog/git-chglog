@@ -3,14 +3,17 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
 
 	"github.com/fatih/color"
 	"github.com/mattn/go-colorable"
-	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
+	"github.com/tsuyoshiwada/go-gitcmd"
 	"github.com/urfave/cli/v2"
 )
 
+// CreateApp creates and initializes CLI application
+// with description, flags, version, etc.
 func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 	ttl := color.New(color.FgYellow).SprintFunc()
 
@@ -182,6 +185,8 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 	return app
 }
 
+// AppAction is a callback function to create initializer
+// and CLIContext and ultimately run the application.
 func AppAction(c *cli.Context) error {
 	wd, err := os.Getwd()
 	if err != nil {
@@ -219,7 +224,7 @@ func AppAction(c *cli.Context) error {
 			Stderr:           colorable.NewColorableStderr(),
 			ConfigPath:       c.String("config"),
 			Template:         c.String("template"),
-			RepositoryUrl:    c.String("repository-url"),
+			RepositoryURL:    c.String("repository-url"),
 			OutputPath:       c.String("output"),
 			Silent:           c.Bool("silent"),
 			NoColor:          c.Bool("no-color"),
@@ -230,7 +235,7 @@ func AppAction(c *cli.Context) error {
 			TagFilterPattern: c.String("tag-filter-pattern"),
 			JiraUsername:     c.String("jira-username"),
 			JiraToken:        c.String("jira-token"),
-			JiraUrl:          c.String("jira-url"),
+			JiraURL:          c.String("jira-url"),
 			Paths:            c.StringSlice("path"),
 		},
 		fs,
@@ -245,5 +250,8 @@ func AppAction(c *cli.Context) error {
 
 func main() {
 	app := CreateApp(AppAction)
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

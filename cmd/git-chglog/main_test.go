@@ -1,14 +1,16 @@
 package main
 
 import (
+	"log"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/urfave/cli/v2"
-	"testing"
 )
 
 var gAssert *assert.Assertions
 
-func mock_app_action(c *cli.Context) error {
+func mockAppAction(c *cli.Context) error {
 	assert := gAssert
 	assert.Equal("c.yml", c.String("config"))
 	assert.Equal("^v", c.String("tag-filter-pattern"))
@@ -25,7 +27,7 @@ func TestCreateApp(t *testing.T) {
 	assert.True(true)
 	gAssert = assert
 
-	app := CreateApp(mock_app_action)
+	app := CreateApp(mockAppAction)
 	args := []string{
 		"git-chglog",
 		"--silent",
@@ -36,5 +38,8 @@ func TestCreateApp(t *testing.T) {
 		"--next-tag", "v5",
 		"--tag-filter-pattern", "^v",
 	}
-	app.Run(args)
+	err := app.Run(args)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

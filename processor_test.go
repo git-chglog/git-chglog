@@ -27,7 +27,7 @@ func TestGitHubProcessor(t *testing.T) {
 multiline [#789](https://example.com/issues/789)
 [@foo](https://github.com/foo), [@bar](https://github.com/bar)`,
 			Notes: []*Note{
-				&Note{
+				{
 					Body: `issue1 [#11](https://example.com/issues/11)
 issue2 [#22](https://example.com/issues/22)
 [gh-56](https://example.com/issues/56) hoge fuga`,
@@ -42,7 +42,7 @@ issue2 [#22](https://example.com/issues/22)
 multiline #789
 @foo, @bar`,
 				Notes: []*Note{
-					&Note{
+					{
 						Body: `issue1 #11
 issue2 #22
 gh-56 hoge fuga`,
@@ -89,7 +89,7 @@ func TestGitLabProcessor(t *testing.T) {
 multiline [#789](https://example.com/issues/789)
 [@foo](https://gitlab.com/foo), [@bar](https://gitlab.com/bar)`,
 			Notes: []*Note{
-				&Note{
+				{
 					Body: `issue1 [#11](https://example.com/issues/11)
 issue2 [#22](https://example.com/issues/22)
 gh-56 hoge fuga`,
@@ -104,7 +104,7 @@ gh-56 hoge fuga`,
 multiline #789
 @foo, @bar`,
 				Notes: []*Note{
-					&Note{
+					{
 						Body: `issue1 #11
 issue2 #22
 gh-56 hoge fuga`,
@@ -151,7 +151,7 @@ func TestBitbucketProcessor(t *testing.T) {
 multiline [#789](https://example.com/issues/789/)
 [@foo](https://bitbucket.org/foo/), [@bar](https://bitbucket.org/bar/)`,
 			Notes: []*Note{
-				&Note{
+				{
 					Body: `issue1 [#11](https://example.com/issues/11/)
 issue2 [#22](https://example.com/issues/22/)
 gh-56 hoge fuga`,
@@ -166,7 +166,7 @@ gh-56 hoge fuga`,
 multiline #789
 @foo, @bar`,
 				Notes: []*Note{
-					&Note{
+					{
 						Body: `issue1 #11
 issue2 #22
 gh-56 hoge fuga`,

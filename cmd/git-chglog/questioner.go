@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	gitcmd "github.com/tsuyoshiwada/go-gitcmd"
-	survey "github.com/AlecAivazis/survey/v2"
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/tsuyoshiwada/go-gitcmd"
 )
 
 // Answer ...
@@ -52,11 +52,12 @@ func (q *questionerImpl) Ask() (*Answer, error) {
 	t := q.fs.Exists(tpl)
 	msg := ""
 
-	if c && t {
+	switch {
+	case c && t:
 		msg = fmt.Sprintf("\"%s\" and \"%s\" already exists. Do you want to overwrite?", config, tpl)
-	} else if c {
+	case c:
 		msg = fmt.Sprintf("\"%s\" already exists. Do you want to overwrite?", config)
-	} else if t {
+	case t:
 		msg = fmt.Sprintf("\"%s\" already exists. Do you want to overwrite?", tpl)
 	}
 
