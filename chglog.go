@@ -20,6 +20,7 @@ type Options struct {
 	Processor                   Processor
 	NextTag                     string              // Treat unreleased commits as specified tags (EXPERIMENTAL)
 	TagFilterPattern            string              // Filter tag by regexp
+	Sort                        string              // Specify how to sort tags; currently supports "date" (default) or by "semver".
 	NoCaseSensitive             bool                // Filter commits in a case insensitive way
 	CommitFilters               map[string][]string // Filter by using `Commit` properties and values. Filtering is not done by specifying an empty value
 	CommitSortBy                string              // Property name to use for sorting `Commit` (e.g. `Scope`)
@@ -120,7 +121,7 @@ func NewGenerator(logger *Logger, config *Config) *Generator {
 	return &Generator{
 		client:          client,
 		config:          config,
-		tagReader:       newTagReader(client, config.Options.TagFilterPattern),
+		tagReader:       newTagReader(client, config.Options.TagFilterPattern, config.Options.Sort),
 		tagSelector:     newTagSelector(),
 		commitParser:    newCommitParser(logger, client, jiraClient, config),
 		commitExtractor: newCommitExtractor(config.Options),

@@ -263,6 +263,7 @@ info:
 
 options:
   tag_filter_pattern: '^v'
+  sort: "date"
 
   commits:
     filters:
@@ -343,6 +344,14 @@ Metadata for CHANGELOG. Depending on Style, it is sometimes used in processing, 
 ### `options`
 
 Options used to process commits.
+
+#### `options.sort`
+
+Options concerning the acquisition and sort of commits.
+
+| Required | Type        | Default   | Description                                                                                                         |
+|:---------|:------------|:----------|:--------------------------------------------------------------------------------------------------------------------|
+| N        | String      | `"date"` | Defines how tags are sorted in the generated change log. Values: "date", "semver". |
 
 #### `options.commits`
 
