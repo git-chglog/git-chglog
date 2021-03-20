@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/AlecAivazis/survey/v2 v2.2.9
 	github.com/andygrunwald/go-jira v1.13.0
+	github.com/coreos/go-semver v0.3.0
 	github.com/fatih/color v1.10.0
 	github.com/imdario/mergo v0.3.12
 	github.com/kyokomi/emoji/v2 v2.2.8
