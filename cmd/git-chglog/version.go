@@ -1,4 +1,4 @@
 package main
 
 // Version of git-chglog cli client
-const Version = "v0.11.2"
+const Version = "v0.12.0"
