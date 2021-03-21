@@ -5,6 +5,20 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v0.12.0"></a>
+## [v0.12.0] - 2021-03-20
+### Chore
+- bumps version to v0.12.0
+- bump golang to 1.16 ([#118](https://github.com/git-chglog/git-chglog/issues/118))
+- **ci:** add golangci-lint action and apply linting changes ([#120](https://github.com/git-chglog/git-chglog/issues/120))
+
+### Features
+- allow tag sorting by semver ([#124](https://github.com/git-chglog/git-chglog/issues/124))
+
+### BREAKING CHANGE
+
+`JiraIssueId` has been renamed to `JiraIssueID`. This impacts the value for `pattern_maps` in `config.yml`.
+
 <a name="v0.11.2"></a>
 ## [v0.11.2] - 2021-03-13
 ### Bug Fixes
@@ -182,7 +196,8 @@ https://github.com/git-chglog/git-chglog/releases/download/v<VERSION>/git-chglog
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.11.2...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.12.0...HEAD
+[v0.12.0]: https://github.com/git-chglog/git-chglog/compare/v0.11.2...v0.12.0
 [v0.11.2]: https://github.com/git-chglog/git-chglog/compare/v0.11.1...v0.11.2
 [v0.11.1]: https://github.com/git-chglog/git-chglog/compare/v0.11.0...v0.11.1
 [v0.11.0]: https://github.com/git-chglog/git-chglog/compare/v0.10.0...v0.11.0
