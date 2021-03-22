@@ -59,6 +59,8 @@ type commitParser struct {
 	reIssue                *regexp.Regexp
 	reNotes                *regexp.Regexp
 	reMention              *regexp.Regexp
+	reSignOff              *regexp.Regexp
+	reCoAuthor             *regexp.Regexp
 	reJiraIssueDescription *regexp.Regexp
 }
 
@@ -81,6 +83,8 @@ func newCommitParser(logger *Logger, client gitcmd.Client, jiraClient JiraClient
 		reIssue:                regexp.MustCompile("(?:" + joinedIssuePrefix + ")(\\d+)"),
 		reNotes:                regexp.MustCompile("^(?i)\\s*(" + joinedNoteKeywords + ")[:\\s]+(.*)"),
 		reMention:              regexp.MustCompile(`@([\w-]+)`),
+		reSignOff:              regexp.MustCompile(`Signed-off-by:\s+([\p{L}\s\-\[\]]+)\s+<([\w+\-\[\].@]+)>`),
+		reCoAuthor:             regexp.MustCompile(`Co-authored-by:\s+([\p{L}\s\-\[\]]+)\s+<([\w+\-\[\].@]+)>`),
 		reJiraIssueDescription: regexp.MustCompile(opts.JiraIssueDescriptionPattern),
 	}
 }
@@ -228,6 +232,36 @@ func (p *commitParser) processHeader(commit *Commit, input string) {
 	}
 }
 
+func (p *commitParser) extractLineMetadata(commit *Commit, line string) bool {
+	meta := false
+
+	refs := p.parseRefs(line)
+	if len(refs) > 0 {
+		meta = true
+		commit.Refs = append(commit.Refs, refs...)
+	}
+
+	mentions := p.parseMentions(line)
+	if len(mentions) > 0 {
+		meta = true
+		commit.Mentions = append(commit.Mentions, mentions...)
+	}
+
+	coAuthors := p.parseCoAuthors(line)
+	if len(coAuthors) > 0 {
+		meta = true
+		commit.CoAuthors = append(commit.CoAuthors, coAuthors...)
+	}
+
+	signers := p.parseSigners(line)
+	if len(signers) > 0 {
+		meta = true
+		commit.Signers = append(commit.Signers, signers...)
+	}
+
+	return meta
+}
+
 func (p *commitParser) processBody(commit *Commit, input string) {
 	input = convNewline(input, "\n")
 
@@ -237,30 +271,29 @@ func (p *commitParser) processBody(commit *Commit, input string) {
 	// notes & refs & mentions
 	commit.Notes = []*Note{}
 	inNote := false
+	trim := false
 	fenceDetector := newMdFenceDetector()
 	lines := strings.Split(input, "\n")
 
+	// body without notes & refs & mentions
+	trimmedBody := make([]string, 0, len(lines))
+
 	for _, line := range lines {
+		if !inNote {
+			trim = false
+		}
 		fenceDetector.Update(line)
 
-		if !fenceDetector.InCodeblock() {
-			refs := p.parseRefs(line)
-			if len(refs) > 0 {
-				inNote = false
-				commit.Refs = append(commit.Refs, refs...)
-			}
-
-			mentions := p.parseMentions(line)
-			if len(mentions) > 0 {
-				inNote = false
-				commit.Mentions = append(commit.Mentions, mentions...)
-			}
+		if !fenceDetector.InCodeblock() && p.extractLineMetadata(commit, line) {
+			trim = true
+			inNote = false
 		}
-
+		// Q: should this check also only be outside of code blocks?
 		res := p.reNotes.FindAllStringSubmatch(line, -1)
 
 		if len(res) > 0 {
 			inNote = true
+			trim = true
 			for _, r := range res {
 				commit.Notes = append(commit.Notes, &Note{
 					Title: r[1],
@@ -271,8 +304,13 @@ func (p *commitParser) processBody(commit *Commit, input string) {
 			last := commit.Notes[len(commit.Notes)-1]
 			last.Body = last.Body + "\n" + line
 		}
+
+		if !trim {
+			trimmedBody = append(trimmedBody, line)
+		}
 	}
 
+	commit.TrimmedBody = strings.TrimSpace(strings.Join(trimmedBody, "\n"))
 	p.trimSpaceInNotes(commit)
 }
 
@@ -315,6 +353,30 @@ func (p *commitParser) parseRefs(input string) []*Ref {
 	}
 
 	return refs
+}
+
+func (p *commitParser) parseSigners(input string) []Contact {
+	res := p.reSignOff.FindAllStringSubmatch(input, -1)
+	contacts := make([]Contact, len(res))
+
+	for i, r := range res {
+		contacts[i].Name = r[1]
+		contacts[i].Email = r[2]
+	}
+
+	return contacts
+}
+
+func (p *commitParser) parseCoAuthors(input string) []Contact {
+	res := p.reCoAuthor.FindAllStringSubmatch(input, -1)
+	contacts := make([]Contact, len(res))
+
+	for i, r := range res {
+		contacts[i].Name = r[1]
+		contacts[i].Email = r[2]
+	}
+
+	return contacts
 }
 
 func (p *commitParser) parseMentions(input string) []string {
