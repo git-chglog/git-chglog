@@ -343,6 +343,14 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 			}
 			return ""
 		},
+		// indent all lines of s n spaces
+		"indent": func(s string, n int) string {
+			if len(s) == 0 {
+				return ""
+			}
+			pad := strings.Repeat(" ", n)
+			return pad + strings.ReplaceAll(s, "\n", "\n"+pad)
+		},
 	}
 
 	fname := filepath.Base(gen.config.Template)
