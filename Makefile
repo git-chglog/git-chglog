@@ -1,3 +1,7 @@
+VERSION?=$$(git describe --tags --always)
+
+LDFLAGS="-X main.version=$(VERSION)"
+
 .PHONY: clean
 clean:
 	rm -rf ./dist/
@@ -7,7 +11,7 @@ clean:
 
 .PHONY: build
 build:
-	go build -o git-chglog ./cmd/git-chglog
+	go build -ldflags=$(LDFLAGS) -o git-chglog ./cmd/git-chglog
 
 .PHONY: test
 test:
