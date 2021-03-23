@@ -89,9 +89,11 @@ func TestGeneratorNotFoundTags(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
+	expected := strings.TrimSpace(buf.String())
+
 	assert.Error(err)
 	assert.Contains(err.Error(), "git-tag does not exist")
-	assert.Equal("", buf.String())
+	assert.Equal("", expected)
 }
 
 func TestGeneratorNotFoundCommits(t *testing.T) {
@@ -116,8 +118,10 @@ func TestGeneratorNotFoundCommits(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "foo")
+	expected := strings.TrimSpace(buf.String())
+
 	assert.Error(err)
-	assert.Equal("", buf.String())
+	assert.Equal("", expected)
 }
 
 func TestGeneratorNotFoundCommitsOne(t *testing.T) {
@@ -171,9 +175,11 @@ func TestGeneratorNotFoundCommitsOne(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "foo")
+	expected := strings.TrimSpace(buf.String())
+
 	assert.Error(err)
 	assert.Contains(err.Error(), "\"foo\" was not found")
-	assert.Equal("", buf.String())
+	assert.Equal("", expected)
 }
 
 func TestGeneratorWithTypeScopeSubject(t *testing.T) {
@@ -257,7 +263,7 @@ change message.`)
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
-	output := strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
+	expected := strings.TrimSpace(buf.String())
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -303,7 +309,7 @@ Online breaking change message.
 
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/2.0.0-beta.0...HEAD
 [2.0.0-beta.0]: https://github.com/git-chglog/git-chglog/compare/1.1.0...2.0.0-beta.0
-[1.1.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...1.1.0`, output)
+[1.1.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...1.1.0`, expected)
 }
 
 func TestGeneratorWithNextTag(t *testing.T) {
@@ -354,7 +360,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
-	output := strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
+	expected := strings.TrimSpace(buf.String())
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -381,11 +387,11 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
 [3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0
-[2.0.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...2.0.0`, output)
+[2.0.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...2.0.0`, expected)
 
 	buf = &bytes.Buffer{}
 	err = gen.Generate(buf, "3.0.0")
-	output = strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
+	expected = strings.TrimSpace(buf.String())
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -399,7 +405,7 @@ func TestGeneratorWithNextTag(t *testing.T) {
 
 
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
-[3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0`, output)
+[3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0`, expected)
 }
 
 func TestGeneratorWithTagFiler(t *testing.T) {
@@ -447,6 +453,7 @@ func TestGeneratorWithTagFiler(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
+	expected := strings.TrimSpace(buf.String())
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -460,7 +467,7 @@ func TestGeneratorWithTagFiler(t *testing.T) {
 - **core:** version dev-1.0.0
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v1.0.0...HEAD`, strings.TrimSpace(buf.String()))
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v1.0.0...HEAD`, expected)
 
 }
 
@@ -520,7 +527,7 @@ Co-authored-by: dependabot-preview[bot] <27856297+dependabot-preview[bot]@users.
 
 	buf := &bytes.Buffer{}
 	err := gen.Generate(buf, "")
-	output := strings.ReplaceAll(strings.TrimSpace(buf.String()), "\r\n", "\n")
+	expected := strings.TrimSpace(buf.String())
 
 	assert.Nil(err)
 	assert.Equal(`<a name="unreleased"></a>
@@ -540,5 +547,5 @@ Co-authored-by: dependabot-preview[bot] <27856297+dependabot-preview[bot]@users.
 When using .TrimmedBody Notes are not included and can only appear in the Notes section.
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/1.0.0...HEAD`, output)
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/1.0.0...HEAD`, expected)
 }
