@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v0.13.0"></a>
+## [v0.13.0] - 2021-03-23
+### Features
+- add support for rendering .Body after .Subject as part of list ([#121](https://github.com/git-chglog/git-chglog/issues/121))
+
 <a name="v0.12.0"></a>
 ## [v0.12.0] - 2021-03-20
 ### Chore
@@ -196,7 +201,8 @@ https://github.com/git-chglog/git-chglog/releases/download/v<VERSION>/git-chglog
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.13.0...HEAD
+[v0.13.0]: https://github.com/git-chglog/git-chglog/compare/v0.12.0...v0.13.0
 [v0.12.0]: https://github.com/git-chglog/git-chglog/compare/v0.11.2...v0.12.0
 [v0.11.2]: https://github.com/git-chglog/git-chglog/compare/v0.11.1...v0.11.2
 [v0.11.1]: https://github.com/git-chglog/git-chglog/compare/v0.11.0...v0.11.1
