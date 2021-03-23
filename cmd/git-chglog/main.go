@@ -12,6 +12,9 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// version is passed in via LDFLAGS main.version
+var version string
+
 // CreateApp creates and initializes CLI application
 // with description, flags, version, etc.
 func CreateApp(actionFunc cli.ActionFunc) *cli.App {
@@ -74,7 +77,7 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 	app := cli.NewApp()
 	app.Name = "git-chglog"
 	app.Usage = "todo usage for git-chglog"
-	app.Version = Version
+	app.Version = version
 
 	app.Flags = []cli.Flag{
 		// init
