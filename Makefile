@@ -22,8 +22,8 @@ install:
 	go install ./cmd/git-chglog
 
 .PHONY: changelog
-changelog:
-	@git-chglog --next-tag $(tag) $(tag)
+changelog: build
+	./git-chglog --next-tag $(VERSION) -o CHANGELOG.md
 
 .PHONY: lint
 lint:
