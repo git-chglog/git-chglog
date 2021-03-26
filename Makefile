@@ -28,3 +28,10 @@ changelog: build
 .PHONY: lint
 lint:
 	@golangci-lint run
+
+.PHONY: release
+release: changelog
+	@git add CHANGELOG.md
+	@git commit -m "chore: update changelog for $(VERSION)"
+	git tag $(VERSION)
+	git push origin master $(VERSION)
