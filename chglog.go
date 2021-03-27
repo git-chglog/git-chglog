@@ -345,7 +345,7 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 
 	fname := filepath.Base(gen.config.Template)
 
-	t := template.Must(template.New(fname).Funcs(fmap).Funcs(sprig.TxtFuncMap()).ParseFiles(gen.config.Template))
+	t := template.Must(template.New(fname).Funcs(sprig.TxtFuncMap()).Funcs(fmap).ParseFiles(gen.config.Template))
 
 	return t.Execute(w, &RenderData{
 		Info:       gen.config.Info,

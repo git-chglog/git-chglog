@@ -471,7 +471,7 @@ func TestGeneratorWithTagFiler(t *testing.T) {
 
 }
 
-func TestGeneratorWithTimmedBody(t *testing.T) {
+func TestGeneratorWithTrimmedBody(t *testing.T) {
 	assert := assert.New(t)
 	testName := "trimmed_body"
 
