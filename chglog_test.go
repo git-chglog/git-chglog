@@ -549,3 +549,83 @@ When using .TrimmedBody Notes are not included and can only appear in the Notes 
 
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/1.0.0...HEAD`, expected)
 }
+
+func TestGeneratorWithSprig(t *testing.T) {
+	assert := assert.New(t)
+	testName := "with_sprig"
+
+	setup(testName, func(commit commitFunc, tag tagFunc, _ gitcmd.Client) {
+		commit("2018-01-01 00:00:00", "feat(core): version 1.0.0", "")
+		tag("1.0.0")
+
+		commit("2018-02-01 00:00:00", "feat(core): version 2.0.0", "")
+		tag("2.0.0")
+
+		commit("2018-03-01 00:00:00", "feat(core): version 3.0.0", "")
+	})
+
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				Title:         "CHANGELOG Example",
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			},
+			Options: &Options{
+				Sort:    "date",
+				NextTag: "3.0.0",
+				CommitFilters: map[string][]string{
+					"Type": {
+						"feat",
+					},
+				},
+				CommitSortBy:      "Scope",
+				CommitGroupBy:     "Type",
+				CommitGroupSortBy: "Title",
+				CommitGroupTitleMaps: map[string]string{
+					"feat": "Features",
+				},
+				HeaderPattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"Scope",
+					"Subject",
+				},
+			},
+		})
+
+	buf := &bytes.Buffer{}
+	err := gen.Generate(buf, "")
+	expected := strings.TrimSpace(buf.String())
+
+	assert.Nil(err)
+	assert.Equal(`My Changelog
+<a name="unreleased"></a>
+## [Unreleased]
+
+
+<a name="3.0.0"></a>
+## [3.0.0] - 2018-03-01
+### Features
+- **CORE:** version 3.0.0
+
+
+<a name="2.0.0"></a>
+## [2.0.0] - 2018-02-01
+### Features
+- **CORE:** version 2.0.0
+
+
+<a name="1.0.0"></a>
+## 1.0.0 - 2018-01-01
+### Features
+- **CORE:** version 1.0.0
+
+
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0
+[2.0.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...2.0.0`, expected)
+
+}

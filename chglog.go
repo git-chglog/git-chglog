@@ -4,7 +4,6 @@ package chglog
 import (
 	"errors"
 	"fmt"
-	"github.com/Masterminds/sprig/v3"
 	"io"
 	"log"
 	"os"
@@ -12,6 +11,8 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/Masterminds/sprig/v3"
 
 	"github.com/tsuyoshiwada/go-gitcmd"
 )
@@ -356,7 +357,7 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 
 	fname := filepath.Base(gen.config.Template)
 
-	t := template.Must(template.New(fname).Funcs(fmap).Funcs(sprig.HermeticTxtFuncMap()).ParseFiles(gen.config.Template))
+	t := template.Must(template.New(fname).Funcs(fmap).Funcs(sprig.TxtFuncMap()).ParseFiles(gen.config.Template))
 
 	return t.Execute(w, &RenderData{
 		Info:       gen.config.Info,

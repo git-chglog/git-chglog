@@ -8,7 +8,7 @@
 [![Coverage Status](https://img.shields.io/coveralls/github/git-chglog/git-chglog.svg?style=flat-square)](https://coveralls.io/github/git-chglog/git-chglog?branch=master)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/git-chglog/git-chglog/blob/master/LICENSE)
 
-> CHANGELOG generator implemented in Go (Golang).  
+> CHANGELOG generator implemented in Go (Golang).
 > _Anytime, anywhere, Write your CHANGELOG._
 
 ## Table of Contents
@@ -130,7 +130,7 @@ $ git-chglog --version
 
 ### Quick Start
 
-`git-chglog` requires configuration files and templates to generate a CHANGELOG.  
+`git-chglog` requires configuration files and templates to generate a CHANGELOG.
 
 However, it is a waste of time to create configuration files and templates from scratch.
 
@@ -146,7 +146,7 @@ git-chglog --init
 
 You are now ready for configuration files and templates!
 
-Let's immediately generate a CHANGELOG of your project.  
+Let's immediately generate a CHANGELOG of your project.
 By doing the following simple command, Markdown for your CHANGELOG is displayed
 on stdout.
 
@@ -429,8 +429,7 @@ Options to detect notes contained in commit bodies.
 
 ## Templates
 
-The `git-chglog` template uses the `text/template` package. For basic usage please
-refer to the following.
+The `git-chglog` template uses the `text/template` package and enhanced templating functions provided by [Sprig](http://masterminds.github.io/sprig). For basic usage please refer to the following.
 
 > [text/template](https://golang.org/pkg/text/template/)
 
@@ -606,7 +605,7 @@ Within a `Commit`, the following Jira data can be used in template:
   It is ideal to describe everything included in CHANGELOG in your commits. But
   actually it is very difficult to do it perfectly.
 
-  There are times when you need to edit the generated output to write a great CHANGELOG.  
+  There are times when you need to edit the generated output to write a great CHANGELOG.
 
   By displaying it on the standard output, it makes it easy to change the contents.
 </details>
@@ -616,7 +615,7 @@ Within a `Commit`, the following Jira data can be used in template:
 
   Yes, it can be solved by using the `--next-tag` flag.
 
-  For example, let's say you want to upgrade your project to `2.0.0`.  
+  For example, let's say you want to upgrade your project to `2.0.0`.
   You can create CHANGELOG containing `2.0.0` as follows.
 
   ```bash
@@ -633,11 +632,11 @@ Within a `Commit`, the following Jira data can be used in template:
 
 <details>
   <summary>Can I generate a CHANGELOG based on certain tags?</summary>
-  
+
   Yes, it can be solved by use the `--tag-filter-pattern` flag.
-  
+
   For example, the following command will only include tags starting with "v":
-  
+
   ```bash
   git-chglog --tag-filter-pattern '^v'
   ```
@@ -675,10 +674,10 @@ Bugs, feature requests and comments are more than welcome in the [issues].
 
 ### Feedback
 
-I would like to make `git-chglog` a better tool.  
+I would like to make `git-chglog` a better tool.
 The goal is to be able to use in various projects.
 
-Therefore, your feedback is very useful.  
+Therefore, your feedback is very useful.
 I am very happy to tell you your opinions on Issues and PR :heart:
 
 ## CHANGELOG
