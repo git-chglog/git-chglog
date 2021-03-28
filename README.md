@@ -198,6 +198,7 @@ OPTIONS:
   --jira-url value            Jira URL [$JIRA_URL]
   --jira-username value       Jira username [$JIRA_USERNAME]
   --jira-token value          Jira token [$JIRA_TOKEN]
+  --sort value                Specify how to sort tags; currently supports "date" or by "semver" (default: date)
   --help, -h                  show help (default: false)
   --version, -v               print the version (default: false)
 
