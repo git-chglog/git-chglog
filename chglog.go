@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/Masterminds/sprig/v3"
-
 	"github.com/tsuyoshiwada/go-gitcmd"
 )
 
