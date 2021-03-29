@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.2.9
+	github.com/Masterminds/sprig/v3 v3.2.2
 	github.com/andygrunwald/go-jira v1.13.0
 	github.com/coreos/go-semver v0.3.0
 	github.com/fatih/color v1.10.0
