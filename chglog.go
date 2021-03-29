@@ -12,6 +12,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/Masterminds/sprig/v3"
 	"github.com/tsuyoshiwada/go-gitcmd"
 )
 
@@ -324,18 +325,6 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 		"datetime": func(layout string, input time.Time) string {
 			return input.Format(layout)
 		},
-		// check whether substr is within s
-		"contains": strings.Contains,
-		// check whether s begins with prefix
-		"hasPrefix": strings.HasPrefix,
-		// check whether s ends with suffix
-		"hasSuffix": strings.HasSuffix,
-		// replace the first n instances of old with new
-		"replace": strings.Replace,
-		// lower case a string
-		"lower": strings.ToLower,
-		// upper case a string
-		"upper": strings.ToUpper,
 		// upper case the first character of a string
 		"upperFirst": func(s string) string {
 			if len(s) > 0 {
@@ -355,7 +344,7 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 
 	fname := filepath.Base(gen.config.Template)
 
-	t := template.Must(template.New(fname).Funcs(fmap).ParseFiles(gen.config.Template))
+	t := template.Must(template.New(fname).Funcs(sprig.TxtFuncMap()).Funcs(fmap).ParseFiles(gen.config.Template))
 
 	return t.Execute(w, &RenderData{
 		Info:       gen.config.Info,
