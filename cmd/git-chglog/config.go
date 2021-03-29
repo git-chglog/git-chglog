@@ -308,7 +308,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 		Options: &chglog.Options{
 			NextTag:                     ctx.NextTag,
 			TagFilterPattern:            ctx.TagFilterPattern,
-			Sort:                        opts.Sort,
+			Sort:                        orValue(ctx.Sort, opts.Sort),
 			NoCaseSensitive:             ctx.NoCaseSensitive,
 			Paths:                       ctx.Paths,
 			CommitFilters:               opts.Commits.Filters,
