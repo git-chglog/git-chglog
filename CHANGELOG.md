@@ -2,6 +2,16 @@
 ## [Unreleased]
 
 
+<a name="v0.14.0"></a>
+## [v0.14.0] - 2021-03-28
+### Chores
+- **CHANGELOG:** regenerate CHANGELOG with type-scope and KAC template ([#129](https://github.com/git-chglog/git-chglog/issues/129))
+
+### Features
+- add sprig template functions support ([#131](https://github.com/git-chglog/git-chglog/issues/131))
+- add `--sort [TYPE]` flag  ([#78](https://github.com/git-chglog/git-chglog/issues/78))
+
+
 <a name="v0.13.0"></a>
 ## [v0.13.0] - 2021-03-23
 ### Chores
@@ -332,7 +342,8 @@
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.14.0...HEAD
+[v0.14.0]: https://github.com/git-chglog/git-chglog/compare/v0.13.0...v0.14.0
 [v0.13.0]: https://github.com/git-chglog/git-chglog/compare/v0.12.0...v0.13.0
 [v0.12.0]: https://github.com/git-chglog/git-chglog/compare/v0.11.2...v0.12.0
 [v0.11.2]: https://github.com/git-chglog/git-chglog/compare/v0.11.1...v0.11.2
