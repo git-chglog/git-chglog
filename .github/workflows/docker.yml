@@ -1,0 +1,38 @@
+name: docker
+
+on:
+  push:
+    branches:    
+      - master
+
+env:
+  IMAGE_NAME: git-chglog
+  VERSION: edge
+  IMAGE_ID: ghcr.io/git-chglog/git-chglog
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+      - name: Build go binary
+        run: go build -o $IMAGE_NAME
+      - name: Build docker image
+        run: docker build . --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push docker image
+        run: |
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
