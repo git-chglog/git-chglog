@@ -1,18 +1,12 @@
-FROM golang:1.16-alpine
-
-RUN apk add --no-cache bash \
-                       curl \
-                       docker-cli \
-                       git \
-                       mercurial \
-                       make \
-                       build-base
-
-ENTRYPOINT ["/entrypoint.sh"]
-CMD [ "-h" ]
+FROM docker.io/alpine:latest
 
 COPY scripts/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-COPY goreleaser_*.apk /tmp/
-RUN apk add --allow-untrusted /tmp/goreleaser_*.apk
+COPY git-chglog /usr/local/bin/git-chglog
+
+WORKDIR /workdir
+RUN chmod +x /usr/local/bin/git-chglog
+
+ENTRYPOINT [ "/usr/local/bin/git-chglog" ]
+CMD [ "--help" ]

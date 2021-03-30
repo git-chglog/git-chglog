@@ -48,3 +48,11 @@ brews:
       system "#{bin}/git-chglog --help"
     install: |
       bin.install "git-chglog"
+
+dockers:
+  - 
+    image_templates:
+    - "ghcr.io/git-chglog/git-chglog:{{ .Tag }}"
+    - "ghcr.io/git-chglog/git-chglog:latest"
+    ids:
+    - git-chglog
