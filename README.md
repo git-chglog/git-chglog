@@ -4,7 +4,6 @@
 
 [![godoc.org](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/git-chglog/git-chglog)
 [![Actions Status](https://github.com/git-chglog/git-chglog/workflows/tests/badge.svg)](https://github.com/git-chglog/git-chglog/actions)
-[![AppVeyor](https://img.shields.io/appveyor/ci/tsuyoshiwada/git-chglog/master.svg?style=flat-square)](https://ci.appveyor.com/project/tsuyoshiwada/git-chglog/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/github/git-chglog/git-chglog.svg?style=flat-square)](https://coveralls.io/github/git-chglog/git-chglog?branch=master)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/git-chglog/git-chglog/blob/master/LICENSE)
 
@@ -659,7 +658,7 @@ Within a `Commit`, the following Jira data can be used in template:
 
 We alway welcome your contributions :clap:
 
-### Development
+## Development
 
 1. Use Golang version `>= 1.16`
 1. Fork (https://github.com/git-chglog/git-chglog) :tada:
@@ -673,7 +672,24 @@ We alway welcome your contributions :clap:
 
 Bugs, feature requests and comments are more than welcome in the [issues].
 
-### Feedback
+## Release Process
+
+There is a `release` target within the Makefile that wraps up the steps to
+release a new version.
+
+> NOTE: Pass the `VERSION` variable when running the command to properly set
+> the tag version for the release.
+
+```bash
+$ VERSION=vX.Y.Z make release
+# EXAMPLE:
+$ VERSION=v0.11.3 make release
+```
+
+Once the `tag` has been pushed, the `goreleaser` github action will take care
+of the rest.
+
+## Feedback
 
 I would like to make `git-chglog` a better tool.
 The goal is to be able to use in various projects.
