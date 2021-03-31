@@ -1,4 +1,4 @@
-name: docker
+name: publish
 
 on:
   push:
@@ -6,9 +6,7 @@ on:
       - master
 
 env:
-  IMAGE_NAME: git-chglog
-  VERSION: edge
-  IMAGE_ID: ghcr.io/git-chglog/git-chglog
+  GO_VERSION: "1.16"
 
 jobs:
   goreleaser:
@@ -21,18 +19,16 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16
+          go-version: ${{ env.GO_VERSION }}
       - name: Build go binary
-        run: go build -o $IMAGE_NAME
-      - name: Build docker image
-        run: docker build . --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        run: make build
       - name: Login to GitHub Packages Docker Registry
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Push docker image
+      - name: Build and Push docker image
         run: |
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          docker build --pull --tag ghcr.io/git-chglog/git-chglog:edge .
+          docker push ghcr.io/git-chglog/git-chglog:edge
