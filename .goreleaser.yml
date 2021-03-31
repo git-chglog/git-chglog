@@ -27,13 +27,13 @@ archives:
         format: zip
 
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 
 changelog:
   sort: desc
   filters:
     exclude:
-      - '^Merge'
+      - "^Merge"
 
 snapshot:
   name_template: "{{ .Tag }}-next"
