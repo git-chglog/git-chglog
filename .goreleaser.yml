@@ -38,6 +38,14 @@ changelog:
 snapshot:
   name_template: "{{ .Tag }}-next"
 
+dockers:
+  - 
+    image_templates:
+      - "ghcr.io/git-chglog/git-chglog:{{ .RawVersion }}"
+      - "ghcr.io/git-chglog/git-chglog:latest"
+    ids:
+      - git-chglog
+
 brews:
   - tap:
       owner: git-chglog
