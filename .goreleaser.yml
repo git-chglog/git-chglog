@@ -38,6 +38,11 @@ changelog:
 snapshot:
   name_template: "{{ .Tag }}-next"
 
+dockers:
+  - image_templates:
+      - "quay.io/git-chglog/git-chglog:{{ .RawVersion }}"
+      - "quay.io/git-chglog/git-chglog:latest"
+
 brews:
   - tap:
       owner: git-chglog

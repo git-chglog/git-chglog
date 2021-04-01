@@ -112,6 +112,16 @@ asdf install git-chglog latest
 go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
 ```
 
+### [Docker](https://www.docker.com/)
+The compiled docker images are maintained on [quay.io](https://quay.io/repository/git-chglog/git-chglog). 
+We maintain the following tags:
+- `edge`: Image that is build from the current `HEAD` of the main line branch.
+- `latest`: Image that is built from the [latest released version](https://github.com/git-chglog/git-chglog/releases)
+- `x.y.y` (versions): Images that are build from the tagged versions within Github.
+```bash
+docker pull quay.io/git-chglog/git-chglog:latest
+docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog --version
+```
 ---
 
 If you are using another platform, you can download a binary from the [releases page]
