@@ -9,6 +9,11 @@ GOHOST  ?= GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO)
 
 LDFLAGS ?= "-X main.version=$(VERSION)"
 
+# Docker variables
+DEFAULT_TAG  ?= $(shell echo "$(VERSION)" | tr -d 'v')
+DOCKER_IMAGE := quay.io/git-chglog/git-chglog
+DOCKER_TAG   ?= $(DEFAULT_TAG)
+
 .PHONY: all
 all: help
 
@@ -46,6 +51,16 @@ install:   ## Install git-chglog
 	@ $(MAKE) --no-print-directory log-$@
 	$(GOHOST) install ./cmd/git-chglog
 
+.PHONY: docker
+docker: build   ## Build Docker image
+	@ $(MAKE) --no-print-directory log-$@
+	docker build --pull --tag $(DOCKER_IMAGE):$(DOCKER_TAG) .
+
+.PHONY: push
+push:   ## Push Docker image
+	@ $(MAKE) --no-print-directory log-$@
+	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
+
 ###########
 ##@ Release
 
@@ -55,7 +70,7 @@ changelog: build   ## Generate changelog
 	./git-chglog --next-tag $(VERSION) -o CHANGELOG.md
 
 .PHONY: release
-release: changelog    ## Release a new tag
+release: changelog   ## Release a new tag
 	@ $(MAKE) --no-print-directory log-$@
 	git add CHANGELOG.md
 	git commit -m "chore: update changelog for $(VERSION)"
