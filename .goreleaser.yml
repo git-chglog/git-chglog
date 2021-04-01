@@ -40,8 +40,8 @@ snapshot:
 
 dockers:
   - image_templates:
-      - "ghcr.io/git-chglog/git-chglog:{{ .RawVersion }}"
-      - "ghcr.io/git-chglog/git-chglog:latest"
+      - "quay.io/git-chglog/git-chglog:{{ .RawVersion }}"
+      - "quay.io/git-chglog/git-chglog:latest"
 
 brews:
   - tap:

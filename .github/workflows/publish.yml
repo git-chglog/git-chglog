@@ -7,6 +7,7 @@ on:
 
 env:
   GO_VERSION: "1.16"
+  DOCKER_REGISTRY: "quay.io"
 
 jobs:
   goreleaser:
@@ -30,5 +31,5 @@ jobs:
           password: ${{ secrets.QUAY_IO_TOKEN }}
       - name: Build and Push docker image
         run: |
-          docker build --pull --tag ghcr.io/git-chglog/git-chglog:edge .
-          docker push ghcr.io/git-chglog/git-chglog:edge
+          docker build --pull --tag ${{ env.DOCKER_REGISTRY }}/git-chglog/git-chglog:edge .
+          docker push ${{ env.DOCKER_REGISTRY }}/git-chglog/git-chglog:edge
