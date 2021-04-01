@@ -112,6 +112,12 @@ asdf install git-chglog latest
 go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
 ```
 
+### [Docker](https://www.docker.com/)
+
+```bash
+docker pull ghcr.io/git-chglog/git-chglog:latest
+docker run -v "$PWD":/workdir ghcr.io/git-chglog/git-chglog --version
+```
 ---
 
 If you are using another platform, you can download a binary from the [releases page]
