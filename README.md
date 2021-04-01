@@ -117,7 +117,7 @@ The compiled docker images are maintained on [quay.io](https://quay.io/repositor
 We maintain the following tags:
 - `edge`: Image that is build from the current `HEAD` of the main line branch.
 - `latest`: Image that is built from the [latest released version](https://github.com/git-chglog/git-chglog/releases)
-- `vx.y.y` (versions): Images that are build from the tagged versions within Github.
+- `x.y.y` (versions): Images that are build from the tagged versions within Github.
 ```bash
 docker pull quay.io/git-chglog/git-chglog:latest
 docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog --version
