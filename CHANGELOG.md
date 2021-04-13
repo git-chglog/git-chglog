@@ -2,9 +2,24 @@
 ## [Unreleased]
 
 
+<a name="v0.14.1"></a>
+## [v0.14.1] - 2021-04-13
+### Bug Fixes
+- **template:** address regression in string functions for template engine ([#142](https://github.com/git-chglog/git-chglog/issues/142))
+
+### Chores
+- add docker target to Makefile ([#138](https://github.com/git-chglog/git-chglog/issues/138))
+- add make release target ([#130](https://github.com/git-chglog/git-chglog/issues/130))
+- **deps:** update alpine docker tag to v3.13.4 ([#136](https://github.com/git-chglog/git-chglog/issues/136))
+
+### Features
+- add docker image on release and master ([#135](https://github.com/git-chglog/git-chglog/issues/135))
+
+
 <a name="v0.14.0"></a>
 ## [v0.14.0] - 2021-03-28
 ### Chores
+- update changelog for v0.14.0
 - **CHANGELOG:** regenerate CHANGELOG with type-scope and KAC template ([#129](https://github.com/git-chglog/git-chglog/issues/129))
 
 ### Features
@@ -342,7 +357,8 @@
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.14.1...HEAD
+[v0.14.1]: https://github.com/git-chglog/git-chglog/compare/v0.14.0...v0.14.1
 [v0.14.0]: https://github.com/git-chglog/git-chglog/compare/v0.13.0...v0.14.0
 [v0.13.0]: https://github.com/git-chglog/git-chglog/compare/v0.12.0...v0.13.0
 [v0.12.0]: https://github.com/git-chglog/git-chglog/compare/v0.11.2...v0.12.0
