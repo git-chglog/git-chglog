@@ -439,9 +439,22 @@ Options to detect notes contained in commit bodies.
 
 ## Templates
 
-The `git-chglog` template uses the `text/template` package and enhanced templating functions provided by [Sprig](http://masterminds.github.io/sprig). For basic usage please refer to the following.
+The `git-chglog` template uses the `text/template` package and enhanced templating functions provided by [Sprig]. For basic usage please refer to the following.
 
-> [text/template](https://golang.org/pkg/text/template/)
+- [text/template](https://golang.org/pkg/text/template/)
+- [Sprig]
+
+We have implemented the following custom template functions. These override functions provided by [Sprig].
+
+| Name         | Signature                                     | Description                                                                   |
+| :----------- | :-------------------------------------------- | :---------------------------------------------------------------------------- |
+| `contains`   | `func(s, substr string) bool`                 | Reports whether `substr` is within `s` using `strings.Contains`               |
+| `datetime`   | `func(layout string, input time.Time) string` | Generate a formatted Date string based on layout                              |
+| `hasPrefix`  | `func(s, prefix string) bool`                 | Tests whether the string `s` begins with `prefix` using `strings.HasPrefix`   |
+| `hasSuffix`  | `func(s, suffix string) bool`                 | Tests whether the string `s` ends with `suffix`. using `strings.HasPrefix`    |
+| `indent`     | `func(s string, n int) string`                | Indent all lines of `s` by `n` spaces                                         |
+| `replace`    | `func(s, old, new string, n int) string`      | Replace `old` with `new` within string `s`, `n` times using `strings.Replace` |
+| `upperFirst` | `func(s string) string`                       | Upper case the first character of a string                                    |
 
 If you are not satisfied with the prepared template please try customizing one.
 
@@ -729,3 +742,4 @@ See [CHANGELOG.md](./CHANGELOG.md)
 [golangci-lint]: https://golangci-lint.run/usage/install/#local-installation
 [issues]: https://github.com/git-chglog/git-chglog/issues
 [git-chglog/artwork]: https://github.com/git-chglog/artwork
+[Sprig]: http://masterminds.github.io/sprig
