@@ -340,6 +340,13 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 			pad := strings.Repeat(" ", n)
 			return pad + strings.ReplaceAll(s, "\n", "\n"+pad)
 		},
+		// While Sprig provides these functions, they change the standard input
+		// order which leads to a regression. For an example see:
+		// https://github.com/Masterminds/sprig/blob/master/functions.go#L149
+		"contains":  strings.Contains,
+		"hasPrefix": strings.HasPrefix,
+		"hasSuffix": strings.HasSuffix,
+		"replace":   strings.Replace,
 	}
 
 	fname := filepath.Base(gen.config.Template)
