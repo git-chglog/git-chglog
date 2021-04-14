@@ -316,6 +316,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 			CommitGroupBy:               opts.CommitGroups.GroupBy,
 			CommitGroupSortBy:           opts.CommitGroups.SortBy,
 			CommitGroupTitleMaps:        opts.CommitGroups.TitleMaps,
+			CommitGroupTitleOrder:       opts.CommitGroups.TitleOrder,
 			HeaderPattern:               opts.Header.Pattern,
 			HeaderPatternMaps:           opts.Header.PatternMaps,
 			IssuePrefix:                 opts.Issues.Prefix,
