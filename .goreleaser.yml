@@ -40,7 +40,7 @@ snapshot:
 
 dockers:
   - image_templates:
-      - "quay.io/git-chglog/git-chglog:{{ .RawVersion }}"
+      - "quay.io/git-chglog/git-chglog:v{{ .RawVersion }}"
       - "quay.io/git-chglog/git-chglog:latest"
 
 brews:
