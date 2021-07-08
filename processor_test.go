@@ -83,30 +83,34 @@ func TestGitLabProcessor(t *testing.T) {
 
 	assert.Equal(
 		&Commit{
-			Header:  "message [@foo](https://gitlab.com/foo) [#123](https://example.com/issues/123)",
-			Subject: "message [@foo](https://gitlab.com/foo) [#123](https://example.com/issues/123)",
+			Header:  "message [@foo](https://gitlab.com/foo) [#123](https://example.com/issues/123) [!345](https://example.com/merge_requests/345)",
+			Subject: "message [@foo](https://gitlab.com/foo) [#123](https://example.com/issues/123) [!345](https://example.com/merge_requests/345)",
 			Body: `issue [#456](https://example.com/issues/456)
 multiline [#789](https://example.com/issues/789)
+merge request [!345](https://example.com/merge_requests/345)
 [@foo](https://gitlab.com/foo), [@bar](https://gitlab.com/bar)`,
 			Notes: []*Note{
 				{
-					Body: `issue1 [#11](https://example.com/issues/11)
+					Body: `issue1 [#11](https://example.com/issues/11) [!33](https://example.com/merge_requests/33)
 issue2 [#22](https://example.com/issues/22)
+merge request [!33](https://example.com/merge_requests/33)
 gh-56 hoge fuga`,
 				},
 			},
 		},
 		processor.ProcessCommit(
 			&Commit{
-				Header:  "message @foo #123",
-				Subject: "message @foo #123",
+				Header:  "message @foo #123 !345",
+				Subject: "message @foo #123 !345",
 				Body: `issue #456
 multiline #789
+merge request !345
 @foo, @bar`,
 				Notes: []*Note{
 					{
-						Body: `issue1 #11
+						Body: `issue1 #11 !33
 issue2 #22
+merge request !33
 gh-56 hoge fuga`,
 					},
 				},
@@ -117,13 +121,13 @@ gh-56 hoge fuga`,
 	assert.Equal(
 		&Commit{
 			Revert: &Revert{
-				Header: "revert header [@mention](https://gitlab.com/mention) [#123](https://example.com/issues/123)",
+				Header: "revert header [@mention](https://gitlab.com/mention) [#123](https://example.com/issues/123) [!345](https://example.com/merge_requests/345)",
 			},
 		},
 		processor.ProcessCommit(
 			&Commit{
 				Revert: &Revert{
-					Header: "revert header @mention #123",
+					Header: "revert header @mention #123 !345",
 				},
 			},
 		),
