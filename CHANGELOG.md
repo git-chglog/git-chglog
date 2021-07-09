@@ -2,12 +2,29 @@
 ## [Unreleased]
 
 
+<a name="v0.15.0"></a>
+## [v0.15.0] - 2021-07-09
+### Bug Fixes
+- **deps:** update module github.com/alecaivazis/survey/v2 to v2.2.14 ([#158](https://github.com/git-chglog/git-chglog/issues/158))
+- **deps:** update module github.com/alecaivazis/survey/v2 to v2.2.13 ([#156](https://github.com/git-chglog/git-chglog/issues/156))
+- **deps:** update module github.com/fatih/color to v1.12.0 ([#150](https://github.com/git-chglog/git-chglog/issues/150))
+- **deps:** update module github.com/fatih/color to v1.11.0 ([#149](https://github.com/git-chglog/git-chglog/issues/149))
+- **deps:** update module github.com/alecaivazis/survey/v2 to v2.2.12 ([#147](https://github.com/git-chglog/git-chglog/issues/147))
+
+### Chores
+- **deps:** update alpine docker tag to v3.14.0 ([#153](https://github.com/git-chglog/git-chglog/issues/153))
+
+### Features
+- Automatic link for gitlab merge requests ([#160](https://github.com/git-chglog/git-chglog/issues/160))
+
+
 <a name="v0.14.2"></a>
-## [v0.14.2] - 2021-04-14
+## [v0.14.2] - 2021-04-16
 ### Bug Fixes
 - add CommitGroupTitleOrder back to Options ([#143](https://github.com/git-chglog/git-chglog/issues/143))
 
 ### Chores
+- update changelog for v0.14.2
 - **deps:** update alpine docker tag to v3.13.5 ([#144](https://github.com/git-chglog/git-chglog/issues/144))
 
 
@@ -367,7 +384,8 @@
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.14.2...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.15.0...HEAD
+[v0.15.0]: https://github.com/git-chglog/git-chglog/compare/v0.14.2...v0.15.0
 [v0.14.2]: https://github.com/git-chglog/git-chglog/compare/v0.14.1...v0.14.2
 [v0.14.1]: https://github.com/git-chglog/git-chglog/compare/v0.14.0...v0.14.1
 [v0.14.0]: https://github.com/git-chglog/git-chglog/compare/v0.13.0...v0.14.0
