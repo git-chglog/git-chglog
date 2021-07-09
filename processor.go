@@ -70,12 +70,14 @@ func (p *GitHubProcessor) addLinks(input string) string {
 //
 // The following processing is performed
 //  - Mentions automatic link (@tsuyoshiwada -> [@tsuyoshiwada](https://gitlab.com/tsuyoshiwada))
-//  - Automatic link to references (#123 -> [#123](https://gitlab.com/owner/repo/issues/123))
+//  - Automatic link to references issues (#123 -> [#123](https://gitlab.com/owner/repo/issues/123))
+//  - Automatic link to references merge request (!123 -> [#123](https://gitlab.com/owner/repo/merge_requests/123))
 type GitLabProcessor struct {
-	Host      string // Host name used for link destination. Note: You must include the protocol (e.g. "https://gitlab.com")
-	config    *Config
-	reMention *regexp.Regexp
-	reIssue   *regexp.Regexp
+	Host           string // Host name used for link destination. Note: You must include the protocol (e.g. "https://gitlab.com")
+	config         *Config
+	reMention      *regexp.Regexp
+	reIssue        *regexp.Regexp
+	reMergeRequest *regexp.Regexp
 }
 
 // Bootstrap ...
@@ -90,6 +92,7 @@ func (p *GitLabProcessor) Bootstrap(config *Config) {
 
 	p.reMention = regexp.MustCompile(`@(\w+)`)
 	p.reIssue = regexp.MustCompile(`(?i)#(\d+)`)
+	p.reMergeRequest = regexp.MustCompile(`(?i)!(\d+)`)
 }
 
 // ProcessCommit ...
@@ -117,6 +120,9 @@ func (p *GitLabProcessor) addLinks(input string) string {
 
 	// issues
 	input = p.reIssue.ReplaceAllString(input, "[#$1]("+repoURL+"/issues/$1)")
+
+	// merge requests
+	input = p.reMergeRequest.ReplaceAllString(input, "[!$1]("+repoURL+"/merge_requests/$1)")
 
 	return input
 }
