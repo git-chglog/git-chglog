@@ -109,6 +109,7 @@ type Tag struct {
 	Name     string
 	Subject  string
 	Date     time.Time
+	Order    int // The less the newer
 	Next     *RelateTag
 	Previous *RelateTag
 }

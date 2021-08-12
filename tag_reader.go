@@ -76,6 +76,7 @@ func (r *tagReader) ReadAll() ([]*Tag, error) {
 
 	switch r.sortBy {
 	case "date":
+		r.assignOrderToTags(tags)
 		r.sortTags(tags)
 	case "semver":
 		r.filterSemVerTags(&tags)
@@ -146,9 +147,32 @@ func (*tagReader) assignPreviousAndNextTag(tags []*Tag) {
 	}
 }
 
+func (r *tagReader) assignOrderToTags(tags []*Tag) error {
+	out, err := r.client.Exec("log", "--oneline", "--decorate=short")
+	if err != nil {
+		return fmt.Errorf("failed to get git-log: %w", err)
+	}
+
+	lines := strings.Split(out, "\n")
+	re := regexp.MustCompile(`tag:\s([^\s]*)[,)]`)
+	for i, line := range lines {
+		result := re.FindAllStringSubmatch(line, -1)
+		for _, match := range result {
+			tagOfCommit := match[1]
+			for _, tag := range tags {
+				if tagOfCommit == tag.Name {
+					tag.Order = i
+					break
+				}
+			}
+		}
+	}
+	return nil
+}
+
 func (*tagReader) sortTags(tags []*Tag) {
 	sort.Slice(tags, func(i, j int) bool {
-		return !tags[i].Date.Before(tags[j].Date)
+		return tags[i].Order < tags[j].Order
 	})
 }
 
