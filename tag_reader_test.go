@@ -13,8 +13,8 @@ func TestTagReader(t *testing.T) {
 	assert := assert.New(t)
 	client := &mockClient{
 		ReturnExec: func(subcmd string, args ...string) (string, error) {
-			if subcmd == "for-each-ref" {
-
+			switch subcmd {
+			case "for-each-ref":
 				return strings.Join([]string{
 					"",
 					"refs/tags/v2.0.4-beta.1@@__CHGLOG__@@Release v2.0.4-beta.1@@__CHGLOG__@@Thu Feb 1 00:00:00 2018 +0000@@__CHGLOG__@@",
@@ -25,7 +25,7 @@ func TestTagReader(t *testing.T) {
 					"refs/tags/hoge_fuga@@__CHGLOG__@@Invalid semver tag name@@__CHGLOG__@@Mon Mar 12 12:30:10 2018 +0000@@__CHGLOG__@@",
 					"hoge@@__CHGLOG__@@",
 				}, "\n"), nil
-			} else if subcmd == "log" {
+			case "log":
 				return strings.Join([]string{
 					"9cf6994 (tag: hoge_fuga) xxxx",
 					"7f68835 (tag: 5.0.0-rc.0) xxxx",
@@ -35,7 +35,7 @@ func TestTagReader(t *testing.T) {
 					"182d417 (tag: 4.4.3) xxxx",
 					"c4c2f10 (tag: v2.0.4-beta.1) xxxxx",
 				}, "\n"), nil
-			} else {
+			default:
 				return "", errors.New("")
 			}
 		},

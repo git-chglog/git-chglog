@@ -52,11 +52,11 @@ func (r *tagReader) ReadAll() ([]*Tag, error) {
 
 		name := r.parseRefname(tokens[0])
 		subject := r.parseSubject(tokens[1])
-		date, err := r.parseDate(tokens[2])
-		if err != nil {
-			t, err2 := r.parseDate(tokens[3])
-			if err2 != nil {
-				return nil, err2
+		date, errOfParseDate := r.parseDate(tokens[2])
+		if errOfParseDate != nil {
+			t, errOfParseDate := r.parseDate(tokens[3])
+			if errOfParseDate != nil {
+				return nil, errOfParseDate
 			}
 			date = t
 		}
@@ -74,16 +74,28 @@ func (r *tagReader) ReadAll() ([]*Tag, error) {
 		})
 	}
 
+	tags, err = r.sortTags(tags)
+	if err != nil {
+		return nil, err
+	}
+
+	r.assignPreviousAndNextTag(tags)
+
+	return tags, nil
+}
+
+func (r *tagReader) sortTags(tags []*Tag) ([]*Tag, error) {
 	switch r.sortBy {
 	case "date":
-		r.assignOrderToTags(tags)
-		r.sortTags(tags)
+		err := r.assignOrderToTags(tags)
+		if err != nil {
+			return nil, err
+		}
+		r.sortTagsByDate(tags)
 	case "semver":
 		r.filterSemVerTags(&tags)
 		r.sortTagsBySemver(tags)
 	}
-	r.assignPreviousAndNextTag(tags)
-
 	return tags, nil
 }
 
@@ -93,9 +105,7 @@ func (*tagReader) filterSemVerTags(tags *[]*Tag) {
 		// remove leading v, since its so
 		// common.
 		name := t.Name
-		if strings.HasPrefix(name, "v") {
-			name = strings.TrimPrefix(name, "v")
-		}
+		name = strings.TrimPrefix(name, "v")
 
 		// attempt semver parse, if not successful
 		// remove it from tags slice.
@@ -170,7 +180,7 @@ func (r *tagReader) assignOrderToTags(tags []*Tag) error {
 	return nil
 }
 
-func (*tagReader) sortTags(tags []*Tag) {
+func (*tagReader) sortTagsByDate(tags []*Tag) {
 	sort.Slice(tags, func(i, j int) bool {
 		return tags[i].Order < tags[j].Order
 	})
