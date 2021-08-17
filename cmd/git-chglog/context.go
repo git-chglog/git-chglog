@@ -11,6 +11,7 @@ type CLIContext struct {
 	Stderr           io.Writer
 	ConfigPath       string
 	Template         string
+	Title            string
 	RepositoryURL    string
 	OutputPath       string
 	Silent           bool
