@@ -202,7 +202,7 @@ func (gen *Generator) readVersions(tags []*Tag, first string) ([]*Version, error
 			return nil, err
 		}
 
-		commitGroups, mergeCommits, revertCommits, noteGroups := gen.commitExtractor.Extract(commits)
+		commitGroups, mergeCommits, revertCommits, otherCommits, noteGroups := gen.commitExtractor.Extract(commits)
 
 		versions = append(versions, &Version{
 			Tag:           tag,
@@ -210,6 +210,7 @@ func (gen *Generator) readVersions(tags []*Tag, first string) ([]*Version, error
 			Commits:       commits,
 			MergeCommits:  mergeCommits,
 			RevertCommits: revertCommits,
+			OtherCommits:  otherCommits,
 			NoteGroups:    noteGroups,
 		})
 
@@ -238,13 +239,14 @@ func (gen *Generator) readUnreleased(tags []*Tag) (*Unreleased, error) {
 		return nil, err
 	}
 
-	commitGroups, mergeCommits, revertCommits, noteGroups := gen.commitExtractor.Extract(commits)
+	commitGroups, mergeCommits, revertCommits, otherCommits, noteGroups := gen.commitExtractor.Extract(commits)
 
 	unreleased := &Unreleased{
 		CommitGroups:  commitGroups,
 		Commits:       commits,
 		MergeCommits:  mergeCommits,
 		RevertCommits: revertCommits,
+		OtherCommits:  otherCommits,
 		NoteGroups:    noteGroups,
 	}
 

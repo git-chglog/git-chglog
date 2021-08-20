@@ -477,6 +477,13 @@ The basic templates are as follows.
 {{ end }}
 {{ end -}}
 {{ end -}}
+
+{{- if .Unreleased.OtherCommits -}}
+### Others
+{{ range .Unreleased.OtherCommits -}}
+- {{ .Header }}
+{{ end -}}
+{{ end -}}
 {{ end -}}
 
 {{ range .Versions }}
@@ -509,6 +516,13 @@ The basic templates are as follows.
 {{ range .Notes }}
 {{ .Body }}
 {{ end }}
+{{ end -}}
+{{ end -}}
+
+{{- if .OtherCommits -}}
+### Others
+{{ range .OtherCommits -}}
+- {{ .Header }}
 {{ end -}}
 {{ end -}}
 {{ end -}}
