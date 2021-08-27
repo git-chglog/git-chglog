@@ -3,7 +3,7 @@ module github.com/git-chglog/git-chglog
 go 1.16
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.2.16
+	github.com/AlecAivazis/survey/v2 v2.3.1
 	github.com/Masterminds/sprig/v3 v3.2.2
 	github.com/andygrunwald/go-jira v1.14.0
 	github.com/coreos/go-semver v0.3.0
