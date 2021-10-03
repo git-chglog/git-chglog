@@ -19,7 +19,7 @@ func TestKACTemplateBuilderDefault(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal(`{{ if .Versions -}}
+	assert.Equal(`{{ if .Unreleased -}}
 <a name="unreleased"></a>
 ## [Unreleased]
 
@@ -67,12 +67,15 @@ func TestKACTemplateBuilderDefault(t *testing.T) {
 {{ end -}}
 {{ end -}}
 
+{{- if .UnreleasedHash.Short }}
+[Unreleased]: {{ .Info.RepositoryURL }}/compare/{{ .UnreleasedHash.Short }}...HEAD
+{{ end -}}
 {{- if .Versions }}
 [Unreleased]: {{ .Info.RepositoryURL }}/compare/{{ $latest := index .Versions 0 }}{{ $latest.Tag.Name }}...HEAD
+{{ end -}}
 {{ range .Versions -}}
 {{ if .Tag.Previous -}}
 [{{ .Tag.Name }}]: {{ $.Info.RepositoryURL }}/compare/{{ .Tag.Previous.Name }}...{{ .Tag.Name }}
-{{ end -}}
 {{ end -}}
 {{ end -}}`, out)
 }
@@ -90,7 +93,7 @@ func TestKACTemplateBuilderNone(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal(`{{ if .Versions -}}
+	assert.Equal(`{{ if .Unreleased -}}
 ## Unreleased
 
 {{ if .Unreleased.CommitGroups -}}
@@ -150,7 +153,7 @@ func TestKACTemplateBuilderSubject(t *testing.T) {
 	})
 
 	assert.Nil(err)
-	assert.Equal(`{{ if .Versions -}}
+	assert.Equal(`{{ if .Unreleased -}}
 ## Unreleased
 
 {{ if .Unreleased.CommitGroups -}}
