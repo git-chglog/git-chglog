@@ -52,11 +52,11 @@ func (r *tagReader) ReadAll() ([]*Tag, error) {
 
 		name := r.parseRefname(tokens[0])
 		subject := r.parseSubject(tokens[1])
-		date, err := r.parseDate(tokens[2])
-		if err != nil {
-			t, err2 := r.parseDate(tokens[3])
-			if err2 != nil {
-				return nil, err2
+		date, errOfParseDate := r.parseDate(tokens[2])
+		if errOfParseDate != nil {
+			t, errOfParseDate := r.parseDate(tokens[3])
+			if errOfParseDate != nil {
+				return nil, errOfParseDate
 			}
 			date = t
 		}
@@ -74,15 +74,28 @@ func (r *tagReader) ReadAll() ([]*Tag, error) {
 		})
 	}
 
+	tags, err = r.sortTags(tags)
+	if err != nil {
+		return nil, err
+	}
+
+	r.assignPreviousAndNextTag(tags)
+
+	return tags, nil
+}
+
+func (r *tagReader) sortTags(tags []*Tag) ([]*Tag, error) {
 	switch r.sortBy {
 	case "date":
-		r.sortTags(tags)
+		err := r.assignOrderToTags(tags)
+		if err != nil {
+			return nil, err
+		}
+		r.sortTagsByDate(tags)
 	case "semver":
 		r.filterSemVerTags(&tags)
 		r.sortTagsBySemver(tags)
 	}
-	r.assignPreviousAndNextTag(tags)
-
 	return tags, nil
 }
 
@@ -92,9 +105,7 @@ func (*tagReader) filterSemVerTags(tags *[]*Tag) {
 		// remove leading v, since its so
 		// common.
 		name := t.Name
-		if strings.HasPrefix(name, "v") {
-			name = strings.TrimPrefix(name, "v")
-		}
+		name = strings.TrimPrefix(name, "v")
 
 		// attempt semver parse, if not successful
 		// remove it from tags slice.
@@ -146,9 +157,32 @@ func (*tagReader) assignPreviousAndNextTag(tags []*Tag) {
 	}
 }
 
-func (*tagReader) sortTags(tags []*Tag) {
+func (r *tagReader) assignOrderToTags(tags []*Tag) error {
+	out, err := r.client.Exec("log", "--oneline", "--decorate=short")
+	if err != nil {
+		return fmt.Errorf("failed to get git-log: %w", err)
+	}
+
+	lines := strings.Split(out, "\n")
+	re := regexp.MustCompile(`tag:\s([^\s]*)[,)]`)
+	for i, line := range lines {
+		result := re.FindAllStringSubmatch(line, -1)
+		for _, match := range result {
+			tagOfCommit := match[1]
+			for _, tag := range tags {
+				if tagOfCommit == tag.Name {
+					tag.Order = i
+					break
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func (*tagReader) sortTagsByDate(tags []*Tag) {
 	sort.Slice(tags, func(i, j int) bool {
-		return !tags[i].Date.Before(tags[j].Date)
+		return tags[i].Order < tags[j].Order
 	})
 }
 
