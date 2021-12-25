@@ -120,7 +120,7 @@ We maintain the following tags:
 - `x.y.y` (versions): Images that are build from the tagged versions within Github.
 ```bash
 docker pull quay.io/git-chglog/git-chglog:latest
-docker run -v "$PWD":/workdir quay.io/git-chglog/git-chglog --version
+docker run -it -v "$PWD":/workdir quay.io/git-chglog/git-chglog --version
 ```
 ---
 
