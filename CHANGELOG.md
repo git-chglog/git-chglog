@@ -2,6 +2,19 @@
 ## [Unreleased]
 
 
+<a name="v0.15.1"></a>
+## [v0.15.1] - 2021-12-14
+### Bug Fixes
+- **deps:** update all non-major dependencies ([#179](https://github.com/git-chglog/git-chglog/issues/179))
+- **deps:** update module github.com/andygrunwald/go-jira to v1.14.0 ([#167](https://github.com/git-chglog/git-chglog/issues/167))
+- **deps:** update module github.com/alecaivazis/survey/v2 to v2.2.16 ([#165](https://github.com/git-chglog/git-chglog/issues/165))
+- **deps:** update module github.com/alecaivazis/survey/v2 to v2.2.15 ([#163](https://github.com/git-chglog/git-chglog/issues/163))
+
+### Chores
+- ignore .vscode
+- **deps:** update all non-major dependencies docker tags ([#168](https://github.com/git-chglog/git-chglog/issues/168))
+
+
 <a name="v0.15.0"></a>
 ## [v0.15.0] - 2021-07-09
 ### Bug Fixes
@@ -12,6 +25,7 @@
 - **deps:** update module github.com/alecaivazis/survey/v2 to v2.2.12 ([#147](https://github.com/git-chglog/git-chglog/issues/147))
 
 ### Chores
+- update changelog for v0.15.0
 - **deps:** update alpine docker tag to v3.14.0 ([#153](https://github.com/git-chglog/git-chglog/issues/153))
 
 ### Features
@@ -384,7 +398,8 @@
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.15.1...HEAD
+[v0.15.1]: https://github.com/git-chglog/git-chglog/compare/v0.15.0...v0.15.1
 [v0.15.0]: https://github.com/git-chglog/git-chglog/compare/v0.14.2...v0.15.0
 [v0.14.2]: https://github.com/git-chglog/git-chglog/compare/v0.14.1...v0.14.2
 [v0.14.1]: https://github.com/git-chglog/git-chglog/compare/v0.14.0...v0.14.1
