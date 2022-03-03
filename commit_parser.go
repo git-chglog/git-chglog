@@ -115,7 +115,10 @@ func (p *commitParser) Parse(rev string) ([]*Commit, error) {
 	commits := make([]*Commit, len(lines))
 
 	for i, line := range lines {
-		commit := p.parseCommit(line)
+		commit, err := p.parseCommit(line)
+		if err != nil {
+			return nil, err
+		}
 
 		if processor != nil {
 			commit = processor.ProcessCommit(commit)
@@ -130,7 +133,7 @@ func (p *commitParser) Parse(rev string) ([]*Commit, error) {
 	return commits, nil
 }
 
-func (p *commitParser) parseCommit(input string) *Commit {
+func (p *commitParser) parseCommit(input string) (*Commit, error) {
 	commit := &Commit{}
 	tokens := strings.Split(input, delimiter)
 
@@ -156,7 +159,19 @@ func (p *commitParser) parseCommit(input string) *Commit {
 	commit.Refs = p.uniqRefs(commit.Refs)
 	commit.Mentions = p.uniqMentions(commit.Mentions)
 
-	return commit
+	args := []string{
+		"--no-commit-id",
+		"--name-only",
+		"-r",
+		commit.Hash.Short,
+	}
+	out, err := p.client.Exec("diff-tree", args...)
+	if err != nil {
+		return nil, err
+	}
+	commit.ChangedFiles = strings.Split(out, "/n")
+
+	return commit, nil
 }
 
 func (p *commitParser) parseHash(input string) *Hash {
