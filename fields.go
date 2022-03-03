@@ -68,24 +68,25 @@ type JiraIssue struct {
 
 // Commit data
 type Commit struct {
-	Hash        *Hash
-	Author      *Author
-	Committer   *Committer
-	Merge       *Merge  // If it is not a merge commit, `nil` is assigned
-	Revert      *Revert // If it is not a revert commit, `nil` is assigned
-	Refs        []*Ref
-	Notes       []*Note
-	Mentions    []string   // Name of the user included in the commit header or body
-	CoAuthors   []Contact  // (e.g. `Co-authored-by: user <user@email>`)
-	Signers     []Contact  // (e.g. `Signed-off-by: user <user@email>`)
-	JiraIssue   *JiraIssue // If no issue id found in header, `nil` is assigned
-	Header      string     // (e.g. `feat(core)[RNWY-310]: Add new feature`)
-	Type        string     // (e.g. `feat`)
-	Scope       string     // (e.g. `core`)
-	Subject     string     // (e.g. `Add new feature`)
-	JiraIssueID string     // (e.g. `RNWY-310`)
-	Body        string
-	TrimmedBody string // Body without any Notes/Refs/Mentions/CoAuthors/Signers
+	Hash         *Hash
+	Author       *Author
+	Committer    *Committer
+	Merge        *Merge  // If it is not a merge commit, `nil` is assigned
+	Revert       *Revert // If it is not a revert commit, `nil` is assigned
+	Refs         []*Ref
+	Notes        []*Note
+	Mentions     []string   // Name of the user included in the commit header or body
+	CoAuthors    []Contact  // (e.g. `Co-authored-by: user <user@email>`)
+	Signers      []Contact  // (e.g. `Signed-off-by: user <user@email>`)
+	JiraIssue    *JiraIssue // If no issue id found in header, `nil` is assigned
+	Header       string     // (e.g. `feat(core)[RNWY-310]: Add new feature`)
+	Type         string     // (e.g. `feat`)
+	Scope        string     // (e.g. `core`)
+	Subject      string     // (e.g. `Add new feature`)
+	JiraIssueID  string     // (e.g. `RNWY-310`)
+	Body         string
+	TrimmedBody  string // Body without any Notes/Refs/Mentions/CoAuthors/Signers
+	ChangedFiles []string
 }
 
 // CommitGroup is a collection of commits grouped according to the `CommitGroupBy` option
