@@ -169,7 +169,9 @@ func (p *commitParser) parseCommit(input string) (*Commit, error) {
 	if err != nil {
 		return nil, err
 	}
-	commit.ChangedFiles = strings.Split(out, "/n")
+	if len(out) > 0 {
+		commit.ChangedFiles = strings.Split(out, "\n")
+	}
 
 	return commit, nil
 }
