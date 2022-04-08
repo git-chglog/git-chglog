@@ -109,7 +109,7 @@ asdf install git-chglog latest
 #### Go users
 
 ```bash
-go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
 ```
 
 ### [Docker](https://www.docker.com/)
