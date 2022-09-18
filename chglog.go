@@ -344,10 +344,12 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 		// While Sprig provides these functions, they change the standard input
 		// order which leads to a regression. For an example see:
 		// https://github.com/Masterminds/sprig/blob/master/functions.go#L149
-		"contains":  strings.Contains,
-		"hasPrefix": strings.HasPrefix,
-		"hasSuffix": strings.HasSuffix,
-		"replace":   strings.Replace,
+		"contains":           strings.Contains,
+		"hasPrefix":          strings.HasPrefix,
+		"hasSuffix":          strings.HasSuffix,
+		"replace":            strings.Replace,
+		"uniqueOlderCommits": uniqueOlderCommits,
+		"uniqueNewerCommits": uniqueNewerCommits,
 	}
 
 	fname := filepath.Base(gen.config.Template)
@@ -359,4 +361,99 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 		Unreleased: unreleased,
 		Versions:   versions,
 	})
+}
+
+// uniqueOlderCommits remmoves duplicated commits.
+// Newer commits are removed when duplicated.
+// Tests duplication with fields specified with `fields`.
+func uniqueOlderCommits(commits []*Commit, fields ...string) ([]*Commit, error) {
+	if len(fields) == 0 {
+		return nil, fmt.Errorf("specify at least one field")
+	}
+	if len(commits) == 0 {
+		return nil, nil
+	}
+	filtered := make([]*Commit, 0, len(commits))
+	for idx, commit := range commits {
+		// compare with older commits and skip if duplicated.
+		duplicated, err := hasDuplicatedCommit(commits[idx+1:], commit, fields)
+		if err != nil {
+			return nil, err
+		}
+		if duplicated {
+			continue
+		}
+		filtered = append(filtered, commit)
+	}
+	return filtered, nil
+}
+
+// uniqueNewerCommits remmoves duplicated commits.
+// Older commits are removed when duplicated.
+// Tests duplication with fields specified with `fields`.
+func uniqueNewerCommits(commits []*Commit, fields ...string) ([]*Commit, error) {
+	if len(fields) == 0 {
+		return nil, fmt.Errorf("specify at least one field")
+	}
+	if len(commits) == 0 {
+		return nil, nil
+	}
+	filtered := make([]*Commit, 0, len(commits))
+	for idx, commit := range commits {
+		// compare with newer commits and skip if duplicated.
+		duplicated, err := hasDuplicatedCommit(commits[:idx], commit, fields)
+		if err != nil {
+			return nil, err
+		}
+		if duplicated {
+			continue
+		}
+		filtered = append(filtered, commit)
+	}
+	return filtered, nil
+}
+
+func hasDuplicatedCommit(targetCommits []*Commit, commit *Commit, fields []string) (bool, error) {
+	for _, targetCommit := range targetCommits {
+		duplicated, err := isDuplicatedCommit(commit, targetCommit, fields)
+		if err != nil {
+			return false, err
+		}
+		if duplicated {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func isDuplicatedCommit(commit1 *Commit, commit2 *Commit, fields []string) (bool, error) {
+	for _, field := range fields {
+		a, ok := dotGetNilable(commit1, field)
+		if !ok {
+			return false, fmt.Errorf("cannot extract field \"%v\" for commit \"%v\"", field, commit1.Hash.Short)
+		}
+		b, ok := dotGetNilable(commit2, field)
+		if !ok {
+			return false, fmt.Errorf("cannot extract field \"%v\" for commit \"%v\"", field, commit1.Hash.Short)
+		}
+		// Here, `nil` for interface.
+		if a == nil || b == nil {
+			if a != nil || b != nil {
+				// not duplicated ones if something differs.
+				return false, nil
+			}
+			// considered to be same.
+			continue
+		}
+		eq, err := compare(a, "==", b)
+		if err != nil {
+			return false, err
+		}
+		if !eq {
+			// not duplicated ones if something differs.
+			return false, nil
+		}
+	}
+	// duplicated ones if nothing differs.
+	return true, nil
 }

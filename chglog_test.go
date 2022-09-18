@@ -629,3 +629,475 @@ func TestGeneratorWithSprig(t *testing.T) {
 [2.0.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...2.0.0`, expected)
 
 }
+
+func TestUniqueOlderCommits(t *testing.T) {
+	tests := []struct {
+		name        string
+		commits     []*Commit
+		fields      []string
+		expected    []*Commit
+		expectError assert.ErrorAssertionFunc
+	}{
+		{
+			name: "Duplication detected",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields: []string{"Subject"},
+			expected: []*Commit{
+				// {Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			expectError: assert.NoError,
+		},
+		{
+			name: "2 duplications detected",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log2"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log1"}, // Duplicated!
+			},
+			fields: []string{"Subject"},
+			expected: []*Commit{
+				// {Hash: &Hash{Short: "1"}, Subject: "log1"},
+				// {Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log2"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log1"}, // Duplicated!
+			},
+			expectError: assert.NoError,
+		},
+		{
+			name: "A double duplication detected",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log1"}, // Duplicated!
+			},
+			fields: []string{"Subject"},
+			expected: []*Commit{
+				// {Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				// {Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log1"}, // Duplicated!
+			},
+			expectError: assert.NoError,
+		},
+		{
+			name: "No duplicates",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log3"},
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields: []string{"Subject"},
+			expected: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log3"},
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			expectError: assert.NoError,
+		},
+		{
+			name:        "No commits (empty)",
+			commits:     []*Commit{},
+			fields:      []string{"Subject"},
+			expected:    nil,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "No commits (nil)",
+			commits:     nil,
+			fields:      []string{"Subject"},
+			expected:    nil,
+			expectError: assert.NoError,
+		},
+		{
+			name: "Empty fields (error)",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields:      []string{},
+			expected:    nil,
+			expectError: assert.Error,
+		},
+		{
+			name: "nil for fields (error)",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields:      nil,
+			expected:    nil,
+			expectError: assert.Error,
+		},
+		{
+			name: "bad field (error)",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields:      []string{"NoSuchField"},
+			expected:    nil,
+			expectError: assert.Error,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual, err := uniqueOlderCommits(
+				test.commits,
+				test.fields...,
+			)
+			test.expectError(t, err)
+			assert.Equal(t, test.expected, actual)
+		})
+	}
+}
+
+func TestUniqueNewerCommits(t *testing.T) {
+	tests := []struct {
+		name        string
+		commits     []*Commit
+		fields      []string
+		expected    []*Commit
+		expectError assert.ErrorAssertionFunc
+	}{
+		{
+			name: "Duplication detected",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields: []string{"Subject"},
+			expected: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				// {Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			expectError: assert.NoError,
+		},
+		{
+			name: "2 duplications detected",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log2"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log1"}, // Duplicated!
+			},
+			fields: []string{"Subject"},
+			expected: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				// {Hash: &Hash{Short: "3"}, Subject: "log2"}, // Duplicated!
+				// {Hash: &Hash{Short: "4"}, Subject: "log1"}, // Duplicated!
+			},
+			expectError: assert.NoError,
+		},
+		{
+			name: "A double duplication detected",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log1"}, // Duplicated!
+			},
+			fields: []string{"Subject"},
+			expected: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				// {Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				// {Hash: &Hash{Short: "4"}, Subject: "log1"}, // Duplicated!
+			},
+			expectError: assert.NoError,
+		},
+		{
+			name: "No duplicates",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log3"},
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields: []string{"Subject"},
+			expected: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log3"},
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			expectError: assert.NoError,
+		},
+		{
+			name:        "No commits (empty)",
+			commits:     []*Commit{},
+			fields:      []string{"Subject"},
+			expected:    nil,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "No commits (nil)",
+			commits:     nil,
+			fields:      []string{"Subject"},
+			expected:    nil,
+			expectError: assert.NoError,
+		},
+		{
+			name: "Empty fields (error)",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields:      []string{},
+			expected:    nil,
+			expectError: assert.Error,
+		},
+		{
+			name: "nil for fields (error)",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields:      nil,
+			expected:    nil,
+			expectError: assert.Error,
+		},
+		{
+			name: "bad field (error)",
+			commits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log1"}, // Duplicated!
+				{Hash: &Hash{Short: "4"}, Subject: "log4"},
+			},
+			fields:      []string{"NoSuchField"},
+			expected:    nil,
+			expectError: assert.Error,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual, err := uniqueNewerCommits(
+				test.commits,
+				test.fields...,
+			)
+			test.expectError(t, err)
+			assert.Equal(t, test.expected, actual)
+		})
+	}
+}
+
+func TestHasDuplicatedCommit(t *testing.T) {
+	tests := []struct {
+		name          string
+		targetCommits []*Commit
+		commit        *Commit
+		fields        []string
+		expected      bool
+		expectError   assert.ErrorAssertionFunc
+	}{
+		{
+			name: "Duplication found",
+			targetCommits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log3"},
+			},
+			commit:      &Commit{Hash: &Hash{Short: "99"}, Subject: "log2"},
+			fields:      []string{"Subject"},
+			expected:    true,
+			expectError: assert.NoError,
+		},
+		{
+			name: "Duplication not found",
+			targetCommits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log3"},
+			},
+			commit:      &Commit{Hash: &Hash{Short: "99"}, Subject: "log99"},
+			fields:      []string{"Subject"},
+			expected:    false,
+			expectError: assert.NoError,
+		},
+		{
+			name:          "No commits (empty)",
+			targetCommits: []*Commit{},
+			commit:        &Commit{Hash: &Hash{Short: "99"}, Subject: "log1"},
+			fields:        []string{"Subject"},
+			expected:      false,
+			expectError:   assert.NoError,
+		},
+		{
+			name:          "No commits (nil)",
+			targetCommits: []*Commit{},
+			commit:        &Commit{Hash: &Hash{Short: "99"}, Subject: "log1"},
+			fields:        []string{"Subject"},
+			expected:      false,
+			expectError:   assert.NoError,
+		},
+		{
+			name: "Empty fields: Nothing to compare and everything is duplicated",
+			targetCommits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log3"},
+			},
+			commit:      &Commit{Hash: &Hash{Short: "99"}, Subject: "log1"},
+			fields:      []string{},
+			expected:    true,
+			expectError: assert.NoError,
+		},
+		{
+			name: "nil for fields: Nothing to compare and everything is duplicated",
+			targetCommits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log3"},
+			},
+			commit:      &Commit{Hash: &Hash{Short: "99"}, Subject: "log1"},
+			fields:      nil,
+			expected:    true,
+			expectError: assert.NoError,
+		},
+		{
+			name: "bad field (error)",
+			targetCommits: []*Commit{
+				{Hash: &Hash{Short: "1"}, Subject: "log1"},
+				{Hash: &Hash{Short: "2"}, Subject: "log2"},
+				{Hash: &Hash{Short: "3"}, Subject: "log3"},
+			},
+			commit:      &Commit{Hash: &Hash{Short: "99"}, Subject: "log1"},
+			fields:      []string{"NoSuchField"},
+			expected:    false,
+			expectError: assert.Error,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual, err := hasDuplicatedCommit(
+				test.targetCommits,
+				test.commit,
+				test.fields,
+			)
+			test.expectError(t, err)
+			assert.Equal(t, test.expected, actual)
+		})
+	}
+}
+
+func TestIsDuplicatedCommit(t *testing.T) {
+	tests := []struct {
+		name        string
+		commit1     *Commit
+		commit2     *Commit
+		fields      []string
+		expected    bool
+		expectError assert.ErrorAssertionFunc
+	}{
+		{
+			name:        "Duplicated for single field",
+			commit1:     &Commit{Hash: &Hash{Short: "1"}, Subject: "log1"},
+			commit2:     &Commit{Hash: &Hash{Short: "2"}, Subject: "log1"},
+			fields:      []string{"Subject"},
+			expected:    true,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "Not duplicted for single field",
+			commit1:     &Commit{Hash: &Hash{Short: "1"}, Subject: "log1"},
+			commit2:     &Commit{Hash: &Hash{Short: "2"}, Subject: "log2"},
+			fields:      []string{"Subject"},
+			expected:    false,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "Duplicated for multiple fields",
+			commit1:     &Commit{Hash: &Hash{Short: "1"}, Scope: "chore", Subject: "log1", JiraIssueID: "FOO-1"},
+			commit2:     &Commit{Hash: &Hash{Short: "2"}, Scope: "chore", Subject: "log1", JiraIssueID: "FOO-1"},
+			fields:      []string{"Scope", "Subject", "JiraIssueID"},
+			expected:    true,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "Not duplicted for multiple fields",
+			commit1:     &Commit{Hash: &Hash{Short: "1"}, Scope: "chore", Subject: "log1", JiraIssueID: "FOO-1"},
+			commit2:     &Commit{Hash: &Hash{Short: "2"}, Scope: "chore", Subject: "log1", JiraIssueID: "FOO-2"},
+			fields:      []string{"Scope", "Subject", "JiraIssueID"},
+			expected:    false,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "Nested",
+			commit1:     &Commit{Hash: &Hash{Short: "1"}, Subject: "log1", Author: &Author{Name: "user1"}},
+			commit2:     &Commit{Hash: &Hash{Short: "2"}, Subject: "log2", Author: &Author{Name: "user1"}},
+			fields:      []string{"Author.Name"},
+			expected:    true,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "Nested: dereference nil",
+			commit1:     &Commit{Hash: &Hash{Short: "1"}, Subject: "log1", Author: &Author{Name: "user1"}},
+			commit2:     &Commit{Hash: &Hash{Short: "2"}, Subject: "log2", Author: nil},
+			fields:      []string{"Author.Name"},
+			expected:    false,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "Empty fields: Nothing to compare and everything is duplicated",
+			commit1:     &Commit{Hash: &Hash{Short: "1"}, Subject: "log1"},
+			commit2:     &Commit{Hash: &Hash{Short: "2"}, Subject: "log2"},
+			fields:      []string{},
+			expected:    true,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "nil for fields: Nothing to compare and everything is duplicated",
+			commit1:     &Commit{Hash: &Hash{Short: "1"}, Subject: "log1"},
+			commit2:     &Commit{Hash: &Hash{Short: "2"}, Subject: "log2"},
+			fields:      nil,
+			expected:    true,
+			expectError: assert.NoError,
+		},
+		{
+			name:        "bad field (error)",
+			commit1:     &Commit{Hash: &Hash{Short: "1"}, Subject: "log1"},
+			commit2:     &Commit{Hash: &Hash{Short: "2"}, Subject: "log2"},
+			fields:      []string{"NoSuchField"},
+			expected:    false,
+			expectError: assert.Error,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual, err := isDuplicatedCommit(
+				test.commit1,
+				test.commit2,
+				test.fields,
+			)
+			test.expectError(t, err)
+			assert.Equal(t, test.expected, actual)
+		})
+	}
+}
