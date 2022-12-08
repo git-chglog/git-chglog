@@ -52,9 +52,10 @@ type NoteOptions struct {
 
 // JiraClientInfoOptions ...
 type JiraClientInfoOptions struct {
-	Username string `yaml:"username"`
-	Token    string `yaml:"token"`
-	URL      string `yaml:"url"`
+	Username    string `yaml:"username"`
+	Token       string `yaml:"token"`
+	BearerToken string `yaml:"bearerToken"`
+	URL         string `yaml:"url"`
 }
 
 // JiraIssueOptions ...
@@ -328,6 +329,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 			NoteKeywords:                opts.Notes.Keywords,
 			JiraUsername:                orValue(ctx.JiraUsername, opts.Jira.ClintInfo.Username),
 			JiraToken:                   orValue(ctx.JiraToken, opts.Jira.ClintInfo.Token),
+			JiraBearerToken:             orValue(ctx.JiraToken, opts.Jira.ClintInfo.BearerToken),
 			JiraURL:                     orValue(ctx.JiraURL, opts.Jira.ClintInfo.URL),
 			JiraTypeMaps:                opts.Jira.Issue.TypeMaps,
 			JiraIssueDescriptionPattern: opts.Jira.Issue.DescriptionPattern,
