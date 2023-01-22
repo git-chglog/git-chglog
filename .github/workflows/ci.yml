@@ -12,7 +12,7 @@ on:
       - "README.md"
 
 env:
-  GO_VERSION: "1.16"
+  GO_VERSION: "1.19"
   GOLANGCI_VERSION: "v1.38"
 
 jobs:
