@@ -40,6 +40,7 @@ func (*osFileSystem) MkdirP(path string) error {
 }
 
 func (*osFileSystem) Create(name string) (File, error) {
+	//nolint: gosec
 	return os.Create(name)
 }
 
