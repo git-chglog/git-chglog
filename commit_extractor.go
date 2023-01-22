@@ -119,6 +119,7 @@ func (e *commitExtractor) commitGroupTitle(commit *Commit) (string, string) {
 			if t, ok := e.opts.CommitGroupTitleMaps[v]; ok {
 				ttl = t
 			} else {
+				//nolint:staticcheck
 				ttl = strings.Title(raw)
 			}
 		}
