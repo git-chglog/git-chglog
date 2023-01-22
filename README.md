@@ -682,7 +682,7 @@ Within a `Commit`, the following Jira data can be used in template:
 
 ## Contributing
 
-We alway welcome your contributions :clap:
+We always welcome your contributions :clap:
 
 ## Development
 
