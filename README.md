@@ -22,6 +22,7 @@
       - [Scoop (for Windows users)](#scoop-for-windows-users)
       - [asdf](#asdf)
       - [Go users](#go-users)
+    - [Docker](#docker)
     - [Test Installation](#test-installation)
     - [Quick Start](#quick-start)
   - [CLI Usage](#cli-usage)
@@ -32,6 +33,7 @@
     - [`template`](#template)
     - [`info`](#info)
     - [`options`](#options)
+      - [`options.sort`](#optionssort)
       - [`options.commits`](#optionscommits)
       - [`options.commit_groups`](#optionscommit_groups)
       - [`options.header`](#optionsheader)
@@ -50,8 +52,9 @@
   - [TODO](#todo)
   - [Thanks](#thanks)
   - [Contributing](#contributing)
-    - [Development](#development)
-    - [Feedback](#feedback)
+  - [Development](#development)
+  - [Release Process](#release-process)
+  - [Feedback](#feedback)
   - [CHANGELOG](#changelog)
   - [Related Projects](#related-projects)
   - [License](#license)
@@ -683,7 +686,7 @@ We alway welcome your contributions :clap:
 
 ## Development
 
-1. Use Golang version `>= 1.16`
+1. Use Golang version `>= 1.19`
 1. Fork (https://github.com/git-chglog/git-chglog) :tada:
 1. Create a feature branch :coffee:
 1. Run test suite with the `$ make test` command and confirm that it passes :zap:

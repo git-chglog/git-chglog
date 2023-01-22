@@ -2,7 +2,6 @@ package main
 
 import (
 	"io"
-	"io/ioutil"
 	"os"
 )
 
@@ -41,9 +40,10 @@ func (*osFileSystem) MkdirP(path string) error {
 }
 
 func (*osFileSystem) Create(name string) (File, error) {
+	//nolint: gosec
 	return os.Create(name)
 }
 
 func (*osFileSystem) WriteFile(path string, content []byte) error {
-	return ioutil.WriteFile(path, content, os.ModePerm)
+	return os.WriteFile(path, content, os.ModePerm)
 }

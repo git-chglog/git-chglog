@@ -23,6 +23,7 @@ func dotGet(target interface{}, prop string) (interface{}, bool) {
 			value = reflect.ValueOf(target)
 		}
 
+		//nolint:staticcheck
 		field := value.FieldByName(strings.Title(key))
 		if !field.IsValid() {
 			return nil, false

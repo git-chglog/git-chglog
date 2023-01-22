@@ -91,10 +91,7 @@ func (*tagReader) filterSemVerTags(tags *[]*Tag) {
 	for i, t := range *tags {
 		// remove leading v, since its so
 		// common.
-		name := t.Name
-		if strings.HasPrefix(name, "v") {
-			name = strings.TrimPrefix(name, "v")
-		}
+		name := strings.TrimPrefix(t.Name, "v")
 
 		// attempt semver parse, if not successful
 		// remove it from tags slice.

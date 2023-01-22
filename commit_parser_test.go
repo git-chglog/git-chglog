@@ -3,7 +3,6 @@ package chglog
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -23,7 +22,7 @@ func TestCommitParserParse(t *testing.T) {
 				return "", errors.New("")
 			}
 
-			bytes, _ := ioutil.ReadFile(filepath.Join("testdata", "gitlog.txt"))
+			bytes, _ := os.ReadFile(filepath.Join("testdata", "gitlog.txt"))
 
 			return string(bytes), nil
 		},
@@ -376,7 +375,7 @@ func TestCommitParserParseWithJira(t *testing.T) {
 				return "", errors.New("")
 			}
 
-			bytes, _ := ioutil.ReadFile(filepath.Join("testdata", "gitlog_jira.txt"))
+			bytes, _ := os.ReadFile(filepath.Join("testdata", "gitlog_jira.txt"))
 
 			return string(bytes), nil
 		},

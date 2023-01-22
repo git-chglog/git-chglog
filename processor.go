@@ -14,8 +14,8 @@ type Processor interface {
 // GitHubProcessor is optimized for CHANGELOG used in GitHub
 //
 // The following processing is performed
-//  - Mentions automatic link (@tsuyoshiwada -> [@tsuyoshiwada](https://github.com/tsuyoshiwada))
-//  - Automatic link to references (#123 -> [#123](https://github.com/owner/repo/issues/123))
+//   - Mentions automatic link (@tsuyoshiwada -> [@tsuyoshiwada](https://github.com/tsuyoshiwada))
+//   - Automatic link to references (#123 -> [#123](https://github.com/owner/repo/issues/123))
 type GitHubProcessor struct {
 	Host      string // Host name used for link destination. Note: You must include the protocol (e.g. "https://github.com")
 	config    *Config
@@ -69,9 +69,9 @@ func (p *GitHubProcessor) addLinks(input string) string {
 // GitLabProcessor is optimized for CHANGELOG used in GitLab
 //
 // The following processing is performed
-//  - Mentions automatic link (@tsuyoshiwada -> [@tsuyoshiwada](https://gitlab.com/tsuyoshiwada))
-//  - Automatic link to references issues (#123 -> [#123](https://gitlab.com/owner/repo/issues/123))
-//  - Automatic link to references merge request (!123 -> [#123](https://gitlab.com/owner/repo/merge_requests/123))
+//   - Mentions automatic link (@tsuyoshiwada -> [@tsuyoshiwada](https://gitlab.com/tsuyoshiwada))
+//   - Automatic link to references issues (#123 -> [#123](https://gitlab.com/owner/repo/issues/123))
+//   - Automatic link to references merge request (!123 -> [#123](https://gitlab.com/owner/repo/merge_requests/123))
 type GitLabProcessor struct {
 	Host           string // Host name used for link destination. Note: You must include the protocol (e.g. "https://gitlab.com")
 	config         *Config
@@ -130,8 +130,8 @@ func (p *GitLabProcessor) addLinks(input string) string {
 // BitbucketProcessor is optimized for CHANGELOG used in Bitbucket
 //
 // The following processing is performed
-//  - Mentions automatic link (@tsuyoshiwada -> [@tsuyoshiwada](https://bitbucket.org/tsuyoshiwada/))
-//  - Automatic link to references (#123 -> [#123](https://bitbucket.org/owner/repo/issues/123/))
+//   - Mentions automatic link (@tsuyoshiwada -> [@tsuyoshiwada](https://bitbucket.org/tsuyoshiwada/))
+//   - Automatic link to references (#123 -> [#123](https://bitbucket.org/owner/repo/issues/123/))
 type BitbucketProcessor struct {
 	Host      string // Host name used for link destination. Note: You must include the protocol (e.g. "https://bitbucket.org")
 	config    *Config
