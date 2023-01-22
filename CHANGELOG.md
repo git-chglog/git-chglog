@@ -9,6 +9,7 @@
 - **deps:** update module gopkg.in/yaml.v2 to v3 ([#221](https://github.com/git-chglog/git-chglog/issues/221))
 
 ### Chores
+- update changelog for v0.15.2
 - update Go install instructions ([#205](https://github.com/git-chglog/git-chglog/issues/205))
 - bump golang to 1.19 ([#218](https://github.com/git-chglog/git-chglog/issues/218))
 - **deps:** update all non-major dependencies ([#220](https://github.com/git-chglog/git-chglog/issues/220))
