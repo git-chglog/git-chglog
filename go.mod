@@ -7,7 +7,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.2.3
 	github.com/andygrunwald/go-jira v1.16.0
 	github.com/coreos/go-semver v0.3.1
-	github.com/fatih/color v1.14.0
+	github.com/fatih/color v1.14.1
 	github.com/imdario/mergo v0.3.13
 	github.com/kyokomi/emoji/v2 v2.2.11
 	github.com/mattn/go-colorable v0.1.13
