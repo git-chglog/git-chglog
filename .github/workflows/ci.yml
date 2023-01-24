@@ -83,4 +83,6 @@ jobs:
       - name: Test docker images of git-chglog
         run: |
           cd $GITHUB_WORKSPACE/BGmi
+          pwd
+          ls -lash
           docker run -v $(pwd):/workdir quay.io/git-chglog/git-chglog:0.15.2
