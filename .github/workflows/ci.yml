@@ -59,3 +59,28 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: ${{ env.GOLANGCI_VERSION }}
+
+  integration-tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: BGmi/BGmi
+          fetch-depth: 0 # all history
+          path: BGmi
+          ref: v2.2.18
+      - name: Test setup
+        run: |
+          docker version
+          docker info
+          pwd
+          ls -lash
+      - name: Test docker images of git-chglog
+        run: |
+          cd $GITHUB_WORKSPACE/BGmi
+          docker run -v $(pwd):/workdir quay.io/git-chglog/git-chglog:0.15.2
