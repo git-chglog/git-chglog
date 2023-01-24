@@ -77,7 +77,7 @@ jobs:
       - name: Updating and upgrading brew
         if: matrix.os == 'macos-latest'
         run: |
-          ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+          bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           brew --version
       - name: Install and start docker
         if: matrix.os == 'macos-latest'
