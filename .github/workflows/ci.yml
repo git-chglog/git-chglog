@@ -114,6 +114,10 @@ jobs:
           # works
           docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.1 > ${GITHUB_WORKSPACE}/BGmi/0151.md
           head ${GITHUB_WORKSPACE}/BGmi/0151.md
-          # broken
-          docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2 > ${GITHUB_WORKSPACE}/BGmi/0152.md
-          head ${GITHUB_WORKSPACE}/BGmi/0152.md
+          # test current build
+          docker build -t git-chglog:fix .
+          docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir git-chglog:fix > ${GITHUB_WORKSPACE}/BGmi/fix.md
+          head ${GITHUB_WORKSPACE}/BGmi/fix.md
+          ## broken
+          #docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2 > ${GITHUB_WORKSPACE}/BGmi/0152.md
+          #head ${GITHUB_WORKSPACE}/BGmi/0152.md
