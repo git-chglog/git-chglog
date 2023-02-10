@@ -94,4 +94,9 @@ jobs:
       - name: Test docker images of git-chglog
         run: |
           ls -lash ${GITHUB_WORKSPACE}/BGmi
-          docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2
+          # works
+          docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.1 > ${GITHUB_WORKSPACE}/BGmi/0151.md
+          head ${GITHUB_WORKSPACE}/BGmi/0151.md
+          # broken
+          docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2 > ${GITHUB_WORKSPACE}/BGmi/0152.md
+          head ${GITHUB_WORKSPACE}/BGmi/0152.md
