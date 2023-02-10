@@ -67,6 +67,12 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest] # windows-latest later
     steps:
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: Run build
+        run: make build
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -74,6 +80,13 @@ jobs:
           fetch-depth: 0 # all history
           path: BGmi
           ref: v2.2.18
+      - name: Test changelog generation with raw binary
+        run: |
+          cp ${GITHUB_WORKSPACE}/git-chglog ${GITHUB_WORKSPACE}/BGmi/git-chglog && chmod +x ${GITHUB_WORKSPACE}/BGmi/git-chglog 
+          cd ${GITHUB_WORKSPACE}/BGmi
+          ./git-chglog > raw.md
+          head raw.md
+          cd ${GITHUB_WORKSPACE}
       - name: Updating and upgrading brew
         if: matrix.os == 'macos-latest'
         run: |
