@@ -1,7 +1,7 @@
 ##################
 ########## Builder
 ##################
-FROM golang:1.19-alpine3.17 as builder
+FROM golang:1.19-alpine as builder
 
 RUN apk add --no-cache tzdata make git
 
@@ -16,7 +16,7 @@ RUN make build
 ##################
 ########## PROD
 ##################
-FROM alpine:3.17.1
+FROM alpine
 
 RUN apk add --no-cache git && \
     mkdir /workdir
