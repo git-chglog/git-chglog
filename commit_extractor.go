@@ -3,6 +3,7 @@ package chglog
 import (
 	"sort"
 	"strings"
+	"time"
 )
 
 type commitExtractor struct {
@@ -114,14 +115,26 @@ func (e *commitExtractor) commitGroupTitle(commit *Commit) (string, string) {
 	)
 
 	if title, ok := dotGet(commit, e.opts.CommitGroupBy); ok {
-		if v, ok := title.(string); ok {
-			raw = v
-			if t, ok := e.opts.CommitGroupTitleMaps[v]; ok {
-				ttl = t
-			} else {
-				//nolint:staticcheck
-				ttl = strings.Title(raw)
-			}
+		switch titleType := title.(type) {
+		case string:
+			raw = titleType
+		case time.Time:
+			raw = titleType.Format("2006-01-02")
+		case *time.Time:
+			raw = titleType.Format("2006-01-02")
+		case interface {
+			String() string
+		}:
+			raw = titleType.String()
+		default:
+			return "", ""
+		}
+
+		if t, ok := e.opts.CommitGroupTitleMaps[raw]; ok {
+			ttl = t
+		} else {
+			//nolint:staticcheck
+			ttl = strings.Title(raw)
 		}
 	}
 
