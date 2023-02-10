@@ -72,7 +72,7 @@ jobs:
         with:
           repository: BGmi/BGmi
           fetch-depth: 0 # all history
-          path: /tmp/BGmi
+          path: BGmi
           ref: v2.2.18
       - name: Updating and upgrading brew
         if: matrix.os == 'macos-latest'
@@ -93,5 +93,5 @@ jobs:
           docker info
       - name: Test docker images of git-chglog
         run: |
-          ls -lash /tmp/BGmi
-          docker run -v /tmp/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2
+          ls -lash ${GITHUB_WORKSPACE}/BGmi
+          docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2
