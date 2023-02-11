@@ -65,7 +65,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest] #, macos-latest] # windows-latest later
+        os: [ubuntu-latest, macos-latest] # windows-latest later
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -77,46 +77,20 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
       - name: Run build
         run: make build
-      - name: Test changelog generation with raw binary
-        run: |
-          git --version
-          ./git-chglog > raw.md
-          head raw.md
       - name: Updating and upgrading brew
         if: matrix.os == 'macos-latest'
         run: |
           bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           brew --version
-      - name: Install and start docker
+      - name: Install docker-cli and start colima 
         if: matrix.os == 'macos-latest'
         # https://github.com/docker/for-mac/issues/2359#issuecomment-943131345
         run: |
-          # for the docker cli
           brew install docker
-          # installed by default
           colima start
-      - name: Test setup
-        run: |
-          docker version
           docker info
-      - name: Test docker images of git-chglog
+      - name: Test docker image
         run: |
-          ls -lash ${GITHUB_WORKSPACE}
-          # works
-          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir --entrypoint '/bin/sh' quay.io/git-chglog/git-chglog:0.15.1 -c "git for-each-ref --format '%(refname)/%(subject)/%(taggerdate)/%(authordate)' refs/tags"
-          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.1 > ${GITHUB_WORKSPACE}/0151.md
-          head ${GITHUB_WORKSPACE}/0151.md
-          # test current build
-          ## alpine - local build
-          docker build -t git-chglog:fix-alpine .
-          # get the error message
-          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir --entrypoint '/bin/sh' git-chglog:fix-alpine -c "git for-each-ref --format '%(refname)/%(subject)/%(taggerdate)/%(authordate)' refs/tags"
-          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir git-chglog:fix-alpine > ${GITHUB_WORKSPACE}/fix-alpine.md
-          head ${GITHUB_WORKSPACE}/fix-alpine.md
-          ### ubuntu - no difference
-          #docker build -t git-chglog:fix-ubuntu -f Dockerfile.buster .
-          #docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir git-chglog:fix-ubuntu > ${GITHUB_WORKSPACE}/fix-ubuntu.md
-          #head ${GITHUB_WORKSPACE}/fix-ubuntu.md
-          ## broken
-          #docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2 > ${GITHUB_WORKSPACE}/0152.md
-          #head ${GITHUB_WORKSPACE}/0152.md
+          docker build -t git-chglog:ci-build .
+          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir git-chglog:ci-build > ${GITHUB_WORKSPACE}/ci-build.md
+          head ${GITHUB_WORKSPACE}/ci-build.md
