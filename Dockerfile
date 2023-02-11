@@ -19,7 +19,8 @@ RUN make build
 FROM alpine
 
 RUN apk add --no-cache git && \
-    mkdir /workdir
+    mkdir /workdir && \
+    git config --global --add safe.directory /workdir
 
 COPY --from=builder /build/git-chglog /usr/local/bin/git-chglog
 
