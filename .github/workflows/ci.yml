@@ -65,7 +65,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest] # windows-latest later
+        os: [ubuntu-latest] #, macos-latest] # windows-latest later
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -77,20 +77,11 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
       - name: Run build
         run: make build
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          repository: BGmi/BGmi
-          fetch-depth: 0 # all history
-          path: BGmi
-          ref: v2.2.18
       - name: Test changelog generation with raw binary
         run: |
-          cp ${GITHUB_WORKSPACE}/git-chglog ${GITHUB_WORKSPACE}/BGmi/git-chglog && chmod +x ${GITHUB_WORKSPACE}/BGmi/git-chglog 
-          cd ${GITHUB_WORKSPACE}/BGmi
+          git --version
           ./git-chglog > raw.md
           head raw.md
-          cd ${GITHUB_WORKSPACE}
       - name: Updating and upgrading brew
         if: matrix.os == 'macos-latest'
         run: |
@@ -110,14 +101,19 @@ jobs:
           docker info
       - name: Test docker images of git-chglog
         run: |
-          ls -lash ${GITHUB_WORKSPACE}/BGmi
+          ls -lash ${GITHUB_WORKSPACE}
           # works
-          docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.1 > ${GITHUB_WORKSPACE}/BGmi/0151.md
-          head ${GITHUB_WORKSPACE}/BGmi/0151.md
+          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.1 > ${GITHUB_WORKSPACE}/0151.md
+          head ${GITHUB_WORKSPACE}/0151.md
           # test current build
-          docker build -t git-chglog:fix .
-          docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir git-chglog:fix > ${GITHUB_WORKSPACE}/BGmi/fix.md
-          head ${GITHUB_WORKSPACE}/BGmi/fix.md
+          ## ubuntu
+          docker build -t git-chglog:fix-ubuntu -f Dockerfile.buster .
+          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir git-chglog:fix-ubuntu > ${GITHUB_WORKSPACE}/fix-ubuntu.md
+          head ${GITHUB_WORKSPACE}/fix-ubuntu.md
+          ## alpine
+          docker build -t git-chglog:fix-alpine .
+          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir git-chglog:fix-alpine > ${GITHUB_WORKSPACE}/fix-alpine.md
+          head ${GITHUB_WORKSPACE}/fix-alpine.md
           ## broken
-          #docker run -v ${GITHUB_WORKSPACE}/BGmi:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2 > ${GITHUB_WORKSPACE}/BGmi/0152.md
-          #head ${GITHUB_WORKSPACE}/BGmi/0152.md
+          #docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2 > ${GITHUB_WORKSPACE}/0152.md
+          #head ${GITHUB_WORKSPACE}/0152.md
