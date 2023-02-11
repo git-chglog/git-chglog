@@ -60,31 +60,43 @@ jobs:
         with:
           version: ${{ env.GOLANGCI_VERSION }}
 
-  integration-tests:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+  docker-image-tests:
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Updating and upgrading brew
-        if: matrix.os == 'macos-latest'
-        run: |
-          bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          brew --version
-      - name: Install docker-cli and start colima 
-        if: matrix.os == 'macos-latest'
-        # https://github.com/docker/for-mac/issues/2359#issuecomment-943131345
-        run: |
-          brew install docker
-          colima start
-          docker info
+      
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run tests
+        run: make build
+      
       - name: Test docker image
         run: |
           docker build -t git-chglog:ci-build .
           docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir git-chglog:ci-build > ${GITHUB_WORKSPACE}/ci-build.md
           head ${GITHUB_WORKSPACE}/ci-build.md
+
+  goreleaser-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          version: latest
+          args: release --clean --skip-publish --snapshot
