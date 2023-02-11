@@ -103,17 +103,20 @@ jobs:
         run: |
           ls -lash ${GITHUB_WORKSPACE}
           # works
+          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir --entrypoint '/bin/sh' quay.io/git-chglog/git-chglog:0.15.1 -c "git for-each-ref --format '%(refname)/%(subject)/%(taggerdate)/%(authordate)' refs/tags"
           docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.1 > ${GITHUB_WORKSPACE}/0151.md
           head ${GITHUB_WORKSPACE}/0151.md
           # test current build
-          ## ubuntu
-          docker build -t git-chglog:fix-ubuntu -f Dockerfile.buster .
-          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir git-chglog:fix-ubuntu > ${GITHUB_WORKSPACE}/fix-ubuntu.md
-          head ${GITHUB_WORKSPACE}/fix-ubuntu.md
-          ## alpine
+          ## alpine - local build
           docker build -t git-chglog:fix-alpine .
+          # get the error message
+          docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir --entrypoint '/bin/sh' git-chglog:fix-alpine -c "git for-each-ref --format '%(refname)/%(subject)/%(taggerdate)/%(authordate)' refs/tags"
           docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir git-chglog:fix-alpine > ${GITHUB_WORKSPACE}/fix-alpine.md
           head ${GITHUB_WORKSPACE}/fix-alpine.md
+          ### ubuntu - no difference
+          #docker build -t git-chglog:fix-ubuntu -f Dockerfile.buster .
+          #docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir git-chglog:fix-ubuntu > ${GITHUB_WORKSPACE}/fix-ubuntu.md
+          #head ${GITHUB_WORKSPACE}/fix-ubuntu.md
           ## broken
           #docker run -v ${GITHUB_WORKSPACE}:/workdir -w /workdir quay.io/git-chglog/git-chglog:0.15.2 > ${GITHUB_WORKSPACE}/0152.md
           #head ${GITHUB_WORKSPACE}/0152.md
