@@ -5,12 +5,14 @@
 <a name="v0.15.3"></a>
 ## [v0.15.3] - 2023-02-11
 ### Bug Fixes
+- release process ([#231](https://github.com/git-chglog/git-chglog/issues/231))
 - **ci:** add integration test with docker image ([#226](https://github.com/git-chglog/git-chglog/issues/226))
 - **deps:** update module github.com/urfave/cli/v2 to v2.24.3 ([#227](https://github.com/git-chglog/git-chglog/issues/227))
 - **deps:** update module github.com/fatih/color to v1.14.1 ([#224](https://github.com/git-chglog/git-chglog/issues/224))
 - **deps:** update all non-major dependencies ([#223](https://github.com/git-chglog/git-chglog/issues/223))
 
 ### Chores
+- update changelog for v0.15.3
 - bump docker/login-action to v2. Closes [#206](https://github.com/git-chglog/git-chglog/issues/206)
 - bump goreleaser/goreleaser-action to v4. Closes [#208](https://github.com/git-chglog/git-chglog/issues/208)
 
