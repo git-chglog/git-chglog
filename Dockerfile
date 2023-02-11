@@ -3,7 +3,7 @@
 ##################
 FROM golang:1.19-alpine as builder
 
-RUN apk add --no-cache tzdata make git
+RUN apk add --no-cache make git
 
 WORKDIR /build
 COPY go.mod go.sum ./
