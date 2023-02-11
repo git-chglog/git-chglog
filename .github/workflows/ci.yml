@@ -60,12 +60,8 @@ jobs:
         with:
           version: ${{ env.GOLANGCI_VERSION }}
 
-  integration-tests:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+  docker-image-tests:
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -79,20 +75,6 @@ jobs:
 
       - name: Run tests
         run: make build
-      
-      - name: Updating and upgrading brew
-        if: matrix.os == 'macos-latest'
-        run: |
-          bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          brew --version
-      
-      - name: Install docker-cli and start colima 
-        if: matrix.os == 'macos-latest'
-        # https://github.com/docker/for-mac/issues/2359#issuecomment-943131345
-        run: |
-          brew install docker
-          colima start
-          docker info
       
       - name: Test docker image
         run: |
