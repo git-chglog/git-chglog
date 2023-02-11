@@ -2,6 +2,19 @@
 ## [Unreleased]
 
 
+<a name="v0.15.3"></a>
+## [v0.15.3] - 2023-02-11
+### Bug Fixes
+- **ci:** add integration test with docker image ([#226](https://github.com/git-chglog/git-chglog/issues/226))
+- **deps:** update module github.com/urfave/cli/v2 to v2.24.3 ([#227](https://github.com/git-chglog/git-chglog/issues/227))
+- **deps:** update module github.com/fatih/color to v1.14.1 ([#224](https://github.com/git-chglog/git-chglog/issues/224))
+- **deps:** update all non-major dependencies ([#223](https://github.com/git-chglog/git-chglog/issues/223))
+
+### Chores
+- bump docker/login-action to v2. Closes [#206](https://github.com/git-chglog/git-chglog/issues/206)
+- bump goreleaser/goreleaser-action to v4. Closes [#208](https://github.com/git-chglog/git-chglog/issues/208)
+
+
 <a name="v0.15.2"></a>
 ## [v0.15.2] - 2023-01-22
 ### Bug Fixes
@@ -9,6 +22,7 @@
 - **deps:** update module gopkg.in/yaml.v2 to v3 ([#221](https://github.com/git-chglog/git-chglog/issues/221))
 
 ### Chores
+- update changelog for v0.15.2
 - update changelog for v0.15.2
 - update Go install instructions ([#205](https://github.com/git-chglog/git-chglog/issues/205))
 - bump golang to 1.19 ([#218](https://github.com/git-chglog/git-chglog/issues/218))
@@ -412,7 +426,8 @@
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.15.2...HEAD
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.15.3...HEAD
+[v0.15.3]: https://github.com/git-chglog/git-chglog/compare/v0.15.2...v0.15.3
 [v0.15.2]: https://github.com/git-chglog/git-chglog/compare/v0.15.1...v0.15.2
 [v0.15.1]: https://github.com/git-chglog/git-chglog/compare/v0.15.0...v0.15.1
 [v0.15.0]: https://github.com/git-chglog/git-chglog/compare/v0.14.2...v0.15.0
