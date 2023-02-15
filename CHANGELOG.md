@@ -2,8 +2,8 @@
 ## [Unreleased]
 
 
-<a name="v0.15.3"></a>
-## [v0.15.3] - 2023-02-11
+<a name="v0.15.4"></a>
+## [v0.15.4] - 2023-02-15
 ### Bug Fixes
 - release process ([#231](https://github.com/git-chglog/git-chglog/issues/231))
 - **ci:** add integration test with docker image ([#226](https://github.com/git-chglog/git-chglog/issues/226))
@@ -12,6 +12,8 @@
 - **deps:** update all non-major dependencies ([#223](https://github.com/git-chglog/git-chglog/issues/223))
 
 ### Chores
+- new release due to shecksum mismatch. Closes [#232](https://github.com/git-chglog/git-chglog/issues/232)
+- update changelog for v0.15.3
 - update changelog for v0.15.3
 - bump docker/login-action to v2. Closes [#206](https://github.com/git-chglog/git-chglog/issues/206)
 - bump goreleaser/goreleaser-action to v4. Closes [#208](https://github.com/git-chglog/git-chglog/issues/208)
@@ -428,8 +430,8 @@
 - First implement
 
 
-[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.15.3...HEAD
-[v0.15.3]: https://github.com/git-chglog/git-chglog/compare/v0.15.2...v0.15.3
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/v0.15.4...HEAD
+[v0.15.4]: https://github.com/git-chglog/git-chglog/compare/v0.15.2...v0.15.4
 [v0.15.2]: https://github.com/git-chglog/git-chglog/compare/v0.15.1...v0.15.2
 [v0.15.1]: https://github.com/git-chglog/git-chglog/compare/v0.15.0...v0.15.1
 [v0.15.0]: https://github.com/git-chglog/git-chglog/compare/v0.14.2...v0.15.0
