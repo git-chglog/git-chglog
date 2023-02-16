@@ -13,7 +13,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13
 	github.com/stretchr/testify v1.8.1
 	github.com/tsuyoshiwada/go-gitcmd v0.0.0-20180205145712-5f1f5f9475df
-	github.com/urfave/cli/v2 v2.24.3
+	github.com/urfave/cli/v2 v2.24.4
 	gopkg.in/yaml.v2 v2.4.0
 )
 
