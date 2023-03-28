@@ -148,17 +148,7 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 		}
 	}()
 
-	tags, first, err := gen.getTags(query)
-	if err != nil {
-		return err
-	}
-
-	unreleased, err := gen.readUnreleased(tags)
-	if err != nil {
-		return err
-	}
-
-	versions, err := gen.readVersions(tags, first)
+	unreleased, versions, err := gen.buildVersionsFromRefs(query)
 	if err != nil {
 		return err
 	}
@@ -168,6 +158,25 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 	}
 
 	return gen.render(w, unreleased, versions)
+}
+
+func (gen *Generator) buildVersionsFromRefs(query string) (*Unreleased, []*Version, error) {
+	tags, first, err := gen.getTags(query)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	unreleased, err := gen.readUnreleased(tags)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	versions, err := gen.readVersions(tags, first)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return unreleased, versions, nil
 }
 
 func (gen *Generator) readVersions(tags []*Tag, first string) ([]*Version, error) {
