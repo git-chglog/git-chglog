@@ -243,7 +243,11 @@ func (gen *Generator) readUnreleased(tags []*Tag) (*Unreleased, error) {
 		rev = tags[0].Name + "..HEAD"
 	}
 
-	commits, err := gen.commitParser.Parse(rev)
+	return gen.generateUnreleasedForRevList(rev)
+}
+
+func (gen *Generator) generateUnreleasedForRevList(revList string) (*Unreleased, error) {
+	commits, err := gen.commitParser.Parse(revList)
 	if err != nil {
 		return nil, err
 	}
