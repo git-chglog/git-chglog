@@ -22,6 +22,7 @@ type CLIContext struct {
 	TagFilterPattern string
 	JiraUsername     string
 	JiraToken        string
+	JiraBearerToken  string
 	JiraURL          string
 	Paths            []string
 	Sort             string

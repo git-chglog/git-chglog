@@ -210,6 +210,7 @@ OPTIONS:
   --jira-url value            Jira URL [$JIRA_URL]
   --jira-username value       Jira username [$JIRA_USERNAME]
   --jira-token value          Jira token [$JIRA_TOKEN]
+  --jira-bearer-token value   Jira bearer token [$JIRA_BEARER_TOKEN]
   --sort value                Specify how to sort tags; currently supports "date" or by "semver" (default: date)
   --help, -h                  show help (default: false)
   --version, -v               print the version (default: false)
@@ -589,6 +590,15 @@ The following is a sample:
 Here you need to define Jira URL, access username and token (password). If you
 don't want to write your Jira access credential in configure file, you may define
 them with environment variables: `JIRA_URL`, `JIRA_USERNAME` and `JIRA_TOKEN`.
+
+To use your Jira personal access token [PAT](https://confluence.atlassian.com/enterprise/using-personal-access-tokens-1026032365.html), you can define it either by setting environment variable `JIRA_BEARER_TOKEN` or into the configuration file such below.
+
+```yaml
+  jira:
+    info:
+      bearerToken: p
+      url: https://jira.com
+```
 
 You also needs to define a issue type map. In above sample, Jira issue type `Task`
 will be mapped to `fix` and `Story` will be mapped to `feat`.
