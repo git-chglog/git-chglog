@@ -61,6 +61,7 @@ type commitParser struct {
 	reMention              *regexp.Regexp
 	reSignOff              *regexp.Regexp
 	reCoAuthor             *regexp.Regexp
+	reJiraKey              *regexp.Regexp
 	reJiraIssueDescription *regexp.Regexp
 }
 
@@ -71,7 +72,7 @@ func newCommitParser(logger *Logger, client gitcmd.Client, jiraClient JiraClient
 	joinedIssuePrefix := joinAndQuoteMeta(opts.IssuePrefix, "|")
 	joinedNoteKeywords := joinAndQuoteMeta(opts.NoteKeywords, "|")
 
-	return &commitParser{
+	p := commitParser{
 		logger:                 logger,
 		client:                 client,
 		jiraClient:             jiraClient,
@@ -87,6 +88,12 @@ func newCommitParser(logger *Logger, client gitcmd.Client, jiraClient JiraClient
 		reCoAuthor:             regexp.MustCompile(`Co-authored-by:\s+([\p{L}\s\-\[\]]+)\s+<([\w+\-\[\].@]+)>`),
 		reJiraIssueDescription: regexp.MustCompile(opts.JiraIssueDescriptionPattern),
 	}
+
+	if opts.JiraKeyPattern != "" {
+		p.reJiraKey = regexp.MustCompile(opts.JiraKeyPattern)
+	}
+
+	return &p
 }
 
 func (p *commitParser) Parse(rev string) ([]*Commit, error) {
@@ -153,6 +160,11 @@ func (p *commitParser) parseCommit(input string) *Commit {
 		}
 	}
 
+	// Jira
+	if commit.JiraIssueID != "" {
+		p.processJiraIssue(commit, commit.JiraIssueID)
+	}
+
 	commit.Refs = p.uniqRefs(commit.Refs)
 	commit.Mentions = p.uniqMentions(commit.Mentions)
 
@@ -206,6 +218,8 @@ func (p *commitParser) processHeader(commit *Commit, input string) {
 		assignDynamicValues(commit, opts.HeaderPatternMaps, res[0][1:])
 	}
 
+	p.populateJiraIssueIDByJiraKeyRegex(commit, input)
+
 	// Merge
 	res = p.reMerge.FindAllStringSubmatch(input, -1)
 	if len(res) > 0 {
@@ -225,11 +239,6 @@ func (p *commitParser) processHeader(commit *Commit, input string) {
 	// refs & mentions
 	commit.Refs = p.parseRefs(input)
 	commit.Mentions = p.parseMentions(input)
-
-	// Jira
-	if commit.JiraIssueID != "" {
-		p.processJiraIssue(commit, commit.JiraIssueID)
-	}
 }
 
 func (p *commitParser) extractLineMetadata(commit *Commit, line string) bool {
@@ -267,6 +276,8 @@ func (p *commitParser) processBody(commit *Commit, input string) {
 
 	// body
 	commit.Body = input
+
+	p.populateJiraIssueIDByJiraKeyRegex(commit, input)
 
 	// notes & refs & mentions
 	commit.Notes = []*Note{}
@@ -312,6 +323,18 @@ func (p *commitParser) processBody(commit *Commit, input string) {
 
 	commit.TrimmedBody = strings.TrimSpace(strings.Join(trimmedBody, "\n"))
 	p.trimSpaceInNotes(commit)
+}
+
+func (p *commitParser) populateJiraIssueIDByJiraKeyRegex(commit *Commit, input string) {
+	if p.reJiraKey != nil {
+		m := p.reJiraKey.FindAllString(input, -1)
+		if len(m) > 0 {
+			// NOTE: a git commit may reference multiple jira issues... here we capture only the first
+			//       a future change may resolve this by updating the commit structure to support
+			//       multiple issues
+			commit.JiraIssueID = m[0]
+		}
+	}
 }
 
 func (*commitParser) trimSpaceInNotes(commit *Commit) {
@@ -432,7 +455,10 @@ func (p *commitParser) processJiraIssue(commit *Commit, issueID string) {
 		p.logger.Error(fmt.Sprintf("Failed to parse Jira story %s: %s\n", issueID, err))
 		return
 	}
-	commit.Type = p.config.Options.JiraTypeMaps[issue.Fields.Type.Name]
+	if commit.Type == "" {
+		// don't override an explicit Conventional Commit Type
+		commit.Type = p.config.Options.JiraTypeMaps[issue.Fields.Type.Name]
+	}
 	commit.JiraIssue = &JiraIssue{
 		Type:        issue.Fields.Type.Name,
 		Summary:     issue.Fields.Summary,

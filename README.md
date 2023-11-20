@@ -574,24 +574,40 @@ This sample pattern can match both forms of commit headers:
 The following is a sample:
 
   ```yaml
-  jira:
-    info:
-      username: u
-      token: p
-      url: https://jira.com
-    issue:
-      type_maps:
-        Task: fix
-        Story: feat
-      description_pattern: "<changelog>(.*)</changelog>"
+  options:
+    jira:
+      info:
+        username: u
+        token: p
+        url: https://jira.com
+      issue:
+        key_pattern: "\\b(JIRA-\\d+)"
+        type_maps:
+          Task: fix
+          Story: feat
+        description_pattern: "<changelog>(.*)</changelog>"
   ```
 
-Here you need to define Jira URL, access username and token (password). If you
-don't want to write your Jira access credential in configure file, you may define
-them with environment variables: `JIRA_URL`, `JIRA_USERNAME` and `JIRA_TOKEN`.
+#### `options.jira.info`
 
-You also needs to define a issue type map. In above sample, Jira issue type `Task`
+Options to configure a Jira API client:
+
+| Key        | Required | Type   | Default | Description                                                                                                                                                            |
+|:-----------|:---------|:-------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `username` | N        | String | none    | Jira username; can also be read as an env var from `JIRA_USERNAME`                                                                                                     |
+| `token`    | N        | String | none    | Jira [API token](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/); can also be read as an env var from `JIRA_TOKEN` |
+| `url`      | N        | String | none    | Base URL for your Jira instance (e.g. https://myorg.atlassian.net/);<br/>can also be read as an env var from `JIRA_URL`                                                 |
+
+#### `options.jira.issue`
+
+You can also define an issue type map. In the above sample, Jira issue type `Task`
 will be mapped to `fix` and `Story` will be mapped to `feat`.
+
+| Key                   | Required | Type                | Default | Description                                                                                                                                                           |
+|:----------------------|:---------|:--------------------|:--------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `key_pattern`         | N        | String              | none    | A golang-compatible regular expression used to match against commit header and body to detect related Jira issues.                                                    |
+| `type_maps`           | N        | `map[string]string` | none    | A dictionary-style map used to infer the Conventional Commit Type from the Jira Issue Type, used when the Conventional Commit Subject does not provide a Commit Type. |
+| `description_pattern` | N        | String              | none    | A golang-compatible regular expression used to select out of a Jira Issue's Description field the subset of text to select for `.JiraIssue.Description`               |
 
 As a Jira story's description could be very long, you might not want to include
 the entire description into change log. In that case, you may define `description_pattern`
@@ -608,17 +624,16 @@ data. For example:
 ### {{ .Title }}
 {{ range .Commits -}}
 - {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
-{{ if .JiraIssue }} {{ .JiraIssue.Description }}
-{{ end }}
+  {{ if .JiraIssue }} {{ .JiraIssue.Description }} {{ end }}
 {{ end }}
 {{ end -}}
 ```
 
 Within a `Commit`, the following Jira data can be used in template:
 
-- `.JiraIssue.Summary` - Summary of the Jira story
-- `.JiraIssue.Description` - Description of the Jira story
-- `.JiraIssue.Type` - Original type of the Jira story, and `.Type` will be mapped type.
+- `.JiraIssue.Summary` - Summary of the Jira issue
+- `.JiraIssue.Description` - Description of the Jira issue
+- `.JiraIssue.Type` - Original type of the Jira issue (also available as `.Type` unless the commit provided a Conventional Commit Type.
 - `.JiraIssue.Labels` - A list of strings, each is a Jira label.
 
 ## FAQ
