@@ -635,6 +635,8 @@ Within a `Commit`, the following Jira data can be used in template:
 - `.JiraIssue.Description` - Description of the Jira issue
 - `.JiraIssue.Type` - Original type of the Jira issue (also available as `.Type` unless the commit provided a Conventional Commit Type.
 - `.JiraIssue.Labels` - A list of strings, each is a Jira label.
+- `.JiraIssue.BaseURL` - The value of `options.jira.info.url` (or the `JIRA_URL` env var) which can be useful in the templates for creating links to your Jira instance
+- `.JiraIssue.BrowseURL` - A default "browse" url for this issue (pre-formatted by concatenting `.JiraIssue.BaseURL` + "/browse/" + `.JiraIssueID`; e.g. "https://myorg.atlassian.net/browse/MYPROJ-1234")
 
 ## FAQ
 

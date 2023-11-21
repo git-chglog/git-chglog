@@ -399,6 +399,7 @@ func TestCommitParserParseWithJira(t *testing.T) {
 					"Subject",
 				},
 				JiraKeyPattern: "\\b(JIRA-\\d+)",
+				JiraURL:        "https://myorg.atlassian.net",
 				JiraTypeMaps: map[string]string{
 					"Story": "feat",
 				},
@@ -415,6 +416,8 @@ func TestCommitParserParseWithJira(t *testing.T) {
 	if commit.JiraIssue == nil {
 		t.Fatal("did not load jira issue JIRA-1111")
 	}
+	assert.Equal("https://myorg.atlassian.net", commit.JiraIssue.BaseURL)
+	assert.Equal("https://myorg.atlassian.net/browse/JIRA-1111", commit.JiraIssue.BrowseURL)
 	assert.Equal("Story", commit.JiraIssue.Type)
 	assert.Equal("summary of JIRA-1111", commit.JiraIssue.Summary)
 	assert.Equal("description of JIRA-1111", commit.JiraIssue.Description)
@@ -426,6 +429,7 @@ func TestCommitParserParseWithJira(t *testing.T) {
 	if commit.JiraIssue == nil {
 		t.Fatal("did not load jira issue JIRA-1112")
 	}
+	assert.Equal("https://myorg.atlassian.net/browse/JIRA-1112", commit.JiraIssue.BrowseURL)
 	assert.Equal("Story", commit.JiraIssue.Type)
 	assert.Equal("summary of JIRA-1112", commit.JiraIssue.Summary)
 	assert.Equal("description of JIRA-1112", commit.JiraIssue.Description)

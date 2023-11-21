@@ -461,6 +461,8 @@ func (p *commitParser) processJiraIssue(commit *Commit, issueID string) {
 	}
 	commit.JiraIssue = &JiraIssue{
 		Type:        issue.Fields.Type.Name,
+		BaseURL:     p.config.Options.JiraURL,
+		BrowseURL:   fmt.Sprintf("%s/browse/%s", strings.TrimRight(p.config.Options.JiraURL, "/"), issueID),
 		Summary:     issue.Fields.Summary,
 		Description: issue.Fields.Description,
 		Labels:      issue.Fields.Labels,
