@@ -195,24 +195,25 @@ USAGE:
     4. <name>       - Commit contained in <name>.
 
 OPTIONS:
-  --init                      generate the git-chglog configuration file in interactive (default: false)
-  --path value                Filter commits by path(s). Can use multiple times.
-  --config value, -c value    specifies a different configuration file to pick up (default: ".chglog/config.yml")
-  --template value, -t value  specifies a template file to pick up. If not specified, use the one in config
-  --repository-url value      specifies git repo URL. If not specified, use 'repository_url' in config
-  --output value, -o value    output path and filename for the changelogs. If not specified, output to stdout
-  --next-tag value            treat unreleased commits as specified tags (EXPERIMENTAL)
-  --silent                    disable stdout output (default: false)
-  --no-color                  disable color output (default: false) [$NO_COLOR]
-  --no-emoji                  disable emoji output (default: false) [$NO_EMOJI]
-  --no-case                   disable case sensitive filters (default: false)
-  --tag-filter-pattern value  Regular expression of tag filter. Is specified, only matched tags will be picked
-  --jira-url value            Jira URL [$JIRA_URL]
-  --jira-username value       Jira username [$JIRA_USERNAME]
-  --jira-token value          Jira token [$JIRA_TOKEN]
-  --sort value                Specify how to sort tags; currently supports "date" or by "semver" (default: date)
-  --help, -h                  show help (default: false)
-  --version, -v               print the version (default: false)
+  --init                         generate the git-chglog configuration file in interactive (default: false)
+  --arg value [ --arg value ]    Pass arbitrary key=value arguments into your templates. Can use multiple times.
+  --path value                   Filter commits by path(s). Can use multiple times.
+  --config value, -c value       specifies a different configuration file to pick up (default: ".chglog/config.yml")
+  --template value, -t value     specifies a template file to pick up. If not specified, use the one in config
+  --repository-url value         specifies git repo URL. If not specified, use 'repository_url' in config
+  --output value, -o value       output path and filename for the changelogs. If not specified, output to stdout
+  --next-tag value               treat unreleased commits as specified tags (EXPERIMENTAL)
+  --silent                       disable stdout output (default: false)
+  --no-color                     disable color output (default: false) [$NO_COLOR]
+  --no-emoji                     disable emoji output (default: false) [$NO_EMOJI]
+  --no-case                      disable case sensitive filters (default: false)
+  --tag-filter-pattern value     Regular expression of tag filter. Is specified, only matched tags will be picked
+  --jira-url value               Jira URL [$JIRA_URL]
+  --jira-username value          Jira username [$JIRA_USERNAME]
+  --jira-token value             Jira token [$JIRA_TOKEN]
+  --sort value                   Specify how to sort tags; currently supports "date" or by "semver" (default: date)
+  --help, -h                     show help (default: false)
+  --version, -v                  print the version (default: false)
 
 EXAMPLE:
 
@@ -244,6 +245,13 @@ EXAMPLE:
   $ git-chglog --path path/to/my/component --output CHANGELOG.component.md
 
     Filter commits by specific paths or files in git and output to a component specific changelog.
+
+  $ git-chglog --arg buildNumber=59 1.0.0
+
+    The above is a command to generate CHANGELOG including commit of only 1.0.0 while passing the `buildNumber`
+    argument into your template to be accessed like this:
+
+        {{ index .Args "buildNumber" }}
 ```
 
 ### `tag query`
