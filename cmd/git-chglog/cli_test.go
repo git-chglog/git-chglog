@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	chglog "github.com/git-chglog/git-chglog"
+	chglog "github.com/fredbi/git-chglog"
 )
 
 func TestCLIForStdout(t *testing.T) {
