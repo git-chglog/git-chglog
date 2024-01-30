@@ -59,6 +59,7 @@ type JiraClientInfoOptions struct {
 
 // JiraIssueOptions ...
 type JiraIssueOptions struct {
+	KeyPattern         string            `yaml:"key_pattern"`
 	TypeMaps           map[string]string `yaml:"type_maps"`
 	DescriptionPattern string            `yaml:"description_pattern"`
 }
@@ -326,6 +327,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 			RevertPattern:               opts.Reverts.Pattern,
 			RevertPatternMaps:           opts.Reverts.PatternMaps,
 			NoteKeywords:                opts.Notes.Keywords,
+			JiraKeyPattern:              opts.Jira.Issue.KeyPattern,
 			JiraUsername:                orValue(ctx.JiraUsername, opts.Jira.ClintInfo.Username),
 			JiraToken:                   orValue(ctx.JiraToken, opts.Jira.ClintInfo.Token),
 			JiraURL:                     orValue(ctx.JiraURL, opts.Jira.ClintInfo.URL),

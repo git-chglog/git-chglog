@@ -61,6 +61,8 @@ type NoteGroup struct {
 // JiraIssue is information about a jira ticket (type, summary, description, and labels)
 type JiraIssue struct {
 	Type        string
+	BaseURL     string
+	BrowseURL   string
 	Summary     string
 	Description string
 	Labels      []string

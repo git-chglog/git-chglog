@@ -39,6 +39,7 @@ type Options struct {
 	RevertPatternMaps           []string            // Similar to `HeaderPatternMaps`
 	NoteKeywords                []string            // Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`)
 	JiraUsername                string
+	JiraKeyPattern              string // Optional regex to match jira issue keys from commit message body
 	JiraToken                   string
 	JiraURL                     string
 	JiraTypeMaps                map[string]string
