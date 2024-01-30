@@ -54,9 +54,10 @@ type Info struct {
 
 // RenderData is the data passed to the template
 type RenderData struct {
-	Info       *Info
-	Unreleased *Unreleased
-	Versions   []*Version
+	Info           *Info
+	Unreleased     *Unreleased
+	Versions       []*Version
+	UnreleasedHash *Hash
 }
 
 // Config for generating CHANGELOG
@@ -163,7 +164,7 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 		return err
 	}
 
-	if len(versions) == 0 {
+	if len(versions) == 0 && query != "" {
 		return fmt.Errorf("commits corresponding to \"%s\" was not found", query)
 	}
 
@@ -285,7 +286,8 @@ func (gen *Generator) getTags(query string) ([]*Tag, string, error) {
 		}, tags...)
 	}
 
-	if len(tags) == 0 {
+	// Error only when you explicitly set a query
+	if len(tags) == 0 && query != "" {
 		return nil, "", errors.New("git-tag does not exist")
 	}
 
@@ -354,9 +356,18 @@ func (gen *Generator) render(w io.Writer, unreleased *Unreleased, versions []*Ve
 
 	t := template.Must(template.New(fname).Funcs(sprig.TxtFuncMap()).Funcs(fmap).ParseFiles(gen.config.Template))
 
+	unreleasedHash := &Hash{}
+
+	if unreleased.CommitGroups != nil && len(unreleased.CommitGroups) > 0 {
+		unreleasedHash = unreleased.CommitGroups[0].Commits[0].Hash
+	} else if unreleased.Commits != nil && len(unreleased.Commits) > 0 {
+		unreleasedHash = unreleased.Commits[0].Hash
+	}
+
 	return t.Execute(w, &RenderData{
-		Info:       gen.config.Info,
-		Unreleased: unreleased,
-		Versions:   versions,
+		Info:           gen.config.Info,
+		Unreleased:     unreleased,
+		Versions:       versions,
+		UnreleasedHash: unreleasedHash,
 	})
 }
