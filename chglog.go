@@ -148,26 +148,40 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 		}
 	}()
 
-	tags, first, err := gen.getTags(query)
+	unreleased, versions, err := gen.buildVersionsFromRefs(query)
 	if err != nil {
 		return err
+	}
+
+	if len(versions) == 0 && len(unreleased.Commits) == 0 {
+		return fmt.Errorf("commits corresponding to \"%s\" were not found", query)
+	}
+
+	return gen.render(w, unreleased, versions)
+}
+
+func (gen *Generator) buildVersionsFromRefs(query string) (*Unreleased, []*Version, error) {
+	tags, first, err := gen.getTags(query)
+	if err != nil {
+		unreleased, err2 := gen.generateUnreleasedForRevList(query)
+		if err2 != nil {
+			return nil, nil, fmt.Errorf("%s and querying unreleased commits by '%s' returned %w", err, query, err2)
+		}
+		versions := make([]*Version, 0)
+		return unreleased, versions, nil
 	}
 
 	unreleased, err := gen.readUnreleased(tags)
 	if err != nil {
-		return err
+		return nil, nil, err
 	}
 
 	versions, err := gen.readVersions(tags, first)
 	if err != nil {
-		return err
+		return nil, nil, err
 	}
 
-	if len(versions) == 0 {
-		return fmt.Errorf("commits corresponding to \"%s\" was not found", query)
-	}
-
-	return gen.render(w, unreleased, versions)
+	return unreleased, versions, nil
 }
 
 func (gen *Generator) readVersions(tags []*Tag, first string) ([]*Version, error) {
@@ -234,7 +248,11 @@ func (gen *Generator) readUnreleased(tags []*Tag) (*Unreleased, error) {
 		rev = tags[0].Name + "..HEAD"
 	}
 
-	commits, err := gen.commitParser.Parse(rev)
+	return gen.generateUnreleasedForRevList(rev)
+}
+
+func (gen *Generator) generateUnreleasedForRevList(revList string) (*Unreleased, error) {
+	commits, err := gen.commitParser.Parse(revList)
 	if err != nil {
 		return nil, err
 	}

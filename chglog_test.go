@@ -120,7 +120,7 @@ func TestGeneratorNotFoundCommits(t *testing.T) {
 	err := gen.Generate(buf, "foo")
 	expected := strings.TrimSpace(buf.String())
 
-	assert.Error(err)
+	assert.NoError(err)
 	assert.Equal("", expected)
 }
 
@@ -177,8 +177,7 @@ func TestGeneratorNotFoundCommitsOne(t *testing.T) {
 	err := gen.Generate(buf, "foo")
 	expected := strings.TrimSpace(buf.String())
 
-	assert.Error(err)
-	assert.Contains(err.Error(), "\"foo\" was not found")
+	assert.NoError(err)
 	assert.Equal("", expected)
 }
 
