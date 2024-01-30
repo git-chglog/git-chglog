@@ -120,6 +120,7 @@ type Version struct {
 	Commits       []*Commit
 	MergeCommits  []*Commit
 	RevertCommits []*Commit
+	OtherCommits  []*Commit
 	NoteGroups    []*NoteGroup
 }
 
@@ -129,5 +130,6 @@ type Unreleased struct {
 	Commits       []*Commit
 	MergeCommits  []*Commit
 	RevertCommits []*Commit
+	OtherCommits  []*Commit
 	NoteGroups    []*NoteGroup
 }

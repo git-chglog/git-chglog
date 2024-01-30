@@ -15,11 +15,12 @@ func newCommitExtractor(opts *Options) *commitExtractor {
 	}
 }
 
-func (e *commitExtractor) Extract(commits []*Commit) ([]*CommitGroup, []*Commit, []*Commit, []*NoteGroup) {
+func (e *commitExtractor) Extract(commits []*Commit) ([]*CommitGroup, []*Commit, []*Commit, []*Commit, []*NoteGroup) {
 	commitGroups := []*CommitGroup{}
 	noteGroups := []*NoteGroup{}
 	mergeCommits := []*Commit{}
 	revertCommits := []*Commit{}
+	otherCommits := []*Commit{}
 
 	filteredCommits := commitFilter(commits, e.opts.CommitFilters, e.opts.NoCaseSensitive)
 
@@ -32,6 +33,10 @@ func (e *commitExtractor) Extract(commits []*Commit) ([]*CommitGroup, []*Commit,
 		if commit.Revert != nil {
 			revertCommits = append(revertCommits, commit)
 			continue
+		}
+
+		if commit.Type == "" {
+			otherCommits = append(otherCommits, commit)
 		}
 	}
 
@@ -46,7 +51,7 @@ func (e *commitExtractor) Extract(commits []*Commit) ([]*CommitGroup, []*Commit,
 	e.sortCommitGroups(commitGroups)
 	e.sortNoteGroups(noteGroups)
 
-	return commitGroups, mergeCommits, revertCommits, noteGroups
+	return commitGroups, mergeCommits, revertCommits, otherCommits, noteGroups
 }
 
 func (e *commitExtractor) processCommitGroups(groups *[]*CommitGroup, commit *Commit, noCaseSensitive bool) {
