@@ -8,6 +8,14 @@ import (
 )
 
 func dotGet(target interface{}, prop string) (interface{}, bool) {
+	return dotGetImpl(target, prop, false)
+}
+
+func dotGetNilable(target interface{}, prop string) (interface{}, bool) {
+	return dotGetImpl(target, prop, true)
+}
+
+func dotGetImpl(target interface{}, prop string, nilable bool) (interface{}, bool) {
 	path := strings.Split(prop, ".")
 
 	if len(path) == 0 {
@@ -18,6 +26,10 @@ func dotGet(target interface{}, prop string) (interface{}, bool) {
 		var value reflect.Value
 
 		if reflect.TypeOf(target).Kind() == reflect.Ptr {
+			if nilable && reflect.ValueOf(target).IsNil() {
+				// avoid dereferencing nil.
+				return nil, true
+			}
 			value = reflect.ValueOf(target).Elem()
 		} else {
 			value = reflect.ValueOf(target)
@@ -79,6 +91,8 @@ func compareString(a string, operator string, b string) bool {
 		return a < b
 	case ">":
 		return a > b
+	case "==":
+		return a == b
 	default:
 		return false
 	}
@@ -90,6 +104,8 @@ func compareInt(a int, operator string, b int) bool {
 		return a < b
 	case ">":
 		return a > b
+	case "==":
+		return a == b
 	default:
 		return false
 	}
@@ -101,6 +117,8 @@ func compareTime(a time.Time, operator string, b time.Time) bool {
 		return !a.After(b)
 	case ">":
 		return a.After(b)
+	case "==":
+		return a.Equal(b)
 	default:
 		return false
 	}

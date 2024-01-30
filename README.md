@@ -459,6 +459,13 @@ We have implemented the following custom template functions. These override func
 | `replace`    | `func(s, old, new string, n int) string`      | Replace `old` with `new` within string `s`, `n` times using `strings.Replace` |
 | `upperFirst` | `func(s string) string`                       | Upper case the first character of a string                                    |
 
+Following custom template functions are also available.
+
+| Name                 | Signature                                             | Description                                                                   |
+| :------------------- | :---------------------------------------------------- | :---------------------------------------------------------------------------- |
+| `uniqueOlderCommits` | `func(commits []*Commit, fields ...string) []*Commit` | Removes duplicated commits. Duplication is evaluated with fields specified. If your logs are created with ".Scope" and ".Subject", specify "Scope" "Subject" to remove duplicated logs. Newer logs, that means ones coming upper in changelogs will be removed for duplication. |
+| `uniqueNewerCommits` | `func(commits []*Commit, fields ...string) []*Commit` | Removes duplicated commits just like `uniqueOlderCommits`, but older logs will be removed for duplication. |
+
 If you are not satisfied with the prepared template please try customizing one.
 
 ---

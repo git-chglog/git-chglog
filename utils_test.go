@@ -81,6 +81,27 @@ func TestDotGet(t *testing.T) {
 	assert.Nil(val)
 }
 
+func TestDotGetNilable(t *testing.T) {
+	assert := assert.New(t)
+
+	type Nest struct {
+		Str string
+	}
+
+	type Sample struct {
+		Nest *Nest
+	}
+
+	sample := Sample{
+		Nest: nil,
+	}
+
+	// Dereferencing nil
+	val, ok := dotGetNilable(&sample, "Nest.Str")
+	assert.True(ok)
+	assert.Equal(val, nil)
+}
+
 func TestCompare(t *testing.T) {
 	assert := assert.New(t)
 
@@ -96,10 +117,16 @@ func TestCompare(t *testing.T) {
 		{0, ">", 1, false},
 		{1, ">", 0, true},
 		{1, "<", 0, false},
+		{0, "==", 1, false},
+		{1, "==", 1, true},
 		{"a", "<", "b", true},
 		{"a", ">", "b", false},
+		{"a", "==", "b", false},
+		{"b", "==", "b", true},
 		{time.Unix(1518018017, 0), "<", time.Unix(1518018043, 0), true},
 		{time.Unix(1518018017, 0), ">", time.Unix(1518018043, 0), false},
+		{time.Unix(1518018017, 0), "==", time.Unix(1518018043, 0), false},
+		{time.Unix(1518018043, 0), "==", time.Unix(1518018043, 0), true},
 	}
 
 	for _, sa := range table {
