@@ -92,7 +92,7 @@ func TestGeneratorNotFoundTags(t *testing.T) {
 	expected := strings.TrimSpace(buf.String())
 
 	assert.Error(err)
-	assert.Contains(err.Error(), "git-tag does not exist")
+	assert.Contains(err.Error(), "zero git-tags were found")
 	assert.Equal("", expected)
 }
 
