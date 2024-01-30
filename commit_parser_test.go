@@ -398,6 +398,7 @@ func TestCommitParserParseWithJira(t *testing.T) {
 					"JiraIssueID",
 					"Subject",
 				},
+				JiraKeyPattern: "\\b(JIRA-\\d+)",
 				JiraTypeMaps: map[string]string{
 					"Story": "feat",
 				},
@@ -406,11 +407,28 @@ func TestCommitParserParseWithJira(t *testing.T) {
 
 	commits, err := parser.Parse("HEAD")
 	assert.Nil(err)
+
+	assert.Equal(2, len(commits))
+
 	commit := commits[0]
-	assert.Equal(commit.JiraIssueID, "JIRA-1111")
-	assert.Equal(commit.JiraIssue.Type, "Story")
-	assert.Equal(commit.JiraIssue.Summary, "summary of JIRA-1111")
-	assert.Equal(commit.JiraIssue.Description, "description of JIRA-1111")
-	assert.Equal(commit.JiraIssue.Labels, []string{"GA"})
-	assert.Equal(commit.Type, "feat")
+	assert.Equal("JIRA-1111", commit.JiraIssueID)
+	if commit.JiraIssue == nil {
+		t.Fatal("did not load jira issue JIRA-1111")
+	}
+	assert.Equal("Story", commit.JiraIssue.Type)
+	assert.Equal("summary of JIRA-1111", commit.JiraIssue.Summary)
+	assert.Equal("description of JIRA-1111", commit.JiraIssue.Description)
+	assert.Equal([]string{"GA"}, commit.JiraIssue.Labels)
+	assert.Equal("feat", commit.Type)
+
+	commit = commits[1]
+	assert.Equal("JIRA-1112", commit.JiraIssueID)
+	if commit.JiraIssue == nil {
+		t.Fatal("did not load jira issue JIRA-1112")
+	}
+	assert.Equal("Story", commit.JiraIssue.Type)
+	assert.Equal("summary of JIRA-1112", commit.JiraIssue.Summary)
+	assert.Equal("description of JIRA-1112", commit.JiraIssue.Description)
+	assert.Equal([]string{"GA"}, commit.JiraIssue.Labels)
+	assert.Equal("fix", commit.Type)
 }
