@@ -302,7 +302,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 		WorkingDir: ctx.WorkingDir,
 		Template:   orValue(ctx.Template, config.Template),
 		Info: &chglog.Info{
-			Title:         info.Title,
+			Title:         orValue(ctx.Title, info.Title),
 			RepositoryURL: orValue(ctx.RepositoryURL, info.RepositoryURL),
 		},
 		Options: &chglog.Options{

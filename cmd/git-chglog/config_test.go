@@ -45,26 +45,32 @@ func TestConfigNormalize(t *testing.T) {
 func TestConfigConvert(t *testing.T) {
 	var patternInFile = "pattern in config"
 	var patternInArgs = "pattern in cli"
+	var titleInFile = "title in file"
+	var titleInArgs = "title in args"
 	assert := assert.New(t)
 	// basic
 	config := &Config{
 		Info: Info{
 			RepositoryURL: "https://example.com/foo/bar/",
+			Title:         titleInFile,
 		},
 		Options: Options{TagFilterPattern: patternInFile},
 	}
-	cli := &CLIContext{TagFilterPattern: patternInArgs}
+	cli := &CLIContext{TagFilterPattern: patternInArgs, Title: titleInArgs}
 	cfg := config.Convert(cli)
 	assert.Equal(cfg.Options.TagFilterPattern, patternInArgs)
+	assert.Equal(cfg.Info.Title, titleInArgs)
 
 	config = &Config{
 		Info: Info{
 			RepositoryURL: "https://example.com/foo/bar/",
+			Title:         titleInFile,
 		},
 		Options: Options{TagFilterPattern: patternInFile},
 	}
 	cli = &CLIContext{}
 	cfg = config.Convert(cli)
 	assert.Equal(cfg.Options.TagFilterPattern, patternInFile)
+	assert.Equal(cfg.Info.Title, titleInFile)
 
 }
