@@ -11,7 +11,7 @@ require (
 	github.com/imdario/mergo v0.3.16
 	github.com/kyokomi/emoji/v2 v2.2.12
 	github.com/mattn/go-colorable v0.1.13
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/tsuyoshiwada/go-gitcmd v0.0.0-20180205145712-5f1f5f9475df
 	github.com/urfave/cli/v2 v2.27.1
 	gopkg.in/yaml.v2 v2.4.0
