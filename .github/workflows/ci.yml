@@ -17,7 +17,7 @@ env:
 
 jobs:
   tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -43,7 +43,7 @@ jobs:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -61,7 +61,7 @@ jobs:
           version: ${{ env.GOLANGCI_VERSION }}
 
   docker-image-tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -83,7 +83,7 @@ jobs:
           head ${GITHUB_WORKSPACE}/ci-build.md
 
   goreleaser-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
