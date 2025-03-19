@@ -281,6 +281,17 @@ func (config *Config) normalizeStyleOfBitbucket() {
 	config.Options = opts
 }
 
+func parseArgs(ss []string) map[string]interface{} {
+	m := make(map[string]interface{}, 0)
+	for _, s := range ss {
+		parts := strings.Split(s, "=")
+		if len(parts) == 2 {
+			m[parts[0]] = parts[1]
+		}
+	}
+	return m
+}
+
 func orValue(str1 string, str2 string) string {
 	if str1 != "" {
 		return str1
@@ -310,6 +321,7 @@ func (config *Config) Convert(ctx *CLIContext) *chglog.Config {
 			TagFilterPattern:            ctx.TagFilterPattern,
 			Sort:                        orValue(ctx.Sort, opts.Sort),
 			NoCaseSensitive:             ctx.NoCaseSensitive,
+			Args:                        parseArgs(ctx.Args),
 			Paths:                       ctx.Paths,
 			CommitFilters:               opts.Commits.Filters,
 			CommitSortBy:                opts.Commits.SortBy,
