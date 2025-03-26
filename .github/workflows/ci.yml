@@ -12,7 +12,7 @@ on:
       - "README.md"
 
 env:
-  GO_VERSION: "1.19"
+  GO_VERSION: "1.24"
   GOLANGCI_VERSION: "v1.50.1"
 
 jobs:
@@ -56,7 +56,7 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v7
         with:
           version: ${{ env.GOLANGCI_VERSION }}
 
