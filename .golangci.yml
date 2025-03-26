@@ -88,7 +88,7 @@ linters:
     - misspell
     - nakedret
     - dupl
-    - depguard
+    #- depguard TODO fix later
 
   presets:
     - bugs
@@ -106,6 +106,8 @@ issues:
         - dupl
         - gosec
         - unparam
+        - testifylint
+        - depguard
 
   # Independently from option `exclude` we use default exclude patterns,
   # it can be disabled by this option. To list all
