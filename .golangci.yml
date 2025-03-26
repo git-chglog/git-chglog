@@ -1,18 +1,12 @@
+version: "1"
+
 # https://golangci-lint.run/usage/configuration/
 run:
   timeout: 10m
-  deadline: 5m
 
   tests: true
 
-output:
-  format: tab
-
 linters-settings:
-  govet:
-    # report about shadowed variables
-    check-shadowing: true
-
   gofmt:
     # simplify code: gofmt with `-s` option, true by default
     simplify: true
@@ -25,10 +19,6 @@ linters-settings:
   gocyclo:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
-
-  maligned:
-    # print struct with more effective memory layout or not, false by default
-    suggest-new: true
 
   dupl:
     # tokens count to trigger issue, 150 by default
@@ -43,13 +33,6 @@ linters-settings:
   lll:
     # tab width in spaces. Default to 1.
     tab-width: 1
-
-  unused:
-    # treat code as a program (not a library) and report unused exported identifiers; default is false.
-    # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
-    # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
-    # with golangci-lint call it on a directory with the changed file.
-    check-exported: false
 
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
@@ -77,8 +60,9 @@ linters-settings:
 
 linters:
   enable:
-    - megacheck
-    - govet
+    - gosimple 
+    - staticcheck
+    - unused
     - gocyclo
     - goconst
     - goimports
@@ -109,12 +93,6 @@ issues:
         - testifylint
         - depguard
 
-  # Independently from option `exclude` we use default exclude patterns,
-  # it can be disabled by this option. To list all
-  # excluded by default patterns execute `golangci-lint run --help`.
-  # Default value for this option is true.
-  exclude-use-default: false
-
   # Show only new issues: if there are unstaged changes or untracked files,
   # only those changes are analyzed, else only changes in HEAD~ are analyzed.
   # It's a super-useful option for integration of golangci-lint into existing
@@ -122,9 +100,6 @@ issues:
   # of integration: much better don't allow issues in new code.
   # Default is false.
   new: false
-
-  # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
-  max-per-linter: 0
 
   # Maximum count of issues with the same text. Set to 0 to disable. Default is 3.
   max-same-issues: 0
