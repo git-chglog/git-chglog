@@ -34,7 +34,7 @@ jobs:
 
       - name: Install goveralls
         run: |
-          go install github.com/mattn/goveralls
+          go install github.com/mattn/goveralls@latest
           echo $GOPATH
           ls -lash $GOPATH
           which goveralls
