@@ -1,3 +1,5 @@
+version: 2
+
 # This is an example .goreleaser.yml file with some sane defaults.
 # Make sure to check the documentation at http://goreleaser.com
 project_name: git-chglog
@@ -44,7 +46,7 @@ dockers:
       - "quay.io/git-chglog/git-chglog:latest"
 
 brews:
-  - tap:
+  - repository:
       owner: git-chglog
       name: homebrew-git-chglog
     homepage: "https://godoc.org/github.com/git-chglog/git-chglog"

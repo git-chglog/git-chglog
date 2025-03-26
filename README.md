@@ -686,7 +686,7 @@ We always welcome your contributions :clap:
 
 ## Development
 
-1. Use Golang version `>= 1.19`
+1. Use Golang version `>= 1.24`
 1. Fork (https://github.com/git-chglog/git-chglog) :tada:
 1. Create a feature branch :coffee:
 1. Run test suite with the `$ make test` command and confirm that it passes :zap:

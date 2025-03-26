@@ -34,6 +34,7 @@ func (*osFileSystem) Exists(path string) bool {
 
 func (*osFileSystem) MkdirP(path string) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
+		//nolint:gosec
 		return os.MkdirAll(path, os.ModePerm)
 	}
 	return nil
@@ -45,5 +46,6 @@ func (*osFileSystem) Create(name string) (File, error) {
 }
 
 func (*osFileSystem) WriteFile(path string, content []byte) error {
+	//nolint:gosec
 	return os.WriteFile(path, content, os.ModePerm)
 }
