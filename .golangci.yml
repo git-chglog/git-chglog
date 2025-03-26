@@ -13,10 +13,6 @@ linters-settings:
     # report about shadowed variables
     check-shadowing: true
 
-  golint:
-    # minimal confidence for issues, default is 0.8
-    min-confidence: 0.8
-
   gofmt:
     # simplify code: gofmt with `-s` option, true by default
     simplify: true
@@ -76,18 +72,6 @@ linters-settings:
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
 
-  gocritic:
-    # Enable multiple checks by tags, run `GL_DEBUG=gocritic golangci-lint` run to see all tags and checks.
-    # Empty list by default. See https://github.com/go-critic/go-critic#usage -> section "Tags".
-    enabled-tags:
-      - performance
-
-    settings: # settings passed to gocritic
-      captLocal: # must be valid enabled check name
-        paramsOnly: true
-      rangeValCopy:
-        sizeThreshold: 32
-
   misspell:
     locale: US
 
@@ -96,13 +80,10 @@ linters:
     - megacheck
     - govet
     - gocyclo
-    - gocritic
-    - interfacer
     - goconst
     - goimports
     - gofmt  # We enable this as well as goimports for its simplify mode.
     - prealloc
-    - golint
     - unconvert
     - misspell
     - nakedret
@@ -124,15 +105,7 @@ issues:
         - errcheck
         - dupl
         - gosec
-        - scopelint
         - unparam
-
-    # These are performance optimisations rather than style issues per se.
-    # They warn when function arguments or range values copy a lot of memory
-    # rather than using a pointer.
-    - text: "(hugeParam|rangeValCopy):"
-      linters:
-      - gocritic
 
   # Independently from option `exclude` we use default exclude patterns,
   # it can be disabled by this option. To list all
