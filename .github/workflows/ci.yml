@@ -33,7 +33,12 @@ jobs:
         run: make test
 
       - name: Install goveralls
-        run: go get github.com/mattn/goveralls
+        run: |
+          go install github.com/mattn/goveralls
+          echo $GOPATH
+          ls -lash $GOPATH
+          which goveralls
+        working-directory: /tmp
 
       - name: Send coverage
         run: goveralls -coverprofile=cover.out -service=github
