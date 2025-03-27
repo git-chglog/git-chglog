@@ -178,6 +178,13 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 			EnvVars: []string{"JIRA_TOKEN"},
 		},
 
+		// jira-bearer-token
+		&cli.StringFlag{
+			Name:    "jira-bearer-token",
+			Usage:   "Jira bearer token",
+			EnvVars: []string{"JIRA_BEARER_TOKEN"},
+		},
+
 		// sort
 		&cli.StringFlag{
 			Name:        "sort",
@@ -245,6 +252,7 @@ func AppAction(c *cli.Context) error {
 			TagFilterPattern: c.String("tag-filter-pattern"),
 			JiraUsername:     c.String("jira-username"),
 			JiraToken:        c.String("jira-token"),
+			JiraBearerToken:  c.String("jira-bearer-token"),
 			JiraURL:          c.String("jira-url"),
 			Paths:            c.StringSlice("path"),
 			Sort:             c.String("sort"),
