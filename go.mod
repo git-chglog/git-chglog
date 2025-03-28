@@ -14,7 +14,8 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/tsuyoshiwada/go-gitcmd v0.0.0-20180205145712-5f1f5f9475df
 	github.com/urfave/cli/v2 v2.27.6
-	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -44,5 +45,4 @@ require (
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/term v0.23.0 // indirect
 	golang.org/x/text v0.17.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
