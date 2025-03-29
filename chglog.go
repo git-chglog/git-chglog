@@ -286,7 +286,7 @@ func (gen *Generator) getTags(query string) ([]*Tag, string, error) {
 	}
 
 	if len(tags) == 0 {
-		return nil, "", errors.New("git-tag does not exist")
+		return nil, "", errors.New("zero git-tags were found")
 	}
 
 	first := ""
