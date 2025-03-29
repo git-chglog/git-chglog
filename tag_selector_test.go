@@ -1,6 +1,7 @@
 package chglog
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -88,14 +89,17 @@ func TestTagSelector(t *testing.T) {
 	}
 
 	for query, expected := range table {
-		list, from, err := selector.Select(fixtures, query)
-		actual := make([]string, len(list))
-		for i, tag := range list {
-			actual[i] = tag.Name
-		}
+		caseName := fmt.Sprintf("query(%s)", query)
+		t.Run(caseName, func(t *testing.T) {
+			list, from, err := selector.Select(fixtures, query)
+			actual := make([]string, len(list))
+			for i, tag := range list {
+				actual[i] = tag.Name
+			}
 
-		assert.Nil(err)
-		assert.Equal(expected[0:len(expected)-1], actual)
-		assert.Equal(expected[len(expected)-1], from)
+			assert.Nil(err)
+			assert.Equal(expected[0:len(expected)-1], actual)
+			assert.Equal(expected[len(expected)-1], from)
+		})
 	}
 }

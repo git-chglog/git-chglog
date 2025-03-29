@@ -1,6 +1,7 @@
 package chglog
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -103,8 +104,11 @@ func TestCompare(t *testing.T) {
 	}
 
 	for _, sa := range table {
-		actual, err := compare(sa.a, sa.op, sa.b)
-		assert.Nil(err)
-		assert.Equal(sa.expected, actual)
+		caseName := fmt.Sprintf("compare(%v%s%v)", sa.a, sa.op, sa.b)
+		t.Run(caseName, func(t *testing.T) {
+			actual, err := compare(sa.a, sa.op, sa.b)
+			assert.Nil(err)
+			assert.Equal(sa.expected, actual)
+		})
 	}
 }
