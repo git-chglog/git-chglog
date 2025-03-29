@@ -24,7 +24,7 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 %s
   {{.Name}} [options] <tag query>
 
-    There are the following specification methods for <tag query>.
+    There aarere the following specification methods for <tag query>.
 
     1. <old>..<new> - Commit contained in <old> tags from <new>.
     2. <name>..     - Commit from the <name> to the latest tag.
@@ -84,6 +84,12 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 		&cli.BoolFlag{
 			Name:  "init",
 			Usage: "generate the git-chglog configuration file in interactive",
+		},
+
+		// arg
+		&cli.StringSliceFlag{
+			Name:  "arg",
+			Usage: "Pass arbitrary key=value arguments into your templates. Can use multiple times.",
 		},
 
 		// path
@@ -247,6 +253,7 @@ func AppAction(c *cli.Context) error {
 			JiraToken:        c.String("jira-token"),
 			JiraURL:          c.String("jira-url"),
 			Paths:            c.StringSlice("path"),
+			Args:             c.StringSlice("arg"),
 			Sort:             c.String("sort"),
 		},
 		fs,

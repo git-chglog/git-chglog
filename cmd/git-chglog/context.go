@@ -24,6 +24,7 @@ type CLIContext struct {
 	JiraToken        string
 	JiraURL          string
 	Paths            []string
+	Args             []string
 	Sort             string
 }
 
