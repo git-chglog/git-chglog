@@ -70,7 +70,7 @@ func cleanup() {
 
 func TestGeneratorNotFoundTags(t *testing.T) {
 	assert := assert.New(t)
-	testName := "not_found"
+	testName := "no_tags"
 
 	setup(testName, func(commit commitFunc, _ tagFunc, _ gitcmd.Client) {
 		commit("2018-01-01 00:00:00", "feat(*): New feature", "")
@@ -91,9 +91,8 @@ func TestGeneratorNotFoundTags(t *testing.T) {
 	err := gen.Generate(buf, "")
 	expected := strings.TrimSpace(buf.String())
 
-	assert.Error(err)
-	assert.Contains(err.Error(), "git-tag does not exist")
-	assert.Equal("", expected)
+	assert.Nil(err)
+	assert.Contains(expected, "<a name=\"unreleased\"></a>\n## [Unreleased]")
 }
 
 func TestGeneratorNotFoundCommits(t *testing.T) {
@@ -627,5 +626,109 @@ func TestGeneratorWithSprig(t *testing.T) {
 [Unreleased]: https://github.com/git-chglog/git-chglog/compare/3.0.0...HEAD
 [3.0.0]: https://github.com/git-chglog/git-chglog/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/git-chglog/git-chglog/compare/1.0.0...2.0.0`, expected)
+
+}
+
+var (
+	styleGitHub         = "github"
+	fmtTypeScopeSubject = "<type>(<scope>): <subject>"
+	tplKeepAChangelog   = "keep-a-changelog"
+)
+
+func TestNewRepoUnreleasedCommitsButNoTags(t *testing.T) {
+	asrt := assert.New(t)
+	testName := "commits_and_no_tags"
+
+	setup(testName, func(commit commitFunc, tag tagFunc, _ gitcmd.Client) {
+		commit("2023-06-25 00:00:00", "feat: Second Feature", "")
+		commit("2023-06-24 00:00:00", "feat: First Feature", "")
+	})
+
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				Title:         "CHANGELOG Example",
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			},
+			Options: &Options{
+				CommitGroupBy: "Type",
+				CommitGroupTitleMaps: map[string]string{
+					"feat": "Features",
+				},
+				HeaderPattern: "^(\\w*)\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"Subject",
+				}},
+		})
+
+	buf := &bytes.Buffer{}
+	err := gen.Generate(buf, "")
+	actual := strings.TrimSpace(buf.String())
+
+	asrt.NoError(err)
+	asrt.Contains(actual, `<a name="unreleased"></a>
+## [Unreleased]
+
+### Features
+- First Feature
+- Second Feature
+
+
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/`)
+
+}
+
+func TestNewRepoUnreleasedCommitsWithNextTag(t *testing.T) {
+	asrt := assert.New(t)
+	testName := "commits_and_next_tag"
+
+	setup(testName, func(commit commitFunc, tag tagFunc, _ gitcmd.Client) {
+		commit("2023-06-25 00:00:00", "feat: Second Feature", "")
+		commit("2023-06-24 00:00:00", "feat: First Feature", "")
+	})
+
+	gen := NewGenerator(NewLogger(os.Stdout, os.Stderr, false, true),
+		&Config{
+			Bin:        "git",
+			WorkingDir: filepath.Join(testRepoRoot, testName),
+			Template:   filepath.Join(cwd, "testdata", testName+".md"),
+			Info: &Info{
+				Title:         "CHANGELOG Example",
+				RepositoryURL: "https://github.com/git-chglog/git-chglog",
+			},
+			Options: &Options{
+				NextTag:       "0.1.0",
+				CommitGroupBy: "Type",
+				CommitGroupTitleMaps: map[string]string{
+					"feat": "Features",
+				},
+				HeaderPattern: "^(\\w*)\\:\\s(.*)$",
+				HeaderPatternMaps: []string{
+					"Type",
+					"Subject",
+				}},
+		})
+
+	buf := &bytes.Buffer{}
+	err := gen.Generate(buf, "")
+	actual := strings.TrimSpace(buf.String())
+
+	asrt.NoError(err)
+	asrt.Equal(`<a name="unreleased"></a>
+## [Unreleased]
+
+
+<a name="0.1.0"></a>
+## 0.1.0 - 2023-06-24
+### Features
+- First Feature
+- Second Feature
+
+
+[Unreleased]: https://github.com/git-chglog/git-chglog/compare/0.1.0...HEAD`, actual)
 
 }

@@ -57,7 +57,7 @@ func (t *kacTemplateBuilderImpl) unreleased(style, format string) string {
 		title = fmt.Sprintf("[%s]", title)
 	}
 
-	return fmt.Sprintf(`{{ if .Versions -}}
+	return fmt.Sprintf(`{{ if .Unreleased -}}
 %s## %s
 
 {{ if .Unreleased.CommitGroups -}}
@@ -156,23 +156,29 @@ func (*kacTemplateBuilderImpl) footer(style string) string {
 	case styleGitHub, styleGitLab:
 		return `
 
-{{- if .Versions }}
+{{ if .UnreleasedHash.Short -}}
+[Unreleased]: {{ .Info.RepositoryURL }}/compare/{{ .UnreleasedHash.Short }}...HEAD
+{{ end -}}
+{{ if .Versions -}}
 [Unreleased]: {{ .Info.RepositoryURL }}/compare/{{ $latest := index .Versions 0 }}{{ $latest.Tag.Name }}...HEAD
+{{ end -}}
 {{ range .Versions -}}
 {{ if .Tag.Previous -}}
 [{{ .Tag.Name }}]: {{ $.Info.RepositoryURL }}/compare/{{ .Tag.Previous.Name }}...{{ .Tag.Name }}
-{{ end -}}
 {{ end -}}
 {{ end -}}`
 	case styleBitbucket:
 		return `
 
-{{- if .Versions }}
-[Unreleased]: {{ .Info.RepositoryURL }}/compare/HEAD..{{ $latest := index .Versions 0 }}{{ $latest.Tag.Name }}
+{{ if .UnreleasedHash.Short -}}
+[Unreleased]: {{ .Info.RepositoryURL }}/compare/{{ .UnreleasedHash.Short }}...HEAD
+{{ end -}}
+{{ if .Versions -}}
+[Unreleased]: {{ .Info.RepositoryURL }}/compare/{{ $latest := index .Versions 0 }}{{ $latest.Tag.Name }}...HEAD
+{{ end -}}
 {{ range .Versions -}}
 {{ if .Tag.Previous -}}
 [{{ .Tag.Name }}]: {{ $.Info.RepositoryURL }}/compare/{{ .Tag.Name }}..{{ .Tag.Previous.Name }}
-{{ end -}}
 {{ end -}}
 {{ end -}}`
 	default:
