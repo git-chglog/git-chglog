@@ -76,9 +76,16 @@ func TestCommitExtractor(t *testing.T) {
 				Header: "REVERT1",
 			},
 		},
+		// [6]
+		{
+			Type:   "",
+			Scope:  "",
+			Header: "Other",
+			Notes:  []*Note{},
+		},
 	}
 
-	commitGroups, mergeCommits, revertCommits, noteGroups := extractor.Extract(fixtures)
+	commitGroups, mergeCommits, revertCommits, otherCommits, noteGroups := extractor.Extract(fixtures)
 
 	assert.Equal([]*CommitGroup{
 		{
@@ -106,6 +113,10 @@ func TestCommitExtractor(t *testing.T) {
 	assert.Equal([]*Commit{
 		fixtures[5],
 	}, revertCommits)
+
+	assert.Equal([]*Commit{
+		fixtures[6],
+	}, otherCommits)
 
 	assert.Equal([]*NoteGroup{
 		{
@@ -207,9 +218,16 @@ func TestCommitOrderExtractor(t *testing.T) {
 				Header: "REVERT1",
 			},
 		},
+		// [6]
+		{
+			Type:   "",
+			Scope:  "",
+			Header: "Other",
+			Notes:  []*Note{},
+		},
 	}
 
-	commitGroups, mergeCommits, revertCommits, noteGroups := extractor.Extract(fixtures)
+	commitGroups, mergeCommits, revertCommits, otherCommits, noteGroups := extractor.Extract(fixtures)
 
 	assert.Equal([]*CommitGroup{
 		{
@@ -237,6 +255,10 @@ func TestCommitOrderExtractor(t *testing.T) {
 	assert.Equal([]*Commit{
 		fixtures[5],
 	}, revertCommits)
+
+	assert.Equal([]*Commit{
+		fixtures[6],
+	}, otherCommits)
 
 	assert.Equal([]*NoteGroup{
 		{
