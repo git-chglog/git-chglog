@@ -116,7 +116,7 @@ go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
 ```
 
 ### [Docker](https://www.docker.com/)
-The compiled docker images are maintained on [quay.io](https://quay.io/repository/git-chglog/git-chglog). 
+The compiled docker images are maintained on [quay.io](https://quay.io/repository/git-chglog/git-chglog).
 We maintain the following tags:
 - `edge`: Image that is build from the current `HEAD` of the main line branch.
 - `latest`: Image that is built from the [latest released version](https://github.com/git-chglog/git-chglog/releases)
@@ -199,6 +199,7 @@ OPTIONS:
   --path value                Filter commits by path(s). Can use multiple times.
   --config value, -c value    specifies a different configuration file to pick up (default: ".chglog/config.yml")
   --template value, -t value  specifies a template file to pick up. If not specified, use the one in config
+  --title value               specifies changelog title. If not specified, use 'title' in config
   --repository-url value      specifies git repo URL. If not specified, use 'repository_url' in config
   --output value, -o value    output path and filename for the changelogs. If not specified, output to stdout
   --next-tag value            treat unreleased commits as specified tags (EXPERIMENTAL)

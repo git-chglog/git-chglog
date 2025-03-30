@@ -107,6 +107,12 @@ func CreateApp(actionFunc cli.ActionFunc) *cli.App {
 			Usage:   "specifies a template file to pick up. If not specified, use the one in config",
 		},
 
+		// changelog title
+		&cli.StringFlag{
+			Name:  "title",
+			Usage: "specifies changelog title. If not specified, use 'title' in config",
+		},
+
 		// repository url
 		&cli.StringFlag{
 			Name:  "repository-url",
@@ -234,6 +240,7 @@ func AppAction(c *cli.Context) error {
 			Stderr:           colorable.NewColorableStderr(),
 			ConfigPath:       c.String("config"),
 			Template:         c.String("template"),
+			Title:            c.String("title"),
 			RepositoryURL:    c.String("repository-url"),
 			OutputPath:       c.String("output"),
 			Silent:           c.Bool("silent"),
