@@ -40,6 +40,7 @@ type Options struct {
 	NoteKeywords                []string            // Keyword list to find `Note`. A semicolon is a separator, like `<keyword>:` (e.g. `BREAKING CHANGE`)
 	JiraUsername                string
 	JiraToken                   string
+	JiraBearerToken             string // Jira PAT (Personal Access Token)
 	JiraURL                     string
 	JiraTypeMaps                map[string]string
 	JiraIssueDescriptionPattern string
