@@ -178,7 +178,7 @@ func (e *commitExtractor) sortCommitGroups(groups []*CommitGroup) { //nolint:goc
 		// TODO(khos2ow): move the inline sort function to
 		// conceret implementation of sort.Interface in order
 		// to reduce cyclomatic complaxity.
-		sort.Slice(group.Commits, func(i, j int) bool {
+		sort.SliceStable(group.Commits, func(i, j int) bool {
 			var (
 				a, b interface{}
 				ok   bool
