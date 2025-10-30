@@ -8,7 +8,7 @@ require (
 	github.com/andygrunwald/go-jira v1.16.0
 	github.com/coreos/go-semver v0.3.1
 	github.com/fatih/color v1.18.0
-	github.com/imdario/mergo v0.3.16
+	github.com/imdario/mergo v1.0.2
 	github.com/kyokomi/emoji/v2 v2.2.13
 	github.com/mattn/go-colorable v0.1.14
 	github.com/stretchr/testify v1.10.0
