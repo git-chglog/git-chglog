@@ -21,6 +21,7 @@
       - [Homebrew (for macOS users)](#homebrew-for-macos-users)
       - [Scoop (for Windows users)](#scoop-for-windows-users)
       - [asdf](#asdf)
+      - [mise](#mise)
       - [Go users](#go-users)
     - [Docker](#docker)
     - [Test Installation](#test-installation)
@@ -107,6 +108,12 @@ scoop install git-chglog
 ```bash
 asdf plugin-add git-chglog https://github.com/GoodwayGroup/asdf-git-chglog.git
 asdf install git-chglog latest
+```
+
+#### [mise](https://github.com/jdx/mise)
+
+```bash
+mise use -g git-chglog@latest
 ```
 
 #### Go users
